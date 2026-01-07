@@ -8,7 +8,7 @@ export default function ContactPage() {
         <p className="text-sm font-semibold text-primary">Contact</p>
         <h1 className="text-3xl font-bold text-neutral-ink">Get in Touch</h1>
         <p className="text-neutral-body">
-          Whether you want to volunteer, donate, partner with us, or simply learn more about our work, we'd love to hear from you. Reach out through the form or visit us at our office in Gandhi Nagar, Indore.
+          Whether you want to volunteer, donate, partner with us, or simply learn more about our work, we&apos;d love to hear from you. Reach out through the form or visit us at our office in Gandhi Nagar, Indore.
         </p>
       </div>
 
