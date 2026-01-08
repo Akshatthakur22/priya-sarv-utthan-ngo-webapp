@@ -36,11 +36,11 @@ export default function HomePage() {
             {values.map((item, index) => (
               <motion.div
                 key={item.title}
-                className="card p-5 transition-all hover:shadow-md hover:-translate-y-1"
+                className="card p-5 md:p-6 transition-all hover:shadow-md hover:-translate-y-1"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <h3 className="text-lg font-semibold text-neutral-ink">{item.title}</h3>
                 <p className="mt-2 text-sm text-neutral-body">

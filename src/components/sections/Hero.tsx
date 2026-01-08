@@ -14,7 +14,7 @@ const heroImage = {
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, ease: "easeOut" }
+  transition: { duration: 0.6 }
 };
 
 const staggerContainer = {
@@ -94,7 +94,7 @@ export function Hero() {
         className="mt-8 flex-1 md:mt-0 space-y-5 md:space-y-6"
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
       >
         <div className="card h-full bg-gradient-to-br from-surface-paper via-accent-peach-light to-surface-offwhite p-5 md:p-6 shadow-md transition-shadow hover:shadow-lg">
           <p className="text-sm font-semibold text-primary">What we believe</p>

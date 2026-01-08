@@ -14,7 +14,7 @@ export default function ContactPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <p className="text-sm font-semibold text-primary">Let's connect</p>
+        <p className="text-sm font-semibold text-primary">Let&apos;s connect</p>
         <h1 className="text-3xl font-bold text-neutral-ink md:text-4xl">We&apos;d love to hear from you</h1>
         <p className="text-base text-neutral-body md:text-lg max-w-3xl">
           Whether you want to volunteer, partner with us, or simply learn more about our work — we&apos;re here to listen. Drop us a message or visit us in Gandhi Nagar, Indore.
@@ -64,7 +64,7 @@ export default function ContactPage() {
               <p className="text-sm text-neutral-body leading-relaxed">{siteConfig.address}</p>
             </div>
             <div>
-              <p className="text-sm font-semibold text-neutral-ink mb-1">We're available</p>
+              <p className="text-sm font-semibold text-neutral-ink mb-1">We&apos;re available</p>
               <p className="text-sm text-neutral-body">{siteConfig.workingHours}</p>
             </div>
           </div>

@@ -31,7 +31,7 @@ const fadeUp = {
   initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: "-50px" },
-  transition: { duration: 0.6, ease: "easeOut" }
+  transition: { duration: 0.6 }
 };
 
 export function ImpactHighlights() {
@@ -60,7 +60,7 @@ export function ImpactHighlights() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <div className={`inline-flex h-10 w-10 items-center justify-center rounded-full bg-${item.color}-light/60 text-${item.color}-dark`}>
                   <item.Icon className="h-5 w-5" />

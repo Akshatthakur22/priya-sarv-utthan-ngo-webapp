@@ -27,11 +27,11 @@ export function WorkInAction() {
     <section className="bg-surface-offwhite py-12">
       <div className="mx-auto max-w-6xl space-y-6 px-4 md:px-6">
         <motion.div 
-          className="space-y-2"
+          className="space-y-2 max-w-2xl"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          transition={{ duration: 0.6 }}
         >
           <p className="text-sm font-semibold text-primary">Our community</p>
           <h2 className="text-2xl font-bold text-neutral-ink">Moments that matter</h2>
@@ -46,11 +46,11 @@ export function WorkInAction() {
           {galleryImages.map((img, index) => (
             <motion.div
               key={img.src}
-              className="overflow-hidden rounded-2xl bg-surface-paper shadow-sm ring-1 ring-neutral-muted/15 transition-all hover:shadow-lg hover:-translate-y-1"
+              className="overflow-hidden rounded-2xl bg-surface-paper shadow-sm ring-1 ring-neutral-muted/15 transition-all hover:shadow-lg hover:-translate-y-1 min-h-[200px] sm:min-h-[250px]"
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.1 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <Image
                 src={img.src}
