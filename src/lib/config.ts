@@ -4,5 +4,7 @@ export const siteConfig = {
   contactEmail: "contact@priyasarv.org",
   phone: "+91 70000 78439",
   address: "69B, Mangal Marg, Gandhi Nagar, Indore, Madhya Pradesh – 452005",
-  workingHours: "11:00 AM – 5:00 PM (All Days)"
+  workingHours: "11:00 AM – 5:00 PM (All Days)",
+  upiId: "priyasarv@upi", // Replace with actual UPI ID
+  upiQrCodeUrl: "/images/upi-qr.png" // QR code image path
 };

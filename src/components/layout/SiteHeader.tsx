@@ -67,13 +67,13 @@ export function SiteHeader() {
 
       {open && (
         <div className="border-t border-neutral-muted/20 bg-surface-offwhite md:hidden">
-          <div className="space-y-1 px-4 pb-4 pt-2">
+          <div className="space-y-1 px-4 pb-4 pt-3">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`block rounded-lg px-3 py-2 text-sm font-medium transition hover:bg-surface-paper ${
-                  pathname === link.href ? "text-primary" : "text-neutral-body"
+                className={`block rounded-lg px-4 py-3 text-sm font-medium transition hover:bg-surface-paper min-h-[44px] flex items-center ${
+                  pathname === link.href ? "text-primary bg-surface-paper" : "text-neutral-body"
                 }`}
                 onClick={() => setOpen(false)}
               >
@@ -82,7 +82,7 @@ export function SiteHeader() {
             ))}
             <Link
               href="/donate"
-              className="button-primary block text-center"
+              className="button-primary mt-3 w-full"
               onClick={() => setOpen(false)}
             >
               Donate

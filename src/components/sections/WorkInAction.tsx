@@ -1,21 +1,23 @@
-import Image from "next/image";
+"use client";
 
-// Placeholder images; replace with real event/community photos later.
+import Image from "next/image";
+import { motion } from "framer-motion";
+
 const galleryImages = [
   {
-    src: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80",
+    src: "/images/child1.png",
     alt: "Children learning together"
   },
   {
-    src: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80",
+    src: "/images/woman.png",
     alt: "Women in community discussion"
   },
   {
-    src: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80",
+    src: "/images/woman1.png",
     alt: "Women empowerment group"
   },
   {
-    src: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=900&q=80",
+    src: "/images/child2.png",
     alt: "Teacher guiding students"
   }
 ];
@@ -24,16 +26,32 @@ export function WorkInAction() {
   return (
     <section className="bg-surface-offwhite py-12">
       <div className="mx-auto max-w-6xl space-y-6 px-4 md:px-6">
-        <div className="space-y-2">
-          <p className="text-sm font-semibold text-primary">Our Work in Action</p>
-          <h2 className="text-2xl font-bold text-neutral-ink">Moments of joy and learning</h2>
-          <p className="text-neutral-body">
-            A glimpse of the smiles, learning, and community spirit we foster every day.
+        <motion.div 
+          className="space-y-2"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <p className="text-sm font-semibold text-primary">Our community</p>
+          <h2 className="text-2xl font-bold text-neutral-ink">Moments that matter</h2>
+          <p className="text-sm italic text-neutral-ink">
+            यही तो खुशी की बात है —
           </p>
-        </div>
+          <p className="text-neutral-body">
+            These aren't just photos. They're the smiles, the progress, and the togetherness that make all the hard work worth it.
+          </p>
+        </motion.div>
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
-          {galleryImages.map((img) => (
-            <div key={img.src} className="overflow-hidden rounded-2xl bg-surface-paper shadow-sm ring-1 ring-neutral-muted/15">
+          {galleryImages.map((img, index) => (
+            <motion.div
+              key={img.src}
+              className="overflow-hidden rounded-2xl bg-surface-paper shadow-sm ring-1 ring-neutral-muted/15 transition-all hover:shadow-lg hover:-translate-y-1"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.1 }}
+            >
               <Image
                 src={img.src}
                 alt={img.alt}
@@ -43,10 +61,9 @@ export function WorkInAction() {
                 sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                 loading="lazy"
               />
-            </div>
+            </motion.div>
           ))}
         </div>
-        {/* Images will be replaced with real NGO event photos later */}
       </div>
     </section>
   );

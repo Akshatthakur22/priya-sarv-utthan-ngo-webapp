@@ -41,25 +41,41 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid gap-3 sm:grid-cols-2">
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-sm font-semibold text-neutral-ink">Name</label>
-          <Input name="name" required placeholder="Your full name" />
+          <label htmlFor="name" className="block text-sm font-semibold text-neutral-ink mb-1.5">
+            Your name
+          </label>
+          <Input id="name" name="name" required placeholder="Full name" />
         </div>
         <div>
-          <label className="text-sm font-semibold text-neutral-ink">Email</label>
-          <Input name="email" type="email" required placeholder="you@example.com" />
+          <label htmlFor="email" className="block text-sm font-semibold text-neutral-ink mb-1.5">
+            Email address
+          </label>
+          <Input id="email" name="email" type="email" required placeholder="you@example.com" />
         </div>
       </div>
       <div>
-        <label className="text-sm font-semibold text-neutral-ink">How can we help?</label>
-        <Textarea name="message" rows={4} required placeholder="Tell us about your question or partnership idea" />
+        <label htmlFor="message" className="block text-sm font-semibold text-neutral-ink mb-1.5">
+          How can we help?
+        </label>
+        <Textarea 
+          id="message" 
+          name="message" 
+          rows={5} 
+          required 
+          placeholder="Tell us about your question, partnership idea, or how you'd like to get involved..."
+        />
       </div>
-      <Button type="submit" disabled={loading}>
+      <Button type="submit" disabled={loading} className="w-full sm:w-auto">
         {loading ? "Sending..." : "Send message"}
       </Button>
-      {status && <p className="text-sm text-neutral-body">{status}</p>}
+      {status && (
+        <p className={`text-sm ${status.includes('Thanks') ? 'text-support-green' : 'text-support-red'}`}>
+          {status}
+        </p>
+      )}
     </form>
   );
 }
