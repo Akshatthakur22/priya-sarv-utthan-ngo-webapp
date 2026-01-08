@@ -39,7 +39,7 @@ export function WorkInAction() {
             यही तो खुशी की बात है —
           </p>
           <p className="text-neutral-body">
-            These aren't just photos. They're the smiles, the progress, and the togetherness that make all the hard work worth it.
+            These aren&apos;t just photos. They&apos;re the smiles, the progress, and the togetherness that make all the hard work worth it.
           </p>
         </motion.div>
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">

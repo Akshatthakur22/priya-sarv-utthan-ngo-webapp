@@ -15,9 +15,9 @@ export default function ContactPage() {
         transition={{ duration: 0.6 }}
       >
         <p className="text-sm font-semibold text-primary">Let's connect</p>
-        <h1 className="text-3xl font-bold text-neutral-ink md:text-4xl">We'd love to hear from you</h1>
+        <h1 className="text-3xl font-bold text-neutral-ink md:text-4xl">We&apos;d love to hear from you</h1>
         <p className="text-base text-neutral-body md:text-lg max-w-3xl">
-          Whether you want to volunteer, partner with us, or simply learn more about our work — we're here to listen. Drop us a message or visit us in Gandhi Nagar, Indore.
+          Whether you want to volunteer, partner with us, or simply learn more about our work — we&apos;re here to listen. Drop us a message or visit us in Gandhi Nagar, Indore.
         </p>
         <p className="text-sm italic text-neutral-ink pt-1">
           बात करना हो तो बेझिझक संपर्क करें।

@@ -46,7 +46,7 @@ export function ImpactHighlights() {
             <p className="text-sm font-semibold text-primary">Where we focus</p>
             <h2 className="text-2xl sm:text-3xl font-bold text-neutral-ink">The work we do, every day</h2>
             <p className="text-base text-neutral-body leading-relaxed">
-              Real change doesn't happen overnight. It happens when a mother learns a new skill, when a child discovers they love learning, when someone gets the legal help they've been waiting for.
+              Real change doesn&apos;t happen overnight. It happens when a mother learns a new skill, when a child discovers they love learning, when someone gets the legal help they&apos;ve been waiting for.
             </p>
             <p className="text-sm italic text-neutral-ink pt-1">
               असली बदलाव तो रोज़ की छोटी-छोटी कोशिशों से आता है।

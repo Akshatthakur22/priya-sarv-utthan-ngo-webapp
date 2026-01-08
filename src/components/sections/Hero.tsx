@@ -99,7 +99,7 @@ export function Hero() {
         <div className="card h-full bg-gradient-to-br from-surface-paper via-accent-peach-light to-surface-offwhite p-5 md:p-6 shadow-md transition-shadow hover:shadow-lg">
           <p className="text-sm font-semibold text-primary">What we believe</p>
           <p className="mt-3 text-sm sm:text-base text-neutral-body leading-relaxed">
-            We believe every woman deserves dignity and every child deserves a chance. For 27 years, we've walked alongside families in Indore — not just offering help, but building trust, hope, and pathways to a better tomorrow.
+            We believe every woman deserves dignity and every child deserves a chance. For 27 years, we&apos;ve walked alongside families in Indore — not just offering help, but building trust, hope, and pathways to a better tomorrow.
           </p>
           <p className="mt-3 text-sm italic text-neutral-ink">
             यही तो असली बदलाव है।
