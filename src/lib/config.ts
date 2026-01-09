@@ -7,7 +7,7 @@ export const siteConfig = {
   workingHours: "11:00 AM – 5:00 PM (All Days)",
 
   // Payments
-  upiId: "7247689015@ybl",
+  upiId: "9755533614-2@axl",
   upiQrCodeUrl: "/images/upi-qr.png",
 
   // Optional but VERY useful later

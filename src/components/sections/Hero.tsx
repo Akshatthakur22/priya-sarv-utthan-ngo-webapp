@@ -27,7 +27,7 @@ const staggerContainer = {
 
 export function Hero() {
   return (
-    <section className="relative mx-auto max-w-6xl px-4 pb-12 pt-8 md:flex md:items-center md:gap-12 md:px-6 md:pt-16 lg:pb-16">
+    <section className="relative mx-auto max-w-6xl px-4 pb-12 pt-8 md:flex md:items-center md:gap-12 md:px-6 md:pt-16 lg:pb-16 overflow-hidden">
       <SoftDecor />
       <motion.div 
         className="flex-1 space-y-5 md:space-y-6"

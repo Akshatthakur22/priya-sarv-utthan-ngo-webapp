@@ -1,13 +1,12 @@
 "use client";
 
-import { ContactForm } from "@/components/forms/ContactForm";
 import { siteConfig } from "@/lib/config";
 import { Instagram, Facebook } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function ContactPage() {
   return (
-    <div className="mx-auto max-w-5xl space-y-8 px-4 py-10 md:px-6">
+    <div className="mx-auto max-w-3xl space-y-8 px-4 py-10 md:px-6">
       <motion.div 
         className="space-y-3"
         initial={{ opacity: 0, y: 20 }}
@@ -15,31 +14,21 @@ export default function ContactPage() {
         transition={{ duration: 0.6 }}
       >
         <p className="text-sm font-semibold text-primary">Let&apos;s connect</p>
-        <h1 className="text-3xl font-bold text-neutral-ink md:text-4xl">We&apos;d love to hear from you</h1>
-        <p className="text-base text-neutral-body md:text-lg max-w-3xl">
-          Whether you want to volunteer, partner with us, or simply learn more about our work — we&apos;re here to listen. Drop us a message or visit us in Gandhi Nagar, Indore.
+        <h1 className="text-3xl font-bold text-neutral-ink md:text-4xl">Get in touch with us</h1>
+        <p className="text-base text-neutral-body md:text-lg max-w-2xl">
+          Whether you want to volunteer, partner with us, or learn more about our work — reach out to us directly. We&apos;re here to listen.
         </p>
         <p className="text-sm italic text-neutral-ink pt-1">
           बात करना हो तो बेझिझक संपर्क करें।
         </p>
       </motion.div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <motion.div 
-          className="card p-6 shadow-sm md:p-8"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          <ContactForm />
-        </motion.div>
-        
-        <motion.div 
-          className="space-y-6"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
+      <motion.div 
+        className="space-y-6"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
           <div className="rounded-2xl bg-surface-paper p-6 shadow-sm ring-1 ring-neutral-muted/20 space-y-5">
             <div>
               <p className="text-sm font-semibold text-neutral-ink mb-1">Email us</p>
@@ -99,8 +88,7 @@ export default function ContactPage() {
               </a>
             </div>
           </div>
-        </motion.div>
-      </div>
+      </motion.div>
     </div>
   );
 }

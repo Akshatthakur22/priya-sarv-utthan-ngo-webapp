@@ -6,7 +6,9 @@ export function SiteFooter() {
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 md:flex-row md:items-center md:justify-between md:px-6">
         <div className="space-y-1">
           <p className="text-sm font-semibold text-neutral-ink">Priya Sarv Utthan Foundation</p>
-          <p className="text-sm text-neutral-muted">For 30+ years, walking alongside communities.</p>
+<p className="text-sm text-neutral-muted">
+  Walking alongside communities with care and commitment for over 27 years.
+</p>
           <p className="text-xs text-neutral-muted">Registered as Priya Sarv Utthan Seva Sansthan</p>
         </div>
         <div className="flex flex-wrap gap-4 text-sm text-neutral-muted">

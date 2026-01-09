@@ -3,6 +3,7 @@
 import { Hero } from "@/components/sections/Hero";
 import { ImpactHighlights } from "@/components/sections/ImpactHighlights";
 import { WorkInAction } from "@/components/sections/WorkInAction";
+import { FloatingDonate } from "@/components/layout/FloatingDonate";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -26,10 +27,11 @@ const values = [
 
 export default function HomePage() {
   return (
-    <div className="space-y-12 pb-12">
-      <Hero />
-      <ImpactHighlights />
-      <WorkInAction />
+    <>
+      <div className="space-y-12 pb-24 md:pb-12">
+        <Hero />
+        <ImpactHighlights />
+        <WorkInAction />
       <section className="bg-surface-paper py-12">
         <div className="mx-auto max-w-6xl px-4 md:px-6">
           <div className="grid gap-6 md:grid-cols-3">
@@ -74,6 +76,10 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
-    </div>
+      </div>
+      
+      {/* Mobile-only floating donate button */}
+      <FloatingDonate />
+    </>
   );
 }
