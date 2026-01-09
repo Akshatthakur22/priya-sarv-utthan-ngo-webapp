@@ -5,6 +5,15 @@ export const siteConfig = {
   phone: "+91 70000 78439",
   address: "69B, Mangal Marg, Gandhi Nagar, Indore, Madhya Pradesh – 452005",
   workingHours: "11:00 AM – 5:00 PM (All Days)",
-  upiId: "priyasarv@upi", // Replace with actual UPI ID
-  upiQrCodeUrl: "/images/upi-qr.png" // QR code image path
+
+  // Payments
+  upiId: "9755533614-2@axl",
+  upiQrCodeUrl: "/images/upi-qr.png",
+
+  // Optional but VERY useful later
+  donationReferencePrefix: "PSUF",
+  donationMinAmount: 50,
+
+  // Transparency (future use)
+  registrationNumber: "XXXXXXX", // NGO reg no (optional)
 };
