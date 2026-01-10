@@ -1,9 +1,11 @@
 import { getEvents } from "@/services/event.service";
+import { FloatingDonate } from "@/components/layout/FloatingDonate";
 
 export default async function EventsPage() {
   const events = await getEvents();
 
   return (
+    <>
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-10 md:px-6">
       <div className="space-y-2">
         <p className="text-sm font-semibold text-primary">Events & updates</p>
@@ -33,5 +35,7 @@ export default async function EventsPage() {
         )}
       </div>
     </div>
+    <FloatingDonate />
+    </>
   );
 }

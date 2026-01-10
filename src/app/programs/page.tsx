@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { FloatingDonate } from "@/components/layout/FloatingDonate";
 
 const programs = [
   {
@@ -47,12 +48,13 @@ const programs = [
 
 export default function ProgramsPage() {
   return (
+    <>
     <div className="mx-auto max-w-6xl space-y-8 px-4 py-10 md:px-6">
       <div className="space-y-2">
         <p className="text-sm font-semibold text-primary">Programs</p>
         <h1 className="text-3xl font-bold text-neutral-ink">Our Seven Focus Areas</h1>
         <p className="text-neutral-body">
-          Since 1999, Priya Sarv Utthan Seva Sansthan has been working across seven key areas to create comprehensive community development and lasting social impact in Indore. Our 27 years of experience guide our approach to sustainable change.
+          Since 1999, Priya Sarv Utthan Foundation has been working across seven key areas to create comprehensive community development and lasting social impact in Indore. Our 27 years of experience guide our approach to sustainable change.
         </p>
       </div>
 
@@ -87,5 +89,7 @@ export default function ProgramsPage() {
         </div>
       </div>
     </div>
+    <FloatingDonate />
+    </>
   );
 }

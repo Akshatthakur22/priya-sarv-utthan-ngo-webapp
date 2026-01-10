@@ -1,10 +1,13 @@
 import { JobApplicationForm } from "@/components/forms/JobApplicationForm";
 import { getJobs } from "@/services/job.service";
+import { FloatingDonate } from "@/components/layout/FloatingDonate";
+
 
 export default async function CareersPage() {
   const jobs = await getJobs({ publicOnly: true });
 
   return (
+    <>
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-10 md:px-6">
       <div className="space-y-2">
         <p className="text-sm font-semibold text-primary">Volunteer with us</p>
@@ -48,5 +51,7 @@ export default async function CareersPage() {
         )}
       </div>
     </div>
+    <FloatingDonate />
+    </>
   );
 }

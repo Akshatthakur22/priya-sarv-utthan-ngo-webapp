@@ -1,14 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { siteConfig } from "@/lib/config";
 
 export default function DonatePage() {
+  const [copied, setCopied] = useState(false);
+
   const copyUpiId = async () => {
     await navigator.clipboard.writeText(siteConfig.upiId);
-    alert("UPI ID copied. Paste it in your UPI app to donate.");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -82,9 +86,9 @@ export default function DonatePage() {
 
         <button
           onClick={copyUpiId}
-          className="rounded-full border px-4 py-2 text-sm font-semibold text-neutral-body"
+          className="rounded-full border px-4 py-2 text-sm font-semibold text-neutral-body transition-colors hover:bg-neutral-muted/10"
         >
-          Copy UPI ID
+          {copied ? "✓ Copied!" : "Copy UPI ID"}
         </button>
 
         <p className="text-xs text-neutral-body mt-2">
