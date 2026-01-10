@@ -43,7 +43,7 @@ export function Hero() {
         </motion.span>
         <motion.div variants={fadeUp}>
           <h1 className="text-3xl font-bold leading-tight text-neutral-ink sm:text-4xl md:text-5xl lg:text-5xl">
-            Priya Sarv Utthan Foundation
+            Priya Sarv Utthan Seva Sansthan
           </h1>
           <p className="mt-3 text-base sm:text-lg text-neutral-ink/70 italic leading-relaxed">
             हर बच्चे को पढ़ने का मौका मिले, हर औरत अपने पैरों पर खड़ी हो सके।

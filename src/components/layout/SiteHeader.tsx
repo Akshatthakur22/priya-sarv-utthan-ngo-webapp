@@ -26,7 +26,7 @@ export function SiteHeader() {
           <div className="relative h-10 w-10 shrink-0 md:h-12 md:w-12">
             <Image
               src="/logo.png"
-              alt="Priya Sarv Utthan Foundation logo"
+              alt="Priya Sarv Utthan Seva Sansthan logo"
               fill
               sizes="48px"
               className="object-contain"
@@ -34,7 +34,7 @@ export function SiteHeader() {
             />
           </div>
           <div className="leading-tight">
-            <span className="block text-base font-semibold md:text-lg">Priya Sarv Utthan Foundation</span>
+            <span className="block text-base font-semibold md:text-lg">Priya Sarv Utthan Seva Sansthan</span>
             <span className="block text-xs text-primary md:text-sm">Building Brighter Futures</span>
           </div>
         </Link>

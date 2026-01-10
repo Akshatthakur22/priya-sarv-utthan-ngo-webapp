@@ -36,7 +36,7 @@ export default async function CareersPage() {
           <div className="card p-6">
             <h3 className="text-lg font-semibold text-neutral-ink mb-3">Interested in Volunteering?</h3>
             <p className="text-sm text-neutral-body mb-4">
-              We are always looking for dedicated volunteers who want to make a difference in our community. Whether you have skills in teaching, legal support, counseling, community outreach, or simply a passion for social work, there&apos;s a place for you at Priya Sarv Utthan Foundation.
+              We are always looking for dedicated volunteers who want to make a difference in our community. Whether you have skills in teaching, legal support, counseling, community outreach, or simply a passion for social work, there&apos;s a place for you at Priya Sarv Utthan Seva Sansthan.
             </p>
             <p className="text-sm text-neutral-body mb-4">
               <strong>What we value:</strong> Volunteers who are committed, compassionate, and willing to work with communities. Most volunteer roles are unpaid but offer meaningful experience and the satisfaction of contributing to real social change.

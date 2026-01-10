@@ -52,7 +52,7 @@ export default function ProgramsPage() {
         <p className="text-sm font-semibold text-primary">Programs</p>
         <h1 className="text-3xl font-bold text-neutral-ink">Our Seven Focus Areas</h1>
         <p className="text-neutral-body">
-          Since 1999, Priya Sarv Utthan Foundation has been working across seven key areas to create comprehensive community development and lasting social impact in Indore. Our 27 years of experience guide our approach to sustainable change.
+          Since 1999, Priya Sarv Utthan Seva Sansthan has been working across seven key areas to create comprehensive community development and lasting social impact in Indore. Our 27 years of experience guide our approach to sustainable change.
         </p>
       </div>
 

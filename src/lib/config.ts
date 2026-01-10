@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: "Priya Sarv Utthan Foundation",
+  name: "Priya Sarv Utthan Seva Sansthan",
   tagline: "Empowering Communities, Building Futures",
   contactEmail: "contact@priyasarv.org",
   phone: "+91 70000 78439",

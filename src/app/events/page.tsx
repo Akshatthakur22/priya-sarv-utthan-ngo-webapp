@@ -9,7 +9,7 @@ export default async function EventsPage() {
         <p className="text-sm font-semibold text-primary">Events & updates</p>
         <h1 className="text-3xl font-bold text-neutral-ink">Community Events & Activities</h1>
         <p className="text-neutral-body">
-          Priya Sarv Utthan Foundation regularly organizes awareness programs, skill training workshops, legal aid camps, and community outreach activities. We bring together community members, experts, and volunteers to create positive change.
+          Priya Sarv Utthan Seva Sansthan regularly organizes awareness programs, skill training workshops, legal aid camps, and community outreach activities. We bring together community members, experts, and volunteers to create positive change.
         </p>
       </div>
 

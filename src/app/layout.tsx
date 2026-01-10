@@ -8,8 +8,8 @@ const nunito = Nunito({ subsets: ["latin"], variable: "--font-display" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-body" });
 
 export const metadata: Metadata = {
-  title: "NGO | Building brighter futures",
-  description: "A trusted NGO connecting donors, volunteers, and communities.",
+  title: "Priya Sarv Utthan Seva Sansthan | Building brighter futures",
+  description: "Priya Sarv Utthan Seva Sansthan - A registered NGO dedicated to women empowerment, education, and community development in Indore.",
   metadataBase: new URL("http://localhost:3000"),
   icons: {
     icon: "/icon.png",
@@ -17,10 +17,10 @@ export const metadata: Metadata = {
     apple: "/icon.png"
   },
   openGraph: {
-    title: "NGO | Building brighter futures",
-    description: "Partner with us to create lasting impact.",
+    title: "Priya Sarv Utthan Seva Sansthan | Building brighter futures",
+    description: "Join us in creating lasting impact through education, women empowerment, and social justice.",
     url: "http://localhost:3000",
-    siteName: "NGO",
+    siteName: "Priya Sarv Utthan Seva Sansthan",
     locale: "en_US",
     type: "website"
   }

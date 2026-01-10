@@ -16,7 +16,7 @@ export default function AboutPage() {
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-10 md:px-6">
       <div className="space-y-2">
         <p className="text-sm font-semibold text-primary">Who we are</p>
-        <h1 className="text-3xl font-bold text-neutral-ink">Priya Sarv Utthan Foundation</h1>
+        <h1 className="text-3xl font-bold text-neutral-ink">Priya Sarv Utthan Seva Sansthan</h1>
         <p className="text-neutral-body">
           Established in 1999 and registered under ID Ind/4124/99 as Priya Sarv Utthan Seva Sansthan, we are a non-profit organization with over 27 years of dedicated service in Gandhi Nagar, Indore, Madhya Pradesh. Our work focuses on women and child development, education, women empowerment, social justice, district legal services, skill training, and women self-employment. We believe in creating opportunities that transform lives.
         </p>
