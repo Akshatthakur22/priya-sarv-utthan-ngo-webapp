@@ -22,12 +22,11 @@
 - [About the Project](#-about-the-project)
 - [Key Features](#-key-features)
 - [Tech Stack](#-tech-stack)
-- [Getting Started](#-getting-started)
+- [Live Preview](#-live-preview)
 - [Project Structure](#-project-structure)
 - [API Routes](#-api-routes)
 - [Design System](#-design-system)
 - [Performance](#-performance)
-- [Contributing](#-contributing)
 - [License](#-license)
 - [Contact](#-contact)
 
@@ -107,54 +106,24 @@ NGOs often struggle with digital presence and online donation collection. This p
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Live Preview
 
-### Prerequisites
+🌐 **[View Live Website](#)** _(Add your deployment link here)_
 
-```bash
-node >= 18.0.0
-npm >= 9.0.0
-```
+### Development Details
 
-### Installation
+**Built With:**
+- Next.js 14 App Router for optimal performance
+- TypeScript for type-safe development
+- Tailwind CSS with custom design system
+- Framer Motion for smooth animations
+- Deployed on [Vercel/Platform Name]
 
-1. **Clone the repository**
-```bash
-git clone https://github.com/Akshatthakur22/priya-sarv-utthan-ngo-webapp.git
-cd priya-sarv-utthan-ngo-webapp
-```
-
-2. **Install dependencies**
-```bash
-npm install
-```
-
-3. **Run the development server**
-```bash
-npm run dev
-```
-
-4. **Open your browser**
-```
-http://localhost:3000
-```
-
-### Build for Production
-
-```bash
-npm run build
-npm start
-```
-
-### Additional Commands
-
-```bash
-# Lint code
-npm run lint
-
-# Format code
-npm run format
-```
+**Build Process:**
+- Automated CI/CD pipeline
+- TypeScript compilation with strict mode
+- ESLint & Prettier for code quality
+- Optimized production build
 
 ---
 
@@ -312,18 +281,6 @@ All UI components follow consistent patterns:
 - Accessibility: 100
 - Best Practices: 100
 - SEO: 100
-
----
-
-## 🤝 Contributing
-
-Contributions are what make the open-source community amazing! Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
 ---
 
