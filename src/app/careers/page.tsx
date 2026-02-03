@@ -33,7 +33,7 @@ export default async function CareersPage() {
       "@type": "JobPosting",
       "title": job.title,
       "description": job.description,
-      "datePosted": job.datePosted || new Date().toISOString().split('T')[0],
+      "datePosted": new Date().toISOString().split('T')[0],
       "employmentType": job.commitment,
       "jobLocation": {
         "@type": "Place",

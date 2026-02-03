@@ -47,23 +47,6 @@ export const metadata: Metadata = {
 
 import Script from 'next/script';
 
-export const metadata: Metadata = {
-  title: "Testimonials | Priya Sarv Utthan Seva Sansthan",
-  description: "Read inspiring stories from our beneficiaries and supporters.",
-  keywords: ["testimonials", "stories", "NGO", "Priya Sarv Utthan Seva Sansthan"],
-  openGraph: {
-    title: "Testimonials | Priya Sarv Utthan Seva Sansthan",
-    description: "Read inspiring stories from our beneficiaries and supporters.",
-    url: "https://priyasarvutthan.org/testimonials",
-    type: "article"
-  },
-  twitter: {
-    card: "summary",
-    title: "Testimonials | Priya Sarv Utthan Seva Sansthan",
-    description: "Read inspiring stories from our beneficiaries and supporters."
-  },
-  alternates: { canonical: "https://priyasarvutthan.org/testimonials" }
-};
 
 
 // Example testimonials data for Review schema
