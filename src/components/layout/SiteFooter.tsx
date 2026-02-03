@@ -16,6 +16,10 @@ export function SiteFooter() {
           <Link href="/careers" className="hover:text-primary">Careers</Link>
           <Link href="/contact" className="hover:text-primary">Contact</Link>
           <Link href="/donate" className="hover:text-primary">Donate</Link>
+          <span className="mx-2 hidden md:inline">|</span>
+          <Link href="/privacy-policy" className="hover:text-primary">Policy</Link>
+          <Link href="/terms" className="hover:text-primary">Terms</Link>
+          <Link href="/testimonials" className="hover:text-primary">Testimonials</Link>
         </div>
       </div>
     </footer>

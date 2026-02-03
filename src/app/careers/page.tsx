@@ -1,14 +1,61 @@
+
+import Script from 'next/script';
 import { JobApplicationForm } from "@/components/forms/JobApplicationForm";
 import { getJobs } from "@/services/job.service";
 import { FloatingDonate } from "@/components/layout/FloatingDonate";
+import type { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Careers | Priya Sarv Utthan Seva Sansthan",
+  description: "Explore career opportunities at Priya Sarv Utthan Seva Sansthan.",
+  keywords: ["careers", "jobs", "NGO", "Priya Sarv Utthan Seva Sansthan"],
+  openGraph: {
+    title: "Careers | Priya Sarv Utthan Seva Sansthan",
+    description: "Explore career opportunities at Priya Sarv Utthan Seva Sansthan.",
+    url: "https://priyasarvutthan.org/careers",
+    type: "website"
+  },
+  twitter: {
+    card: "summary",
+    title: "Careers | Priya Sarv Utthan Seva Sansthan",
+    description: "Explore career opportunities at Priya Sarv Utthan Seva Sansthan."
+  },
+  alternates: { canonical: "https://priyasarvutthan.org/careers" }
+};
 
+// JobPosting JSON-LD will be generated from jobs
 export default async function CareersPage() {
   const jobs = await getJobs({ publicOnly: true });
 
+  const jobsJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": jobs.map(job => ({
+      "@type": "JobPosting",
+      "title": job.title,
+      "description": job.description,
+      "datePosted": job.datePosted || new Date().toISOString().split('T')[0],
+      "employmentType": job.commitment,
+      "jobLocation": {
+        "@type": "Place",
+        "address": job.location
+      },
+      "hiringOrganization": {
+        "@type": "Organization",
+        "name": "Priya Sarv Utthan Seva Sansthan",
+        "sameAs": "https://yourngo.org"
+      }
+    }))
+  };
+
   return (
     <>
-    <div className="mx-auto max-w-6xl space-y-6 px-4 py-10 md:px-6">
+      <Script
+        id="careers-jobs-jsonld"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jobsJsonLd) }}
+      />
+      <div className="mx-auto max-w-6xl space-y-6 px-4 py-10 md:px-6">
       <div className="space-y-2">
         <p className="text-sm font-semibold text-primary">Volunteer with us</p>
         <h1 className="text-3xl font-bold text-neutral-ink">Join Our Mission</h1>

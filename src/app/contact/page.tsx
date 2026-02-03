@@ -1,4 +1,13 @@
+
 "use client";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": "Contact Priya Sarv Utthan Seva Sansthan",
+  "url": "https://yourngo.org/contact"
+};
+
 
 import { siteConfig } from "@/lib/config";
 import { Instagram, Facebook } from "lucide-react";
@@ -7,6 +16,7 @@ import { motion } from "framer-motion";
 export default function ContactPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-8 px-4 py-10 md:px-6">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <motion.div 
         className="space-y-3"
         initial={{ opacity: 0, y: 20 }}
@@ -88,7 +98,7 @@ export default function ContactPage() {
               </a>
             </div>
           </div>
-      </motion.div>
-    </div>
-  );
-}
+        </motion.div>
+      </div>
+    );
+  }

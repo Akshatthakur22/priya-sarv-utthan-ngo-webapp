@@ -1,9 +1,62 @@
-"use client";
+
+
 
 import { Hero } from "@/components/sections/Hero";
-import { ImpactHighlights } from "@/components/sections/ImpactHighlights";
-import { WorkInAction } from "@/components/sections/WorkInAction";
 import { FloatingDonate } from "@/components/layout/FloatingDonate";
+import type { Metadata } from "next";
+import HomeMotionSections from "@/components/sections/HomeMotionSections";
+export const metadata: Metadata = {
+  title: "Priya Sarv Utthan Seva Sansthan | Building brighter futures in Indore",
+  description: "Official NGO site for Priya Sarv Utthan Seva Sansthan. Women empowerment, education, health, legal aid, and community development in Indore, MP.",
+  keywords: [
+    "NGO", "Indore", "women empowerment", "education", "health", "legal aid", "community development", "volunteer", "charity", "social work", "child development", "skill training", "self-employment", "social justice", "India", "nonprofit"
+  ],
+  openGraph: {
+    title: "Priya Sarv Utthan Seva Sansthan | Building brighter futures in Indore",
+    description: "Official NGO site for Priya Sarv Utthan Seva Sansthan. Women empowerment, education, health, legal aid, and community development in Indore, MP.",
+    url: "https://priyasarvutthan.org/",
+    siteName: "Priya Sarv Utthan Seva Sansthan",
+    images: [
+      {
+        url: "https://priyasarvutthan.org/icon.png",
+        width: 512,
+        height: 512,
+        alt: "Priya Sarv Utthan Seva Sansthan logo"
+      }
+    ],
+    type: "website"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Priya Sarv Utthan Seva Sansthan | Building brighter futures in Indore",
+    description: "Official NGO site for Priya Sarv Utthan Seva Sansthan. Women empowerment, education, health, legal aid, and community development in Indore, MP.",
+    images: ["https://priyasarvutthan.org/icon.png"]
+  },
+  alternates: { canonical: "https://priyasarvutthan.org/" }
+};
+
+import { organizationSchema } from "@/lib/schema-templates";
+
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Priya Sarv Utthan Seva Sansthan",
+  "url": "https://priyasarvutthan.org",
+  "logo": "https://priyasarvutthan.org/icon.png",
+  "description": "A registered NGO dedicated to women empowerment, education, and community development in Indore.",
+  "contactPoint": [{
+    "@type": "ContactPoint",
+    "telephone": "+91-70000 78439",
+    "contactType": "Customer Service",
+    "email": "contact@priyasarvutthan.org"
+  }],
+  "sameAs": [
+    "https://facebook.com/priyasarvutthan",
+    "https://twitter.com/priyasarvutthan",
+    "https://instagram.com/priyasarvutthan"
+  ]
+};
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -28,57 +81,8 @@ const values = [
 export default function HomePage() {
   return (
     <>
-      <div className="space-y-12 pb-24 md:pb-12">
-        <Hero />
-        <ImpactHighlights />
-        <WorkInAction />
-      <section className="bg-surface-paper py-12">
-        <div className="mx-auto max-w-6xl px-4 md:px-6">
-          <div className="grid gap-6 md:grid-cols-3">
-            {values.map((item, index) => (
-              <motion.div
-                key={item.title}
-                className="card p-5 md:p-6 transition-all hover:shadow-md hover:-translate-y-1"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <h3 className="text-lg font-semibold text-neutral-ink">{item.title}</h3>
-                <p className="mt-2 text-sm text-neutral-body">
-                  {item.desc}
-                </p>
-                <p className="mt-3 text-xs italic text-primary">
-                  {item.hindi}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-          <motion.div
-            className="mt-10 flex flex-wrap gap-3"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
-          >
-            <Link
-              href="/donate"
-              className="button-primary transition-transform hover:scale-105"
-            >
-              Join This Mission
-            </Link>
-            <Link
-              href="/careers"
-              className="inline-flex items-center justify-center rounded-full border border-neutral-muted/30 bg-surface-paper px-4 py-2 text-sm font-semibold text-neutral-body transition-all hover:border-neutral-muted/40 hover:shadow-sm"
-            >
-              Work With Us
-            </Link>
-          </motion.div>
-        </div>
-      </section>
-      </div>
-      
-      {/* Mobile-only floating donate button */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
+      <HomeMotionSections />
       <FloatingDonate />
     </>
   );

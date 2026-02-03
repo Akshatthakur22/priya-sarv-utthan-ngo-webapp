@@ -1,10 +1,32 @@
+// ...metadata removed due to 'use client' restriction...
+
 "use client";
+
 
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { siteConfig } from "@/lib/config";
+import Script from 'next/script';
+
+const donateJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "DonateAction",
+  "name": "Donate to Your NGO Name",
+  "description": "Support our mission to make a difference. Donate to Your NGO Name and help us create lasting impact in our community.",
+  "target": {
+    "@type": "EntryPoint",
+    "urlTemplate": "https://your-ngosite.org/donate"
+  },
+  "recipient": {
+    "@type": "Organization",
+    "name": "Your NGO Name",
+    "url": "https://your-ngosite.org"
+  }
+};
+
+
 
 export default function DonatePage() {
   const [copied, setCopied] = useState(false);
@@ -24,6 +46,12 @@ export default function DonatePage() {
         animate={{ opacity: 1, y: 0 }}
       >
         {/* Background Image */}
+        <Script
+          id="donate-jsonld"
+          type="application/ld+json"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(donateJsonLd) }}
+        />
         <Image
           src="/images/donation-children.png"
           alt="Children supported by our NGO"
@@ -118,9 +146,12 @@ export default function DonatePage() {
       </div>
 
       {/* GRATITUDE */}
+
       <p className="text-sm text-neutral-body italic text-center">
         Thank you for choosing kindness 🤍
       </p>
     </div>
   );
 }
+
+
