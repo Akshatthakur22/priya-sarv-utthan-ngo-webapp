@@ -26,3 +26,19 @@ h1, h2, h3, h4, h5, h6 {
 .card {
   @apply rounded-2xl bg-surface-paper shadow-sm ring-1 ring-neutral-muted/20;
 }
+
+/* Hide scrollbar for horizontal carousels */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Safe area for mobile devices with notches */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

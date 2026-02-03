@@ -299,7 +299,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 **Priya Sarv Utthan Seva Sansthan**
 
-- Email: contact@priyasarv.org
+- Email: priyasarvuthan@gmail.com
 - Phone: +91 70000 78439
 - Address: 69B, Mangal Marg, Gandhi Nagar, Indore, Madhya Pradesh – 452005
 

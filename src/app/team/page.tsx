@@ -33,20 +33,38 @@ const team = [
   {
     name: "Priya Sharma",
     role: "Founder & President",
-    image: "/images/team/priya.jpg",
+    image: "/images/woman.png",
     bio: "Priya has led the organization since its inception, focusing on women empowerment and education."
   },
   {
-    name: "Amit Verma",
+    name: "Sunita Joshi",
     role: "Program Director",
-    image: "/images/team/amit.jpg",
-    bio: "Amit oversees all program operations and community outreach initiatives."
+    image: "/images/woman1.png",
+    bio: "Sunita oversees all program operations and community outreach initiatives."
   },
   {
-    name: "Sunita Joshi",
+    name: "Meena Verma",
     role: "Finance Lead",
-    image: "/images/team/sunita.jpg",
-    bio: "Sunita manages finances and ensures transparency in all donations and expenditures."
+    image: "/images/woman4.png",
+    bio: "Meena manages finances and ensures transparency in all donations and expenditures."
+  },
+  {
+    name: "Kavita Patel",
+    role: "Education Coordinator",
+    image: "/images/woman2.png",
+    bio: "Kavita leads our education programs and mentorship initiatives for children."
+  },
+  {
+    name: "Rekha Singh",
+    role: "Women Welfare Head",
+    image: "/images/woman3.png",
+    bio: "Rekha coordinates skill training programs and self-help groups for women."
+  },
+  {
+    name: "Anita Kumari",
+    role: "Community Outreach",
+    image: "/images/woman5.png",
+    bio: "Anita connects with local communities and manages volunteer activities."
   }
 ];
 
@@ -61,22 +79,45 @@ const jsonLd = {
 
 export default function TeamPage() {
   return (
-    <div className="bg-white py-12 px-4 max-w-4xl mx-auto">
+    <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <h1 className="text-4xl font-bold mb-8 text-center">Our Team</h1>
-      <div className="grid md:grid-cols-3 gap-8 mb-12">
-        {team.map((member) => (
-          <div key={member.name} className="bg-gray-50 rounded-lg p-6 text-center shadow">
-            <img src={member.image} alt={member.name} className="w-24 h-24 mx-auto rounded-full mb-4 object-cover" />
-            <h2 className="text-xl font-semibold mb-1">{member.name}</h2>
-            <p className="text-blue-600 mb-2">{member.role}</p>
-            <p className="text-gray-700 text-sm">{member.bio}</p>
+      
+      {/* Hero Section */}
+      <div className="relative h-[35vh] min-h-[280px] overflow-hidden">
+        <img 
+          src="/images/child.png" 
+          alt="Our dedicated team" 
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-4">
+          <span className="inline-flex items-center gap-2 rounded-full bg-orange-500/20 backdrop-blur-sm px-4 py-2 text-sm font-semibold text-orange-200 border border-orange-400/30 mb-4">
+            👥 Meet The Team
+          </span>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Dedicated Team</h1>
+          <p className="text-lg text-white/80 max-w-xl">The passionate people driving change in our community</p>
+        </div>
+      </div>
+
+      <div className="bg-neutral-50 py-16 px-4">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            {team.map((member) => (
+              <div key={member.name} className="bg-white rounded-[2rem] p-6 text-center shadow-lg border border-neutral-100 hover:shadow-xl transition-shadow">
+                <img src={member.image} alt={member.name} className="w-28 h-28 mx-auto rounded-full mb-4 object-cover ring-4 ring-orange-100" />
+                <h2 className="text-xl font-bold text-neutral-900 mb-1">{member.name}</h2>
+                <p className="text-orange-600 font-semibold mb-3">{member.role}</p>
+                <p className="text-neutral-600 text-sm leading-relaxed">{member.bio}</p>
+              </div>
+            ))}
           </div>
-        ))}
+          <div className="text-center">
+            <a href="/contact" className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105">
+              Contact Our Team
+            </a>
+          </div>
+        </div>
       </div>
-      <div className="text-center">
-        <a href="/contact" className="inline-block bg-blue-600 text-white px-6 py-2 rounded shadow hover:bg-blue-700">Contact Our Team</a>
-      </div>
-    </div>
+    </>
   );
 }

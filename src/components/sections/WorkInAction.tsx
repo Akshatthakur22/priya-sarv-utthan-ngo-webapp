@@ -5,20 +5,28 @@ import { motion } from "framer-motion";
 
 const galleryImages = [
   {
-    src: "/images/child1.png",
+    src: "/images/child2.png",
     alt: "Children learning together"
   },
   {
-    src: "/images/woman.png",
+    src: "/images/woman3.png",
     alt: "Women in community discussion"
   },
   {
-    src: "/images/woman1.png",
+    src: "/images/woman4.png",
     alt: "Women empowerment group"
   },
   {
-    src: "/images/child2.png",
+    src: "/images/child5.png",
     alt: "Teacher guiding students"
+  },
+  {
+    src: "/images/child6.png",
+    alt: "Happy children at the center"
+  },
+  {
+    src: "/images/woman5.png",
+    alt: "Women achieving milestones"
   }
 ];
 
@@ -42,10 +50,10 @@ export function WorkInAction() {
             These aren&apos;t just photos. They&apos;re the smiles, the progress, and the togetherness that make all the hard work worth it.
           </p>
         </motion.div>
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
           {galleryImages.map((img, index) => (
             <motion.div
-              key={img.src}
+              key={`${img.src}-${index}`}
               className="overflow-hidden rounded-2xl bg-surface-paper shadow-sm ring-1 ring-neutral-muted/15 transition-all hover:shadow-lg hover:-translate-y-1 min-h-[200px] sm:min-h-[250px]"
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}

@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import FloatingHelpWidget from "@/components/help/FloatingHelpWidget";
 
 const nunito = Nunito({ subsets: ["latin"], variable: "--font-display" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-body" });
@@ -35,19 +36,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${nunito.variable} ${inter.variable}`}> 
-      <head>
-          <Script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456"
-          crossOrigin="anonymous"
-        />
-      </head>
       <body className="min-h-screen font-body antialiased overflow-x-hidden">
         <div className="flex min-h-screen flex-col">
           <SiteHeader />
           <main className="flex-1">{children}</main>
           <SiteFooter />
         </div>
+        <FloatingHelpWidget />
         <Analytics />
       </body>
     </html>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useState, useEffect } from "react";
+import { triggerButtonHaptic } from "@/utils/haptics";
 
 export function FloatingDonate() {
   const [isVisible, setIsVisible] = useState(false);
@@ -37,7 +38,7 @@ export function FloatingDonate() {
 
   return (
     <motion.div
-      className="fixed bottom-0 left-0 right-0 z-50 md:hidden"
+      className="fixed bottom-0 left-0 right-0 z-50 md:hidden pb-[env(safe-area-inset-bottom)]"
       initial={{ y: 100, opacity: 0 }}
       animate={{ 
         y: isVisible ? 0 : 100, 
@@ -52,6 +53,7 @@ export function FloatingDonate() {
       <div className="relative px-4 pb-4 pt-3">
         <Link
           href="/donate"
+          onClick={() => triggerButtonHaptic()}
           className="flex items-center justify-center gap-2 w-full rounded-full bg-primary px-6 py-3.5 text-base font-semibold text-white shadow-lg shadow-primary/20 transition-all active:scale-95 min-h-[52px]"
         >
           <span className="text-xl">❤️</span>

@@ -7,7 +7,7 @@ export const db = {
     {
       id: "don_001",
       name: "Amina Yusuf",
-      email: "amina@example.org",
+      email: "priyasarvuthan@gmail.com",
       amount: 150,
       message: "Keep supporting girls' education!",
       status: "succeeded" as const,
@@ -16,7 +16,7 @@ export const db = {
     {
       id: "don_002",
       name: "Luis Gomez",
-      email: "luis@example.org",
+      email: "priyasarvuthan@gmail.com",
       amount: 75,
       message: "Proud to help.",
       status: "succeeded" as const,

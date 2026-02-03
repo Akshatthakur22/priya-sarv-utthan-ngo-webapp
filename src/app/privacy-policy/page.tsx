@@ -68,7 +68,7 @@ export default function PrivacyPolicyPage() {
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-2">Contact Us</h2>
           <p>
-            For any privacy-related questions, email us at <a href="mailto:info@yourngo.org" className="text-blue-600 underline">info@yourngo.org</a>.
+            For any privacy-related questions, email us at <a href="mailto:priyasarvuthan@gmail.com" className="text-blue-600 underline">priyasarvuthan@gmail.com</a>.
           </p>
         </section>
       </div>

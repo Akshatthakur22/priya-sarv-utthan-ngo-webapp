@@ -2,7 +2,6 @@ import { getEvents } from "@/services/event.service";
 import { FloatingDonate } from "@/components/layout/FloatingDonate";
 import type { Metadata } from "next";
 import { eventSchemaTemplate } from "@/lib/schema-templates";
-import AdBanner from "@/components/ads/AdBanner";
 export const metadata: Metadata = {
   title: "Events | Priya Sarv Utthan Seva Sansthan",
   description: "See upcoming and past events organized by Priya Sarv Utthan Seva Sansthan in Indore. Health camps, education drives, and more.",
@@ -65,11 +64,25 @@ export default async function EventsPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(eventsJsonLd) }} />
-      <div className="mx-auto max-w-5xl space-y-6 px-4 py-10 md:px-6">
-        <div className="space-y-2">
-          <p className="text-sm font-semibold text-primary">Events & updates</p>
-          <h1 className="text-3xl font-bold text-neutral-ink">Community Events & Activities</h1>
+      
+      {/* Hero Section with Image */}
+      <div className="relative h-[35vh] min-h-[280px] overflow-hidden">
+        <img 
+          src="/images/random1.png" 
+          alt="Community event" 
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-4">
+          <span className="inline-flex items-center gap-2 rounded-full bg-orange-500/20 backdrop-blur-sm px-4 py-2 text-sm font-semibold text-orange-200 border border-orange-400/30 mb-4">
+            📅 Community Events
+          </span>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Events & Activities</h1>
+          <p className="text-lg text-white/80 max-w-xl">Join us in making a difference in our community</p>
         </div>
+      </div>
+      
+      <div className="mx-auto max-w-5xl space-y-6 px-4 py-10 md:px-6">
         <div className="grid gap-4">
           {events.map((evt) => (
             <div key={evt.id} className="card p-4">
