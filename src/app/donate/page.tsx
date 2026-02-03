@@ -19,12 +19,16 @@ const IMPACT_LABELS: Record<number, string> = {
   2000: "Fund a month of vocational training",
 };
 
+
 export default function DonatePage() {
   const [amount, setAmount] = useState(500);
+  const [customAmount, setCustomAmount] = useState("");
   const [showQR, setShowQR] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const upiLink = `${UPI_BASE}&am=${amount}`;
+  // Use custom amount if set and valid, else use selected quick amount
+  const effectiveAmount = customAmount && !isNaN(Number(customAmount)) && Number(customAmount) > 0 ? Number(customAmount) : amount;
+  const upiLink = `${UPI_BASE}&am=${effectiveAmount}`;
 
   const copyUpiId = async () => {
     await navigator.clipboard.writeText(UPI_ID);
@@ -75,17 +79,26 @@ export default function DonatePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <div className="mb-4 flex justify-center gap-2">
+              <div className="mb-4 flex flex-wrap justify-center gap-2">
                 {AMOUNTS.map((amt) => (
                   <button
                     key={amt}
-                    className={`rounded-full px-4 py-2 font-semibold text-sm transition-all border-2 ${amount === amt ? "border-emerald-600 bg-emerald-50 text-emerald-700" : "border-neutral-muted bg-white text-neutral-body hover:bg-emerald-50"}`}
-                    onClick={() => setAmount(amt)}
+                    className={`rounded-full px-4 py-2 font-semibold text-sm transition-all border-2 ${Number(customAmount) === amt || (customAmount === "" && amount === amt) ? "border-emerald-600 bg-emerald-50 text-emerald-700" : "border-neutral-muted bg-white text-neutral-body hover:bg-emerald-50"}`}
+                    onClick={() => { setAmount(amt); setCustomAmount(""); }}
                     aria-label={`Donate ₹${amt}`}
                   >
                     ₹{amt}
                   </button>
                 ))}
+                <input
+                  type="number"
+                  min={1}
+                  placeholder="Other"
+                  className="rounded-full border-2 border-neutral-muted bg-white px-4 py-2 text-sm font-semibold text-neutral-body w-28 focus:border-emerald-600 focus:ring-emerald-200 outline-none transition-all"
+                  value={customAmount}
+                  onChange={e => setCustomAmount(e.target.value.replace(/^0+/, ""))}
+                  aria-label="Enter custom amount"
+                />
               </div>
               <motion.a
                 href={upiLink}
@@ -149,6 +162,11 @@ export default function DonatePage() {
                 <span className="inline-block rounded-full bg-emerald-100 px-4 py-2 text-emerald-700 font-semibold text-sm">Section 80G Tax Benefits</span>
               </div>
               <p className="text-xs text-neutral-body mt-2">All donations are used for community welfare. Receipts provided for tax claims.</p>
+              <div className="mt-3">
+                <span className="inline-block rounded-full bg-peach-100 px-4 py-2 text-peach-700 font-semibold text-sm">
+                  {IMPACT_LABELS[effectiveAmount] || `Your gift of ₹${effectiveAmount} will help us create impact!`}
+                </span>
+              </div>
             </motion.div>
 
             {/* Contact & Gratitude */}
