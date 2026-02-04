@@ -36,6 +36,25 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${nunito.variable} ${inter.variable}`}> 
+      <head>
+        {/* Google Analytics Tag */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-FDC3201102"
+          strategy="afterInteractive"
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-FDC3201102');
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-screen font-body antialiased overflow-x-hidden">
         <div className="flex min-h-screen flex-col">
           <SiteHeader />

@@ -1,157 +1,223 @@
-import { Metadata } from 'next';
+"use client";
+import React from "react";
+import { motion } from "framer-motion";
 
-export const metadata: Metadata = {
-  title: 'Testimonials | Your NGO Name',
-  description: 'Read testimonials and reviews from people whose lives have been touched by Your NGO Name. Discover the impact of our work through their stories.',
-  keywords: [
-    'testimonials',
-    'reviews',
-    'stories',
-    'impact',
-    'Your NGO Name',
-    'NGO',
-    'nonprofit',
-    'community',
-    'feedback',
-    'supporters',
-    'beneficiaries',
-    'social work',
-    'charity'
-  ],
-  openGraph: {
-    title: 'Testimonials | Priya Sarv Utthan Seva Sansthan',
-    description: 'Read inspiring stories from our beneficiaries and supporters.',
-    url: 'https://priyasarvutthan.org/testimonials',
-    type: 'website',
-    images: [
-      {
-        url: '/images/og-testimonials.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Testimonials for Priya Sarv Utthan Seva Sansthan',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Testimonials | Priya Sarv Utthan Seva Sansthan',
-    description: 'Read inspiring stories from our beneficiaries and supporters.',
-    images: ['/images/og-testimonials.jpg'],
-    site: '@priyasarvutthan',
-    creator: '@priyasarvutthan',
-  },
-  alternates: {
-    canonical: 'https://priyasarvutthan.org/testimonials',
-  },
-};
-
-import Script from 'next/script';
-
-
-
-// Example testimonials data for Review schema
 const testimonials = [
   {
-    "@type": "Review",
-    "reviewBody": "Thanks to Priya Sarv Utthan Seva Sansthan, I was able to complete my education and start my own business.",
-    "author": { "@type": "Person", "name": "Meena Kumari" },
-    "reviewRating": { "@type": "Rating", "ratingValue": "5" },
-    "image": "/images/woman1.png"
+    name: "Smt. Kamla Devi",
+    role: "Pension Beneficiary",
+    hindi: "जगदीश जी की मदद से मेरी पेंशन शुरू हुई, अब मुझे किसी पर निर्भर नहीं रहना पड़ता।",
+    english: "With Mr. Jagdish's help, my pension finally started. I no longer have to depend on others for my basic needs.",
+    color: "#e67e22"
   },
   {
-    "@type": "Review",
-    "reviewBody": "The health camps organized by the NGO helped my family access vital medical care. My children now receive regular check-ups.",
-    "author": { "@type": "Person", "name": "Sunita Devi" },
-    "reviewRating": { "@type": "Rating", "ratingValue": "5" },
-    "image": "/images/woman2.png"
+    name: "Rahul Sharma",
+    role: "Law Student / Volunteer",
+    hindi: "विधिक साक्षरता शिविरों के माध्यम से मुझे कानून की शक्ति का सही ज्ञान मिला।",
+    english: "Through the legal literacy camps, I gained real knowledge about the power of our constitutional rights.",
+    color: "#1a2a6c"
   },
   {
-    "@type": "Review",
-    "reviewBody": "Volunteering with Priya Sarv Utthan Seva Sansthan has been a life-changing experience. I've learned so much.",
-    "author": { "@type": "Person", "name": "Kavita Singh" },
-    "reviewRating": { "@type": "Rating", "ratingValue": "5" },
-    "image": "/images/woman3.png"
+    name: "Sunita Ahirwar",
+    role: "Skill Training Student",
+    hindi: "संस्था के सिलाई प्रशिक्षण केंद्र से जुड़कर मैं आज आत्मनिर्भर बन गई हूँ।",
+    english: "By joining the NGO's vocational training center, I am now self-reliant and supporting my family.",
+    color: "#27ae60"
   },
   {
-    "@type": "Review",
-    "reviewBody": "The tailoring skills I learned here helped me become financially independent. Now I support my entire family.",
-    "author": { "@type": "Person", "name": "Rekha Verma" },
-    "reviewRating": { "@type": "Rating", "ratingValue": "5" },
-    "image": "/images/woman4.png"
+    name: "Dr. Alok Gupta",
+    role: "Community Supporter",
+    hindi: "समाज के अंतिम व्यक्ति तक न्याय पहुँचाने का यह मिशन वास्तव में सराहनीय है।",
+    english: "This mission to bring justice to the very last person in society is truly commendable and transparent.",
+    color: "#1a2a6c"
   },
   {
-    "@type": "Review",
-    "reviewBody": "My daughter got free tuition and school supplies. Today she dreams of becoming a doctor!",
-    "author": { "@type": "Person", "name": "Geeta Bai" },
-    "reviewRating": { "@type": "Rating", "ratingValue": "5" },
-    "image": "/images/woman5.png"
+    name: "Meena Bi",
+    role: "Widow Pension Mission",
+    hindi: "₹600 पेंशन बढ़ाने की लड़ाई में जगदीश जाधव जी हमारे सबसे बड़े साथी हैं।",
+    english: "In the fight to increase the ₹600 pension, Mr. Jagdish Jadhav is our strongest ally and voice.",
+    color: "#e67e22"
   }
 ];
 
-const reviewsJsonLd = {
-  "@context": "https://schema.org",
-  "@graph": testimonials
-};
-
 export default function TestimonialsPage() {
   return (
-    <>
-      <Script
-        id="testimonials-reviews-jsonld"
-        type="application/ld+json"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewsJsonLd) }}
-      />
-      
-      {/* Hero Section */}
-      <div className="relative h-[40vh] min-h-[300px] overflow-hidden">
-        <img 
-          src="/images/random.png" 
-          alt="Community stories" 
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-4">
-          <span className="inline-flex items-center gap-2 rounded-full bg-orange-500/20 backdrop-blur-sm px-4 py-2 text-sm font-semibold text-orange-200 border border-orange-400/30 mb-4">
-            💬 Real Stories
-          </span>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Voices of Change</h1>
-          <p className="text-lg text-white/80 max-w-xl">Hear from the people whose lives have been touched by our work</p>
-        </div>
+    <div className="testimonial-page">
+      <style jsx>{`
+        .testimonial-page {
+          background-color: #f8f9fa;
+          min-height: 100vh;
+          padding: 5rem 1.5rem;
+          font-family: 'Inter', sans-serif;
+        }
+
+        .header {
+          text-align: center;
+          max-width: 800px;
+          margin: 0 auto 4rem auto;
+        }
+
+        .header h1 {
+          font-size: 3rem;
+          color: #1a2a6c;
+          margin-bottom: 1rem;
+        }
+
+        .header-hindi {
+          font-family: 'Mukta', sans-serif;
+          font-size: 1.4rem;
+          color: #e67e22;
+          font-weight: 600;
+          display: block;
+          margin-bottom: 1rem;
+        }
+
+        .testimonial-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+          gap: 2rem;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+
+        .card {
+          background: white;
+          padding: 2rem;
+          border-radius: 20px;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          border: 1px solid #f0f0f0;
+          transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+          transform: translateY(-10px);
+        }
+
+        .quote-icon {
+          font-size: 3rem;
+          color: #eee;
+          position: absolute;
+          top: 1rem;
+          right: 1.5rem;
+          line-height: 1;
+        }
+
+        .hindi-text {
+          font-family: 'Mukta', sans-serif;
+          font-size: 1.25rem;
+          color: #333;
+          font-weight: 600;
+          line-height: 1.4;
+          margin-bottom: 1.5rem;
+          position: relative;
+          z-index: 1;
+        }
+
+        .english-text {
+          font-size: 1rem;
+          color: #666;
+          line-height: 1.6;
+          font-style: italic;
+          margin-bottom: 2rem;
+        }
+
+        .profile {
+          margin-top: auto;
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+
+        .avatar {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-weight: bold;
+          font-size: 1.2rem;
+        }
+
+        .info h4 {
+          margin: 0;
+          color: #1a2a6c;
+          font-size: 1.1rem;
+        }
+
+        .info p {
+          margin: 0;
+          font-size: 0.85rem;
+          color: #888;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+          .header h1 { font-size: 2.2rem; }
+          .testimonial-grid { grid-template-columns: 1fr; }
+        }
+      `}</style>
+
+      <div className="header">
+        <span className="header-hindi">"जन सेवा का प्रभाव: हमारे लाभार्थियों की आवाज़"</span>
+        <h1>Voices of Impact</h1>
+        <p>Real stories of change from the people we serve and the volunteers who lead the mission.</p>
       </div>
 
-      <div className="bg-neutral-50 py-16 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid gap-8 md:grid-cols-2">
-            {testimonials.map((t, idx) => (
-              <div key={idx} className="bg-white rounded-[2rem] p-6 shadow-lg border border-neutral-100 hover:shadow-xl transition-shadow">
-                <div className="flex items-center gap-4 mb-4">
-                  <img 
-                    src={t.image} 
-                    alt={t.author.name} 
-                    className="w-16 h-16 rounded-full object-cover ring-4 ring-orange-100"
-                  />
-                  <div>
-                    <h2 className="text-lg font-bold text-neutral-900">{t.author.name}</h2>
-                    <div className="flex gap-1 text-orange-400">
-                      {[...Array(5)].map((_, i) => (
-                        <span key={i}>⭐</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <p className="text-neutral-600 leading-relaxed italic">"{t.reviewBody}"</p>
+      <div className="testimonial-grid">
+        {testimonials.map((t, index) => (
+          <motion.div 
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            viewport={{ once: true }}
+            className="card"
+          >
+            <div className="quote-icon">“</div>
+            <p className="hindi-text">{t.hindi}</p>
+            <p className="english-text">{t.english}</p>
+            
+            <div className="profile">
+              <div className="avatar" style={{ backgroundColor: t.color }}>
+                {t.name.charAt(0)}
               </div>
-            ))}
-          </div>
-          
-          <div className="text-center mt-12">
-            <a href="/donate" className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105">
-              Support Our Work
-            </a>
-          </div>
-        </div>
+              <div className="info">
+                <h4>{t.name}</h4>
+                <p>{t.role}</p>
+              </div>
+            </div>
+          </motion.div>
+        ))}
       </div>
-    </>
+
+      <motion.div 
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        style={{ textAlign: 'center', marginTop: '5rem', color: '#1a2a6c', fontWeight: 'bold' }}
+      >
+        <p>Join our mission to create more stories like these.</p>
+        <button 
+          onClick={() => window.location.href = '/donate'} 
+          style={{ 
+            backgroundColor: '#e67e22', 
+            color: 'white', 
+            border: 'none', 
+            padding: '12px 30px', 
+            borderRadius: '50px',
+            cursor: 'pointer',
+            marginTop: '1rem',
+            fontSize: '1rem'
+          }}
+        >
+          Support Our Cause
+        </button>
+      </motion.div>
+    </div>
   );
 }

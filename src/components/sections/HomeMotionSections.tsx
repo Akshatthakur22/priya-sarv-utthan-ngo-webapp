@@ -40,7 +40,7 @@ export default function HomeMotionSections() {
       const scrollAmount = carouselRef.current.offsetWidth * 0.85;
       carouselRef.current.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     }
   };
@@ -49,16 +49,16 @@ export default function HomeMotionSections() {
     <>
       {/* Full-width Hero Slider */}
       <HeroSlider />
-      
+
       {/* Image-to-Text Story Sections */}
       <StorySections />
-      
+
       {/* Work in Action */}
       <WorkInAction />
-      
+
       {/* Trust & Credibility Section */}
       <TrustSection />
-      
+
       {/* Values Section - Mobile: Horizontal Swipe Carousel */}
       <section className="bg-surface-paper py-12 md:py-20">
         <div className="mx-auto max-w-6xl px-4 md:px-6">
@@ -75,28 +75,31 @@ export default function HomeMotionSections() {
             <h2 className="text-2xl md:text-4xl font-bold text-neutral-900">
               Our Core <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500">Values</span>
             </h2>
+            <p className="text-base text-neutral-body leading-relaxed mt-4">
+              We uphold <strong>Transparency</strong>, <strong>Corruption-free Administration</strong>, and <strong>Legal Literacy</strong> as the pillars of our organization. Every initiative is designed to empower communities with trust and accountability.
+            </p>
           </motion.div>
-          
+
           {/* Mobile: Horizontal Carousel */}
           <div className="relative md:hidden">
             {/* Carousel Navigation Buttons */}
-            <button 
+            <button
               onClick={() => scrollCarousel("left")}
               className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-neutral-600 active:scale-90 touch-manipulation -ml-2"
               aria-label="Previous"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
-            <button 
+            <button
               onClick={() => scrollCarousel("right")}
               className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-neutral-600 active:scale-90 touch-manipulation -mr-2"
               aria-label="Next"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
-            
+
             {/* Scrollable Container */}
-            <div 
+            <div
               ref={carouselRef}
               className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 -mx-4 px-4"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
@@ -117,11 +120,11 @@ export default function HomeMotionSections() {
                 </motion.div>
               ))}
             </div>
-            
+
             {/* Swipe Hint */}
             <p className="text-center text-xs text-neutral-400 mt-2 pb-16">← Swipe to explore →</p>
           </div>
-          
+
           {/* Desktop: Grid */}
           <div className="hidden md:grid gap-6 md:grid-cols-3">
             {values.map((item, index) => (
@@ -140,7 +143,7 @@ export default function HomeMotionSections() {
               </motion.div>
             ))}
           </div>
-          
+
           <motion.div
             className="mt-10 md:mt-12 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4"
             initial={{ opacity: 0, y: 20 }}
@@ -150,7 +153,7 @@ export default function HomeMotionSections() {
           >
             <a
               href="/donate"
-              onClick={() => triggerButtonHaptic()}
+              onClick={() => triggerButtonHaptic(100)}
               className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-orange-500 to-amber-500 
                          px-8 py-4 min-h-[52px] text-base sm:text-lg font-semibold text-white 
                          shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/30 
@@ -160,7 +163,7 @@ export default function HomeMotionSections() {
             </a>
             <a
               href="/careers"
-              onClick={() => triggerButtonHaptic()}
+              onClick={() => triggerButtonHaptic(100)}
               className="inline-flex items-center justify-center rounded-full border-2 border-neutral-200 bg-white 
                          px-8 py-4 min-h-[52px] text-base sm:text-lg font-semibold text-neutral-700 
                          hover:border-orange-200 hover:bg-orange-50 
@@ -171,10 +174,10 @@ export default function HomeMotionSections() {
           </motion.div>
         </div>
       </section>
-      
+
       {/* Masonry Gallery */}
       <MasonryGallery />
-      
+
       {/* Live Impact Ticker */}
       <ImpactTicker />
     </>

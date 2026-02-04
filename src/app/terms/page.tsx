@@ -1,75 +1,158 @@
-import type { Metadata } from "next";
+"use client";
+import React from "react";
+import Script from "next/script";
+import { motion } from "framer-motion";
 
-export const metadata: Metadata = {
-  title: "Terms & Conditions | Priya Sarv Utthan Seva Sansthan",
-  description: "Read the terms and conditions for using Priya Sarv Utthan Seva Sansthan's website and services.",
-  keywords: ["terms", "conditions", "NGO", "Priya Sarv Utthan Seva Sansthan"],
-  openGraph: {
-    title: "Terms & Conditions | Priya Sarv Utthan Seva Sansthan",
-    description: "Terms and conditions for using our website and services.",
-    url: "https://priyasarvutthan.org/terms",
-    type: "article"
+const termsSections = [
+  {
+    title: "1. Acceptance of Terms",
+    hindi: "इस वेबसाइट का उपयोग करके, आप हमारे नियमों को स्वीकार करते हैं।",
+    content: "By accessing priyasarvutthan.org, you agree to be bound by these Terms and Conditions. Our services are intended to provide legal literacy and social support to the community."
   },
-  twitter: {
-    card: "summary",
-    title: "Terms & Conditions | Priya Sarv Utthan Seva Sansthan",
-    description: "Terms and conditions for using our website and services."
+  {
+    title: "2. Donation & Refund Policy",
+    hindi: "दान की प्रक्रिया और पारदर्शिता।",
+    content: "Donations are processed via secure channels. As per Indian law, donations once made are generally non-refundable. We provide 80G tax-exemption receipts for all eligible donations made within India."
   },
-  alternates: { canonical: "https://priyasarvutthan.org/terms" }
-};
+  {
+    title: "3. Legal Aid Disclaimer",
+    hindi: "विधिक जानकारी और परामर्श की सीमाएँ।",
+    content: "Information provided on this platform regarding New Criminal Laws (BNS 2023) or human rights is for educational purposes. It does not constitute a formal lawyer-client relationship until a specific case is officially taken up by our legal cell."
+  },
+  {
+    title: "4. Intellectual Property",
+    hindi: "सामग्री के उपयोग के नियम।",
+    content: "All content, including the mission details of Mr. Jagdish Jadhav and our organizational logos, are the property of Priya Sarv Utthan Seva Sansthan. Unauthorized reproduction is strictly prohibited."
+  },
+  {
+    title: "5. Limitation of Liability",
+    hindi: "हमारी जिम्मेदारी की सीमा।",
+    content: "While we strive for 100% accuracy in our legal literacy missions, the Sansthan is not liable for actions taken by individuals based solely on website content without professional consultation."
+  }
+];
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "NGO",
-  "name": "Priya Sarv Utthan Seva Sansthan",
-  "url": "https://priyasarvutthan.org",
-  "description": "A registered NGO dedicated to women empowerment, education, and community development in Indore."
-};
-
-import Script from 'next/script';
-const termsJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Terms & Conditions | Your NGO Name",
-  "url": "https://your-ngosite.org/terms",
-  "description": "Read the terms and conditions for using Your NGO Name's website and services.",
-};
 export default function TermsPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Terms and Conditions | Priya Sarv Utthan Seva Sansthan",
+    "url": "https://priyasarvutthan.org/terms",
+    "description": "Official terms and conditions governing the use of our NGO platform and donation services.",
+  };
+
   return (
-    <>
+    <div className="terms-container">
+      <style jsx>{`
+        .terms-container {
+          background-color: #f4f7f6;
+          min-height: 100vh;
+          padding: 5rem 1rem;
+          font-family: 'Inter', sans-serif;
+        }
+        .content-card {
+          max-width: 850px;
+          margin: 0 auto;
+          background: #ffffff;
+          padding: 4rem;
+          border-radius: 8px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+          border-top: 8px solid #1a2a6c;
+        }
+        h1 {
+          font-size: 2.8rem;
+          color: #1a2a6c;
+          text-align: center;
+          margin-bottom: 0.5rem;
+        }
+        .subtitle {
+          text-align: center;
+          color: #666;
+          margin-bottom: 3rem;
+          font-weight: 500;
+        }
+        .hindi-lead {
+          font-family: 'Mukta', sans-serif;
+          display: block;
+          background: #fff5eb;
+          padding: 1rem;
+          border-radius: 8px;
+          color: #d35400;
+          text-align: center;
+          margin-bottom: 3rem;
+          font-weight: 600;
+        }
+        .section {
+          margin-bottom: 3rem;
+        }
+        .section-title {
+          font-size: 1.5rem;
+          color: #1a2a6c;
+          margin-bottom: 0.5rem;
+          font-weight: 700;
+        }
+        .hindi-sub {
+          font-family: 'Mukta', sans-serif;
+          color: #7f8c8d;
+          font-size: 1.1rem;
+          margin-bottom: 0.8rem;
+          display: block;
+        }
+        .text {
+          color: #2c3e50;
+          line-height: 1.8;
+          font-size: 1.05rem;
+        }
+        .footer-note {
+          margin-top: 4rem;
+          padding-top: 2rem;
+          border-top: 1px solid #eee;
+          font-size: 0.95rem;
+          color: #7f8c8d;
+        }
+        @media (max-width: 768px) {
+          .content-card { padding: 2rem 1.5rem; }
+          h1 { font-size: 2rem; }
+        }
+      `}</style>
+
       <Script
-        id="terms-jsonld"
+        id="terms-json"
         type="application/ld+json"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(termsJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="bg-white py-12 px-4 max-w-3xl mx-auto">
-        <h1 className="text-4xl font-bold mb-6 text-center">Terms & Conditions</h1>
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-2">Acceptance of Terms</h2>
+
+      <motion.div 
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        className="content-card"
+      >
+        <header>
+          <h1>Terms & Conditions</h1>
+          <p className="subtitle">Operational Guidelines of Priya Sarv Utthan Seva Sansthan</p>
+        </header>
+
+        <span className="hindi-lead">
+          "नियम और शर्तें हमारे सेवा कार्यों की पारदर्शिता और सत्यनिष्ठा सुनिश्चित करती हैं।"
+        </span>
+
+        {termsSections.map((section, index) => (
+          <div key={index} className="section">
+            <h2 className="section-title">{section.title}</h2>
+            <span className="hindi-sub">{section.hindi}</span>
+            <p className="text">{section.content}</p>
+          </div>
+        ))}
+
+        <div className="footer-note">
           <p>
-            By using our website, you agree to comply with these terms and conditions. Priya Sarv Utthan Seva Sansthan reserves the right to update these terms at any time.
+            For any clarifications regarding our operational terms, please reach out to us at:
+            <br />
+            <strong>Email:</strong> priyasarvutthan@gmail.com
+            <br />
+            <strong>Location:</strong> Indore, Madhya Pradesh
           </p>
-        </section>
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-2">Use of Content</h2>
-          <p>
-            All content is for informational purposes only. Unauthorized use or reproduction is prohibited.
-          </p>
-        </section>
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-2">Limitation of Liability</h2>
-          <p>
-            Priya Sarv Utthan Seva Sansthan is not liable for any damages arising from the use of this website.
-          </p>
-        </section>
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-2">Contact Us</h2>
-          <p>
-            For questions about these terms, email <a href="mailto:priyasarvuthan@gmail.com" className="text-blue-600 underline">priyasarvuthan@gmail.com</a>.
-          </p>
-        </section>
-      </div>
-    </>
+        </div>
+      </motion.div>
+    </div>
   );
 }

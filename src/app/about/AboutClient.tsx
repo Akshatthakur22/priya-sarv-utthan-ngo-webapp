@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Phone, Building2, Users, Heart, Scale, GraduationCap, Home, Award, FileCheck, Shield, ChevronRight, User, Star } from "lucide-react";
 import { triggerHaptic } from "@/utils/haptics";
 
+
 // City data with Jabalpur having local contact info
 const cities = [
   {
@@ -242,14 +243,24 @@ export default function AboutClient() {
           >
             <div className="grid md:grid-cols-[280px_1fr] gap-8 items-center">
               <div className="relative mx-auto md:mx-0">
-                <div className="aspect-square w-64 md:w-full rounded-[2.5rem] bg-gradient-to-br from-emerald-400 to-teal-500 p-1 shadow-2xl shadow-emerald-500/20">
+                <motion.a
+                  href="/founder"
+                  initial={{ scale: 1 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="block aspect-square w-64 md:w-full rounded-[2.5rem] bg-gradient-to-br from-emerald-400 to-teal-500 p-1 shadow-2xl shadow-emerald-500/20"
+                >
                   <div className="w-full h-full rounded-[2.25rem] bg-teal-950/80 overflow-hidden flex items-center justify-center">
-                    <div className="text-center p-6">
-                      <User className="w-20 h-20 text-emerald-300/50 mx-auto mb-3" />
-                      <p className="text-sm text-emerald-200/60">Photo Coming Soon</p>
-                    </div>
+                    <Image
+                      src="/images/woman1.png"
+                      alt="Founder Photo"
+                      className="object-cover w-full h-full rounded-[2.25rem]"
+                      width={256}
+                      height={256}
+                    />
                   </div>
-                </div>
+                </motion.a>
                 <div className="absolute -bottom-4 -right-4 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl shadow-lg px-4 py-2">
                   <p className="text-xs text-emerald-100">Since 1999</p>
                   <p className="text-sm font-bold text-white">27+ Years</p>

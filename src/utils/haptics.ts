@@ -33,6 +33,6 @@ export function triggerSuccessHaptic(): void {
 /**
  * Triggers a button press haptic (very short vibration)
  */
-export function triggerButtonHaptic(): void {
+export function triggerButtonHaptic(p0: number): void {
   triggerHaptic(30);
 }

@@ -53,7 +53,7 @@ export function FloatingDonate() {
       <div className="relative px-4 pb-4 pt-3">
         <Link
           href="/donate"
-          onClick={() => triggerButtonHaptic()}
+          onClick={() => triggerButtonHaptic(30)}
           className="flex items-center justify-center gap-2 w-full rounded-full bg-primary px-6 py-3.5 text-base font-semibold text-white shadow-lg shadow-primary/20 transition-all active:scale-95 min-h-[52px]"
         >
           <span className="text-xl">❤️</span>
