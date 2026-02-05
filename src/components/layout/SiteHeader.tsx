@@ -42,8 +42,8 @@ export function SiteHeader() {
             <Image
               src="/logo.png"
               alt="Priya Sarv Utthan Seva Sansthan logo"
-              fill
-              sizes="48px"
+              width={48}
+              height={48}
               className="object-contain"
               priority
             />
