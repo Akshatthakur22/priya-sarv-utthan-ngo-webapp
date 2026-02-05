@@ -42,3 +42,20 @@ h1, h2, h3, h4, h5, h6 {
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+
+/* Updated text color classes for better contrast */
+.text-slate-400 {
+  color: #6b7280; /* Increased contrast */
+}
+
+.text-slate-500 {
+  color: #4b5563; /* Increased contrast */
+}
+
+.text-slate-100 {
+  color: #1f2937; /* Darker text for better readability */
+}
+
+.text-slate-50 {
+  color: #111827; /* High contrast for light backgrounds */
+}
