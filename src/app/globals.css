@@ -42,3 +42,28 @@ h1, h2, h3, h4, h5, h6 {
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+
+/* Updated text color classes for better contrast */
+.text-primary {
+  color: #1d4ed8; /* Increased contrast for primary text */
+}
+
+.text-neutral-400 {
+  color: #6b7280; /* Improved contrast for neutral text */
+}
+
+.text-neutral-muted {
+  color: #374151; /* Darker neutral color for better readability */
+}
+
+.text-surface-offwhite {
+  color: #f3f4f6; /* Ensure sufficient contrast */
+}
+
+/* Increase touch target sizes */
+button, a {
+  min-width: 48px;
+  min-height: 48px;
+  padding: 12px;
+  margin: 4px;
+}

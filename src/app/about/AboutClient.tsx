@@ -253,7 +253,7 @@ export default function AboutClient() {
                 >
                   <div className="w-full h-full rounded-[2.25rem] bg-teal-950/80 overflow-hidden flex items-center justify-center">
                     <Image
-                      src="/images/woman1.png"
+                      src="/images/founder_aboutpage.png"
                       alt="Founder Photo"
                       className="object-cover w-full h-full rounded-[2.25rem]"
                       width={256}

@@ -123,7 +123,7 @@ export function StorySections() {
                     src={story.image}
                     alt={story.imageAlt}
                     fill
-                    priority={index === 0}
+                    loading="lazy"
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
                     placeholder="blur"
