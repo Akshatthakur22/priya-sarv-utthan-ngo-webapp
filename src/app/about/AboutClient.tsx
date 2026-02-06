@@ -306,7 +306,7 @@ export default function AboutClient() {
                     <Phone className="w-5 h-5" />
                     <span>
                       <span className="block text-xs opacity-80">Contact Founder</span>
-                      <span className="text-lg">+91 98065 02882</span>
+                      <span className="text-lg">+91 9977177059</span>
                     </span>
                   </a>
                   <a

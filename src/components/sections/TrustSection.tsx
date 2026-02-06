@@ -127,7 +127,7 @@ export function TrustSection() {
                 className="mt-5 inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold px-5 py-3 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all text-sm"
               >
                 <Phone className="w-4 h-4" />
-                +91 98065 02882
+                +91 9977177059
               </a>
             </motion.div>
 

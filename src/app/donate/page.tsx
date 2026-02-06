@@ -114,37 +114,12 @@ export default function DonatePage() {
         <p className="text-xs font-bold text-neutral-400 mb-8 tracking-wide italic">QR917000078439-2755@unionbankofindia</p>
         
         {/* UPI LOGO BAR */}
-       <div className="flex justify-center items-center gap-6 py-4 opacity-100">
-  
-  {/* GOOGLE PAY */}
-  <a
-    href="intent://pay?pa=qr917000078439-2755@unionbankofindia&pn=Priya%20Sarv%20Utthan&cu=INR#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end;"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <img src="/images/gpay-logo.png" alt="GPay" className="h-5 w-auto" />
-  </a>
-
-  {/* PHONEPE */}
-  <a
-    href="upi://pay?pa=qr917000078439-2755@unionbankofindia&pn=Priya%20Sarv%20Utthan&cu=INR"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <img src="/images/phonepe-logo.png" alt="PhonePe" className="h-6 w-auto" />
-  </a>
-
-  {/* PAYTM */}
-  <a
-    href="upi://pay?pa=qr917000078439-2755@unionbankofindia&pn=Priya%20Sarv%20Utthan&cu=INR"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <img src="/images/paytm-logo.png" alt="Paytm" className="h-5 w-auto" />
-  </a>
-
-</div>
-
+        <div className="flex justify-center items-center gap-6 py-4 opacity-100">
+   {/* Remove 'grayscale' classes to restore color */}
+   <img src="/images/gpay-logo.png" alt="GPay" className="h-5 w-auto" />
+   <img src="/images/phonepe-logo.png" alt="PhonePe" className="h-6 w-auto" />
+   <img src="/images/paytm-logo.png" alt="Paytm" className="h-5 w-auto" />
+         </div>
       </motion.div>
 
       {/* 4. MOBILE-FRIENDLY ACTION SECTION */}
