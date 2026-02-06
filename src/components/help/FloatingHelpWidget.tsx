@@ -1,17 +1,37 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LifeBuoy, MessageCircle, Gavel, Phone, X } from "lucide-react";
 import Link from "next/link";
 
 export default function FloatingHelpWidget() {
   const [open, setOpen] = useState(false);
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    if (open) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [open]);
 
   return (
     <div className="fixed z-50 bottom-20 md:bottom-6 right-4 md:right-6 flex flex-col items-end">
       <AnimatePresence>
         {open && (
           <motion.nav
+            ref={popupRef}
             initial={{ opacity: 0, y: 30, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.9 }}

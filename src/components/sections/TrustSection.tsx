@@ -66,10 +66,12 @@ export function TrustSection() {
               className="bg-gradient-to-br from-teal-900 via-emerald-900 to-teal-950 rounded-[2rem] p-6 sm:p-8 text-white"
             >
               <div className="flex items-start gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 p-0.5 flex-shrink-0">
-                  <div className="w-full h-full rounded-[14px] bg-teal-950 flex items-center justify-center">
-                    <User className="w-8 h-8 text-emerald-300/60" />
-                  </div>
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 p-0.5 flex-shrink-0 overflow-hidden">
+                  <img 
+                    src="/images/founder_founderpage.png" 
+                    alt="Jagdish Jadhav - Founder & President" 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs text-emerald-400 font-semibold uppercase tracking-wide mb-1">
@@ -80,9 +82,44 @@ export function TrustSection() {
                 </div>
               </div>
               
-              <p className="mt-4 text-emerald-100/80 text-sm italic leading-relaxed">
-                &ldquo;Building a self-reliant society through compassion and collective action.&rdquo;
-              </p>
+              <div className="mt-4 space-y-3">
+                <p className="text-emerald-100/90 text-sm leading-relaxed">
+                  Social reformer with 27+ years of dedicated service to community development and women empowerment across Madhya Pradesh.
+                </p>
+                
+                <div className="flex flex-wrap gap-2">
+                  <span className="inline-flex items-center px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs font-medium">
+                    🎓 Education Advocate
+                  </span>
+                  <span className="inline-flex items-center px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs font-medium">
+                    👥 Community Leader
+                  </span>
+                  <span className="inline-flex items-center px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs font-medium">
+                    🌱 Rural Development
+                  </span>
+                </div>
+                
+                <p className="text-emerald-100/80 text-sm italic leading-relaxed">
+                  &ldquo;Building a self-reliant society through compassion and collective action. Every child deserves education, every woman deserves empowerment.&rdquo;
+                </p>
+                
+                <div className="pt-3 border-t border-emerald-500/20">
+                  <div className="grid grid-cols-3 gap-3 text-center">
+                    <div>
+                      <p className="text-lg font-bold text-emerald-100">27+</p>
+                      <p className="text-xs text-emerald-300/70">Years Service</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold text-emerald-100">50K+</p>
+                      <p className="text-xs text-emerald-300/70">Lives Impacted</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold text-emerald-100">3</p>
+                      <p className="text-xs text-emerald-300/70">Cities Served</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
               
               <a
                 href="tel:+919806502882"

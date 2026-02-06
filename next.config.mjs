@@ -5,7 +5,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'calcuzy.app',
+        hostname: 'priyasarvutthan.org',
         pathname: '/**',
       },
     ],
@@ -15,7 +15,7 @@ const nextConfig = {
   experimental: {
     optimizeCss: true, // Enable CSS optimization
   },
-  swcMinify: true, // Use SWC for faster builds and modern JavaScript
+  
   async headers() {
     return [
       {
