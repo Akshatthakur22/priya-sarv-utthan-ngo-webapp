@@ -6,6 +6,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Phone, Building2, Users, Heart, Scale, GraduationCap, Home, Award, FileCheck, Shield, ChevronRight, User, Star } from "lucide-react";
 import { triggerHaptic } from "@/utils/haptics";
 
+// Static image array to prevent hydration issues
+const staticGalleryImages = [
+  { src: "/images/random.png", alt: "Community gathering" },
+  { src: "/images/child2.png", alt: "Children learning" },
+  { src: "/images/woman3.png", alt: "Women empowerment" },
+  { src: "/images/achivement.png", alt: "Achievement award ceremony" }
+];
+
 
 // City data with Jabalpur having local contact info
 const cities = [
@@ -194,6 +202,7 @@ export default function AboutClient() {
         viewport={{ once: true, margin: "-50px" }}
         variants={staggerContainer}
         className="bg-gradient-to-r from-orange-500 to-amber-500 py-8 sm:py-10"
+        style={{ opacity: 1 }}
       >
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -219,6 +228,7 @@ export default function AboutClient() {
         viewport={{ once: true, margin: "-50px" }}
         variants={scaleIn}
         className="bg-surface-cream py-16 md:py-20"
+        style={{ opacity: 1 }}
       >
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-10">
@@ -296,7 +306,7 @@ export default function AboutClient() {
                     <Phone className="w-5 h-5" />
                     <span>
                       <span className="block text-xs opacity-80">Contact Founder</span>
-                      <span className="text-lg">+91 98065 02882</span>
+                      <span className="text-lg">+91 9977177059</span>
                     </span>
                   </a>
                   <a
@@ -555,6 +565,7 @@ export default function AboutClient() {
           viewport={{ once: true, margin: "-50px" }}
           variants={fadeInUp}
           className="bg-gradient-to-br from-orange-500 to-amber-500 rounded-[3rem] p-8 sm:p-12 text-white text-center"
+          style={{ opacity: 1 }}
         >
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">Our Approach • हमारा दृष्टिकोण</h2>
           <p className="text-white/90 max-w-3xl mx-auto leading-relaxed mb-8">
@@ -585,6 +596,7 @@ export default function AboutClient() {
           viewport={{ once: true, margin: "-50px" }}
           variants={staggerContainer}
           className="space-y-6"
+          style={{ opacity: 1 }}
         >
           <div className="text-center">
             <motion.h2 variants={fadeInUp} className="text-2xl sm:text-3xl font-bold text-neutral-900">
@@ -599,9 +611,10 @@ export default function AboutClient() {
               { src: "/images/child5.png", alt: "Education program" }
             ].map((img, i) => (
               <motion.div
-                key={i}
+                key={`gallery-${i}-${img.src}`}
                 variants={fadeInUp}
                 className="relative aspect-square rounded-[2rem] overflow-hidden shadow-lg group"
+                suppressHydrationWarning
               >
                 <Image
                   src={img.src}

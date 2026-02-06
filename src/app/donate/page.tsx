@@ -119,7 +119,7 @@ export default function DonatePage() {
    <img src="/images/gpay-logo.png" alt="GPay" className="h-5 w-auto" />
    <img src="/images/phonepe-logo.png" alt="PhonePe" className="h-6 w-auto" />
    <img src="/images/paytm-logo.png" alt="Paytm" className="h-5 w-auto" />
-</div>
+         </div>
       </motion.div>
 
       {/* 4. MOBILE-FRIENDLY ACTION SECTION */}

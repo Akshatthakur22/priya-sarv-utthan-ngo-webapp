@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const CONTACT = {
   email: "priyasarvuthan@gmail.com",
-  phone: "+91 98065 02882",
+  phone: "+91 9977177059",
   address: "69B, Mangal Marg, Gandhi Nagar, Indore",
   whatsappGroup: "https://chat.whatsapp.com/YourGroupInviteLink",
   instagram: "https://www.instagram.com/priyasarvutthan?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",

@@ -172,7 +172,7 @@ export default function LegalIntakeForm({ serviceType, onSuccess }: LegalIntakeF
             required
             value={formData.phone}
             onChange={handleChange}
-            placeholder="+91 98065 02882"
+            placeholder="+91 9977177059"
             className="w-full px-4 py-3 rounded-xl border border-neutral-200 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 outline-none transition-all text-neutral-900 placeholder:text-neutral-400"
           />
         </div>
