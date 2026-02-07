@@ -15,9 +15,9 @@ export const metadata: Metadata = {
   description: "Priya Sarv Utthan Seva Sansthan - A registered NGO dedicated to women empowerment, education, and community development in Indore.",
   metadataBase: new URL("https://priyasarvutthan.org"),
   icons: {
-    icon: "/icon.png",
-    shortcut: "/icon.png",
-    apple: "/icon.png"
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico"
   },
   openGraph: {
     title: "Priya Sarv Utthan Seva Sansthan | Building brighter futures",
