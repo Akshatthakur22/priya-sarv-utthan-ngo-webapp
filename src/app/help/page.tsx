@@ -154,7 +154,7 @@ export default function HelpPage() {
           </div>
           <div className="flex gap-3 flex-wrap justify-center">
             <a
-              href="https://wa.me/919806502882"
+              href="https://chat.whatsapp.com/DGYpDQSt3kK23DAGixeELC"
               target="_blank"
               rel="noopener"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-orange-600 font-black text-base shadow hover:bg-orange-50 transition-all active:scale-95 touch-manipulation"

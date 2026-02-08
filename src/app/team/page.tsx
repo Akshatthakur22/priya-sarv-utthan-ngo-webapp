@@ -30,6 +30,19 @@ export const metadata: Metadata = {
 };
 
 const team = [
+  ,
+  {
+    name: "Praveen Soni",
+    role: "Division In-Charge (Jabalpur)",
+    image: "/images/Praveen_Soni.png",
+    bio: "Praveen manages Jabalpur operations and oversees the Old Age Home & Sanskar Classes. Contact: 7582079991"
+  },
+  {
+    name: "Smt. Jyoti Mandal",
+    role: "Division In-Charge (Ujjain)",
+    image: "/images/Jyoti_Mandal.png",
+    bio: "उज्जैन संभाग प्रभारी श्रीमती ज्योति मंडल. Address: 62 Shivdham Colony, Hamukhedi, Dewas Road, Ujjain, M.P. Contact: 8770669350"
+  },
   {
     name: "Priya Sharma",
     role: "Founder & President",
@@ -53,18 +66,6 @@ const team = [
     role: "Education Coordinator",
     image: "/images/woman2.png",
     bio: "Kavita leads our education programs and mentorship initiatives for children."
-  },
-  {
-    name: "Rekha Singh",
-    role: "Women Welfare Head",
-    image: "/images/woman3.png",
-    bio: "Rekha coordinates skill training programs and self-help groups for women."
-  },
-  {
-    name: "Anita Kumari",
-    role: "Community Outreach",
-    image: "/images/woman5.png",
-    bio: "Anita connects with local communities and manages volunteer activities."
   }
 ];
 

@@ -102,13 +102,13 @@ const eventGallery = [
   {
     id: 7,
     image: "/images/real6.png",
-    title: "Tree Plantation Drive",
-    description: "500 saplings planted by volunteers to make Indore greener.",
-    hindiLine: "हरित भविष्य, सुंदर कल",
-    location: "Indore outskirts",
+    title: "Old Age Pension Issue Awareness",
+    description: "Awareness drive and support for elderly citizens regarding old age pension schemes and issues.",
+    hindiLine: "वृद्धावस्था पेंशन, हर बुजुर्ग का अधिकार",
+    location: "Indore",
     date: "August 2024",
-    category: "Environment",
-    icon: Sparkles
+    category: "Care",
+    icon: Heart
   },
   {
     id: 8,
@@ -128,7 +128,7 @@ const eventGallery = [
     description: "Medical checkups and companionship for elderly residents.",
     hindiLine: "आदर वृद्धों का, धरोहर समाज की",
     location: "Old Age Home, Indore",
-    date: "June 2024",
+    date: "June 2025",
     category: "Care",
     icon: Heart
   },
@@ -139,7 +139,7 @@ const eventGallery = [
     description: "Inter-school sports competition promoting fitness and teamwork.",
     hindiLine: "खेल से शक्ति, शक्ति से प्रगति",
     location: "Sports Ground, Indore",
-    date: "May 2024",
+    date: "May 2025",
     category: "Sports",
     icon: Users
   },
@@ -150,42 +150,42 @@ const eventGallery = [
     description: "Computer and vocational training for unemployed youth.",
     hindiLine: "कौशल से रोजगार, रोजगार से समृद्धि",
     location: "Training Center",
-    date: "April 2024",
+    date: "April 2025",
     category: "Training",
     icon: Sparkles
   },
   {
     id: 12,
     image: "/images/real11.png",
-    title: "Cleanliness Drive",
-    description: "Community volunteers cleaned 5 local parks and streets.",
-    hindiLine: "स्वच्छ इंदौर, स्वस्थ इंदौर",
-    location: "Various Locations",
-    date: "March 2024",
-    category: "Environment",
-    icon: Shield
+    title: "Women Empowerment Sewing Training",
+    description: "Skill development and sewing training for women to promote self-reliance and employment.",
+    hindiLine: "स्वावलंबन की ओर, सशक्त महिलाएं",
+    location: "Indore",
+    date: "March 2025",
+    category: "Empowerment",
+    icon: Users
   },
   {
     id: 13,
     image: "/images/real12.png",
-    title: "Festival with Elders",
-    description: "Diwali celebration bringing joy to senior citizens.",
+    title: "Festival with Elders and Children",
+    description: "Diwali celebration bringing joy to senior citizens and children together.",
     hindiLine: "ट्योहार की रोशनी, दिलों में खुशी",
     location: "Senior Care Center",
-    date: "November 2024",
+    date: "November 2025",
     category: "Celebration",
     icon: Heart
   },
   {
     id: 14,
     image: "/images/real13.png",
-    title: "Winter Blanket Distribution",
-    description: "Warm blankets and clothes distributed to 300+ homeless people.",
-    hindiLine: "गर्माहट देकर दिल जीतो",
-    location: "Streets of Indore",
-    date: "December 2024",
-    category: "Relief",
-    icon: Heart
+    title: "Legal Literacy Camp",
+    description: "Awareness and legal rights session for 200+ girls at local girls' school.",
+    hindiLine: "कानूनी ज्ञान, बेटियों का सम्मान",
+    location: "Girls' School, Indore",
+    date: "December 2025",
+    category: "Legal Aid",
+    icon: Shield
   }
 ];
 

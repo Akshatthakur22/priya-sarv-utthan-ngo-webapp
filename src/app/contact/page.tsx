@@ -7,7 +7,7 @@ const CONTACT = {
   email: "priyasarvuthan@gmail.com",
   phone: "+91 9977177059",
   address: "69B, Mangal Marg, Gandhi Nagar, Indore",
-  whatsappGroup: "https://chat.whatsapp.com/YourGroupInviteLink",
+  whatsappGroup: "https://chat.whatsapp.com/DGYpDQSt3kK23DAGixeELC",
   instagram: "https://www.instagram.com/priyasarvutthan?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
   facebook: "https://facebook.com/priyasarvutthaan",
   maps: "https://www.google.com/maps?q=69B,+Mangal+Marg,+Gandhi+Nagar,+Indore",
