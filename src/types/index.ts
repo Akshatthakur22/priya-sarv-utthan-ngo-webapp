@@ -23,7 +23,7 @@ export interface JobItem {
   id: string;
   title: string;
   location: string;
-  commitment: "full-time" | "part-time" | "volunteer";
+commitment: string;
   description: string;
   open: boolean;
 }

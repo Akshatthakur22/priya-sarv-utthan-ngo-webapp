@@ -9,7 +9,7 @@ export function Button({ variant = "primary", className, children, ...props }: P
   const styles =
     variant === "primary"
       ? "button-primary"
-      : "inline-flex items-center justify-center rounded-full border border-neutral-muted/30 bg-surface-paper px-4 py-2 text-sm font-semibold text-neutral-body hover:border-neutral-muted/40";
+      : "inline-flex items-center justify-center rounded-full border border-neutral-muted/30 bg-surface-paper px-4 py-2 text-sm font-semibold text-neutral-body hover:border-neutral-muted/40 min-h-[48px]";
 
   return (
     <button className={clsx(styles, className)} {...props}>

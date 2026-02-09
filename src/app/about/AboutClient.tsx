@@ -247,10 +247,10 @@ export default function AboutClient() {
               Global Leadership • वैश्विक नेतृत्व
             </motion.span>
             <motion.h2 variants={fadeInUp} className="text-3xl sm:text-4xl font-bold text-neutral-900 mb-2">
-              Founder & President
+              Founder
             </motion.h2>
             <motion.p variants={fadeInUp} className="text-orange-600 text-lg font-medium">
-              संस्थापक एवं अध्यक्ष
+              संस्थापक
             </motion.p>
           </div>
 

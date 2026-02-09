@@ -12,9 +12,6 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'], // Enable modern image formats
     deviceSizes: [72, 128, 256, 512, 1024], // Optimize for displayed dimensions
   },
-  experimental: {
-    optimizeCss: true, // Enable CSS optimization
-  },
   
   async headers() {
     return [

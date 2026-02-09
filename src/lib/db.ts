@@ -3,61 +3,47 @@ import { ContactMessage, Donation, EventItem, JobApplication, JobItem } from "@/
 const now = new Date();
 
 export const db = {
-  donations: [
-    {
-      id: "don_001",
-      name: "Amina Yusuf",
-      email: "priyasarvuthan@gmail.com",
-      amount: 150,
-      message: "Keep supporting girls' education!",
-      status: "succeeded" as const,
-      createdAt: now.toISOString()
-    },
-    {
-      id: "don_002",
-      name: "Luis Gomez",
-      email: "priyasarvuthan@gmail.com",
-      amount: 75,
-      message: "Proud to help.",
-      status: "succeeded" as const,
-      createdAt: now.toISOString()
-    }
-  ] as Donation[],
   events: [
     {
-      id: "evt_community_health",
-      title: "Community Health Camp",
-      date: "2024-09-15",
-      location: "Nairobi, KE",
-      description: "Free screenings, nutrition guidance, and referrals.",
-      published: true
+     id: "evt_health_camp_2026",
+    title: "Community Health Camp",
+    date: "2026-04-20",
+    location: "Gandhi Nagar, Indore",
+    description: "Free health checkups and medicines distributed to 200+ families.",
+    published: true
     },
     {
-      id: "evt_skills_lab",
-      title: "Youth Skills Lab",
-      date: "2024-10-02",
-      location: "Kisumu, KE",
-      description: "Hands-on digital literacy and job readiness coaching.",
+      id: "evt_seekho_sikhao_kamao_2026",
+      title: "Seekho • Sikhao • Mission",
+      date: "2026-02-18",
+      location: "Indore, MP",
+      description: "A comprehensive skill development program for women featuring professional training in Mehendi art, beauty parlour services (makeup, hairstyling, skincare), advanced sewing and tailoring, and home-based income activities. Participants learn practical skills to start their own businesses, teach others, and achieve financial independence through sustainable livelihood opportunities.",
       published: true
     }
+
   ] as EventItem[],
+
+
+
   jobs: [
     {
-      id: "job_program_manager",
-      title: "Program Manager",
-      location: "Hybrid / Nairobi",
-      commitment: "full-time",
-      description: "Lead multi-country programs with a focus on monitoring and evaluation.",
+      id: "job_volunteer_coach_indore_2026",
+      title: "Program & Volunteer Management Intern",
+      location: "Indore / Remote",
+      commitment: "Internship",
+      description: "Support the planning and coordination of community programs, assist in managing volunteers, help organize events, maintain participation records, and contribute to outreach activities. Ideal for students looking to gain real experience in social work, community development, and NGO operations.",
       open: true
     },
-    {
-      id: "job_volunteer_coach",
-      title: "Volunteer Coach",
-      location: "Remote",
-      commitment: "volunteer",
-      description: "Mentor youth cohorts for 2-4 hours per week.",
-      open: true
-    }
+     {
+  id: "job_skill_mission_partner_2025",
+  title: "Mission Partner – Skill Development Program",
+  location: "Indore / Open for Collaborators",
+  commitment: "Flexible (Volunteer / Partner / Supporter)",
+  description: "Become a part of our ‘Seekho • Sikhao • Kamao’ mission by supporting women's skill development. We welcome individuals, organizations, institutes, and community members who can contribute by providing training space, connecting us with skilled trainers (Mehendi, Beauty Parlour, Sewing, Art & Craft, etc.), or helping organize free skill-training camps. Your support can empower women to learn, teach others, and become financially independent.",
+  open: true
+}
+
+
   ] as JobItem[],
   jobApplications: [] as JobApplication[],
   contacts: [] as ContactMessage[]

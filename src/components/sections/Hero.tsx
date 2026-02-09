@@ -67,7 +67,7 @@ export function Hero() {
           </Link>
           <Link
             href="/programs"
-            className="inline-flex items-center justify-center rounded-full border border-neutral-muted/30 bg-surface-paper px-4 py-2.5 text-sm font-semibold text-neutral-body transition-all hover:border-neutral-muted/40 hover:shadow-sm min-h-[44px]"
+            className="inline-flex items-center justify-center rounded-full border border-neutral-muted/30 bg-surface-paper px-4 py-2.5 text-sm font-semibold text-neutral-body transition-all hover:border-neutral-muted/40 hover:shadow-sm min-h-[48px]"
           >
             See What We Do
           </Link>
@@ -119,6 +119,7 @@ export function Hero() {
             className="h-full w-full object-cover"
             sizes="(min-width: 1024px) 480px, 100vw"
             priority
+            fetchPriority="high"
           />
         </div>
       </motion.div>

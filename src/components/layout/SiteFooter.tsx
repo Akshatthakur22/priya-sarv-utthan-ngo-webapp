@@ -15,7 +15,14 @@ export function SiteFooter() {
           <p className="text-xs text-neutral-muted mt-2">
             © {new Date().getFullYear()} Priya Sarv Utthan Seva Sansthan. All Rights Reserved.
             <br />
-            Designed & Developed by <span className="font-medium text-neutral-ink">Akshat Thakur</span>
+            Designed & Developed by <a 
+              href="https://www.linkedin.com/in/akshatthakur22/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="font-medium text-neutral-ink hover:text-primary transition-colors"
+            >
+              Akshat Thakur
+            </a>
           </p>
         </div>
 

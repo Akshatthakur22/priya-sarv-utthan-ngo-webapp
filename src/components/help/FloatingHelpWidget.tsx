@@ -47,6 +47,7 @@ export default function FloatingHelpWidget() {
               <Link
                 href="https://chat.whatsapp.com/DGYpDQSt3kK23DAGixeELC"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-green-50 active:bg-green-100 transition-colors font-semibold text-green-700 touch-manipulation"
                 aria-label="Chat with us on WhatsApp"
               >
