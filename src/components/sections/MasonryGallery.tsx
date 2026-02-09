@@ -215,6 +215,7 @@ export function MasonryGallery() {
                 width={1200}
                 height={900}
                 className="w-full h-auto max-h-[80vh] object-contain rounded-2xl"
+                sizes="100vw"
               />
               {/* Caption */}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent rounded-b-2xl p-6">

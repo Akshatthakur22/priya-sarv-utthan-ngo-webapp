@@ -70,6 +70,7 @@ export function HeroSlider() {
             alt={heroSlides[currentSlide].alt}
             fill
             priority
+            fetchPriority="high"
             className="object-cover object-top md:object-center"
             sizes="100vw"
             placeholder="blur"

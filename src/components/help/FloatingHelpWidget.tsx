@@ -45,8 +45,9 @@ export default function FloatingHelpWidget() {
             </div>
             <div className="p-2 space-y-1">
               <Link
-                href="https://wa.me/919806502882"
+                href="https://chat.whatsapp.com/DGYpDQSt3kK23DAGixeELC"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-green-50 active:bg-green-100 transition-colors font-semibold text-green-700 touch-manipulation"
                 aria-label="Chat with us on WhatsApp"
               >
@@ -62,7 +63,7 @@ export default function FloatingHelpWidget() {
                 <span className="text-sm">Get Legal Aid</span>
               </Link>
               <a
-                href="tel:+919806502882"
+                href="tel:+919977177059"
                 className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-orange-50 active:bg-orange-100 transition-colors font-semibold text-orange-700 touch-manipulation"
                 aria-label="Call Now"
               >

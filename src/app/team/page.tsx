@@ -19,9 +19,9 @@ export const metadata: Metadata = {
     ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Our Team | Priya Sarv Utthan Seva Sansthan",
-    description: "Meet the dedicated team behind Priya Sarv Utthan Seva Sansthan.",
+    description: "Meet the dedicated team behind Priya Sarv Utthan Seva Sansthan's mission for social impact.",
     images: ["/images/og-team.jpg"],
     site: "@priyasarvutthan",
     creator: "@priyasarvutthan",
@@ -30,41 +30,48 @@ export const metadata: Metadata = {
 };
 
 const team = [
+  ,
   {
-    name: "Priya Sharma",
-    role: "Founder & President",
-    image: "/images/woman.png",
-    bio: "Priya has led the organization since its inception, focusing on women empowerment and education."
+    name: "Preeti Jadhav",
+    role: "President",
+    image: "/images/Preeti_Jadhav.png",
+    bio: "Mrs. Preeti Jadhav is the President of the organization, leading administrative work and women empowerment programs."
   },
   {
-    name: "Sunita Joshi",
-    role: "Program Director",
-    image: "/images/woman1.png",
-    bio: "Sunita oversees all program operations and community outreach initiatives."
+    name: "Praveen Soni",
+    role: "Division In-Charge (Jabalpur)",
+    image: "/images/Praveen_Soni.png",
+    bio: "Praveen manages Jabalpur operations and oversees the Old Age Home & Sanskar Classes. Contact: 7582079991"
   },
   {
-    name: "Meena Verma",
-    role: "Finance Lead",
-    image: "/images/woman4.png",
-    bio: "Meena manages finances and ensures transparency in all donations and expenditures."
+    name: "Jyoti Mandal",
+    role: "Division In-Charge (Ujjain)",
+    image: "/images/Jyoti_Mandal.png",
+    bio: "उज्जैन संभाग प्रभारी श्रीमती ज्योति मंडल. Address: 62 Shivdham Colony, Hamukhedi, Dewas Road, Ujjain, M.P. Contact: 8770669350"
   },
   {
-    name: "Kavita Patel",
+    name: "Sunita Chauhan",
+    role: "vice president",
+    image: "/images/sunita_chauhan.png",
+    bio: "Sunita oversees all program operations and community outreach initiatives. श्रीमती संगठीता चोहन कोषाध्यक्ष (Commitment to women's empowerment)"
+  },
+  {
+    name: "Renu Thakur",
     role: "Education Coordinator",
-    image: "/images/woman2.png",
-    bio: "Kavita leads our education programs and mentorship initiatives for children."
+    image: "/images/Renu_Thakur.png",
+    bio: ""
   },
   {
-    name: "Rekha Singh",
-    role: "Women Welfare Head",
-    image: "/images/woman3.png",
-    bio: "Rekha coordinates skill training programs and self-help groups for women."
+    name: "Baal Sadhvi Vimla Devi Jain",
+    role: "Animal & Bird Welfare Lead",
+    image: "/images/Vimla_Devi.png",
+    bio: "Baal Sadhvi Vimla Devi Jain leads our Animal & Bird Welfare initiatives, focusing on compassion, care, feeding, and protection of animals and birds. (पशु पक्षी सेवा)"
   },
   {
-    name: "Anita Kumari",
-    role: "Community Outreach",
-    image: "/images/woman5.png",
-    bio: "Anita connects with local communities and manages volunteer activities."
+    name: "Akshat Thakur",
+    role: "Software Developer & Platform Builder",
+    image: "/images/akki.png",
+    bio: "Akshat is the developer behind our entire web platform. He designed, built, and maintains the NGO’s website, handling everything from the frontend and backend to forms, automation, events, and donations. As a B.Tech CSE student passionate about software development, Akshat uses his skills to support social impact and help the organization reach more people effectively."
   }
 ];
 

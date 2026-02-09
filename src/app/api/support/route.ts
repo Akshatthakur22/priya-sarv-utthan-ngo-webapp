@@ -21,15 +21,6 @@ function formatDate(dateStr: string): string {
 
 export async function POST(req: NextRequest) {
   try {
-    // Check for required environment variable
-    if (!process.env.EMAIL_APP_PASSWORD) {
-      console.error("EMAIL_APP_PASSWORD environment variable is not set");
-      return NextResponse.json(
-        { error: "Email service not configured. Please contact support." },
-        { status: 500 }
-      );
-    }
-
     const body = await req.json();
     const {
       name,
@@ -56,6 +47,19 @@ export async function POST(req: NextRequest) {
       dateStyle: "full",
       timeStyle: "short",
     });
+
+    // Check for email configuration
+    if (!process.env.EMAIL_APP_PASSWORD) {
+      console.warn("EMAIL_APP_PASSWORD not configured. Case logged locally:", { caseId, name, serviceType });
+      
+      // Return success for UI but note email wasn't sent
+      return NextResponse.json({
+        success: true,
+        caseId,
+        message: "Case submitted successfully (email service in development mode)",
+        warning: "Email notifications are currently disabled"
+      });
+    }
 
     // Build conditional fields HTML
     let conditionalFields = "";
@@ -152,7 +156,7 @@ export async function POST(req: NextRequest) {
     
     <!-- Action Button -->
     <div style="background: white; padding: 24px; text-align: center; border-left: 1px solid #e5e7eb; border-right: 1px solid #e5e7eb;">
-      <a href="https://wa.me/${phone.replace(/\D/g, "")}?text=Namaste%20${encodeURIComponent(name)}%2C%20we%20received%20your%20case%20${encodeURIComponent(caseId)}.%20Our%20team%20will%20assist%20you%20shortly." 
+      <a href="https://wa.me/${phone.replace(/\D/g, "")}?text=नमस्ते%20${encodeURIComponent(name)}%2C%20हमनें%20आपकी%20केस%20${encodeURIComponent(caseId)}%20प्राप्ति%20है।%20हमारा%20टीम%20जल्दी%20से%20आपकी%20सहायता%20करेंगे।" 
          style="display: inline-block; background: #16a34a; color: white; padding: 14px 32px; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 14px;">
         💬 Reply on WhatsApp
       </a>
@@ -161,7 +165,7 @@ export async function POST(req: NextRequest) {
     <!-- Footer -->
     <div style="background: #1f2937; padding: 24px; border-radius: 0 0 16px 16px; text-align: center;">
       <p style="margin: 0; color: #9ca3af; font-size: 12px;">
-        Priya Sarva Utthaan Seva Sansthan<br>
+        Priya Sarv Utthan Seva Sansthan<br>
         69B, Mangal Marg, Gandhi Nagar, Indore
       </p>
       <p style="margin: 12px 0 0; color: #6b7280; font-size: 11px;">

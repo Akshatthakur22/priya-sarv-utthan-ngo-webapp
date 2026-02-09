@@ -60,21 +60,28 @@ const cities = [
     }
   },
   {
-    id: "bhopal",
-    name: "Bhopal",
-    nameHi: "भोपाल",
+    id: "ujjain",
+    name: "Ujjain",
+    nameHi: "उज्जैन",
     type: "Outreach Center",
     typeHi: "आउटरीच केंद्र",
     icon: Users,
     color: "from-blue-500 to-indigo-500",
-    description: "Community welfare coordination and grassroots outreach programs in the state capital.",
+    description: "Grassroots outreach and community programs in the historic city of Ujjain.",
     projects: [
-      { name: "Community Welfare Hub", desc: "Coordinating welfare initiatives across the capital", featured: true },
+      { name: "Community Welfare Hub", desc: "Coordinating welfare initiatives across the region", featured: true },
       { name: "Women's Self-Help Groups", desc: "Financial literacy and micro-enterprise support" }
     ],
-    address: "Bhopal, Madhya Pradesh",
+    address: "62 Shivdham Colony, Hamukhedi, Dewas Road, Ujjain, Madhya Pradesh",
     image: "/images/child2.png",
-    localContact: null
+    localContact: {
+      name: "Smt. Jyoti Mandal",
+      nameHi: "श्रीमती ज्योति मंडल",
+      role: "Division In-Charge",
+      roleHi: "उज्जैन संभाग प्रभारी",
+      phone: "8770669350",
+      message: "उज्जैन संभाग प्रभारी श्रीमती ज्योति मंडल"
+    }
   }
 ];
 
@@ -240,10 +247,10 @@ export default function AboutClient() {
               Global Leadership • वैश्विक नेतृत्व
             </motion.span>
             <motion.h2 variants={fadeInUp} className="text-3xl sm:text-4xl font-bold text-neutral-900 mb-2">
-              Founder & President
+              Founder
             </motion.h2>
             <motion.p variants={fadeInUp} className="text-orange-600 text-lg font-medium">
-              संस्थापक एवं अध्यक्ष
+              संस्थापक
             </motion.p>
           </div>
 

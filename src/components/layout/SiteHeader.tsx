@@ -87,7 +87,7 @@ export function SiteHeader() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`block rounded-lg px-4 py-3 text-sm font-medium transition hover:bg-surface-paper min-h-[44px] flex items-center ${
+                className={`block rounded-lg px-4 py-3 text-sm font-medium transition hover:bg-surface-paper min-h-[48px] flex items-center ${
                   pathname === link.href ? "text-primary bg-surface-paper" : "text-neutral-body"
                 }`}
                 onClick={() => setOpen(false)}
