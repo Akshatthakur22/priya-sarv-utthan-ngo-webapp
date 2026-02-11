@@ -4,7 +4,7 @@ import Image from "next/image";
 import { triggerHaptic } from "@/utils/haptics";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
-import styles from "./FounderCard.module.css"; // Corrected the import path for styles
+import styles from "./FounderCard.module.css";
 
 interface FounderCardProps {
   name: string;
@@ -12,6 +12,7 @@ interface FounderCardProps {
   expertise: string;
   impact: string;
   contact: string;
+  imageSrc?: string;
 }
 
 export default function FounderCard({
@@ -20,11 +21,24 @@ export default function FounderCard({
   expertise,
   impact,
   contact,
+  imageSrc,
 }: FounderCardProps) {
   const router = useRouter();
 
   const handleClick = () => {
     router.push("/founder");
+  };
+
+  // Generate SEO-friendly alt text dynamically
+  const generateAltText = () => {
+    const ngoName = "Priya Sarv Utthan Seva Sansthan";
+    if (title.toLowerCase().includes("founder") || title.toLowerCase().includes("president")) {
+      return `${name} - Founder and President of ${ngoName} leading social welfare initiatives in Madhya Pradesh`;
+    } else if (title.toLowerCase().includes("secretary")) {
+      return `${name} - Secretary of ${ngoName} managing administrative operations and community development programs`;
+    } else {
+      return `${name} - ${title} at ${ngoName} dedicated to social welfare and community empowerment`;
+    }
   };
 
   return (
@@ -43,7 +57,18 @@ export default function FounderCard({
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <div className={styles.imagePlaceholder}>Photo Coming Soon</div>
+          {imageSrc ? (
+            <Image
+              src={imageSrc}
+              alt={generateAltText()}
+              width={200}
+              height={200}
+              className="w-full h-full object-cover rounded-lg"
+              priority={true}
+            />
+          ) : (
+            <div className={styles.imagePlaceholder}>Photo Coming Soon</div>
+          )}
         </motion.div>
       </div>
       <div className={styles.textContent}>

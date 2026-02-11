@@ -6,27 +6,27 @@ import { motion } from "framer-motion";
 const galleryImages = [
   {
     src: "/images/child2.png",
-    alt: "Children learning together"
+    alt: "Children learning together at Priya Sarv Utthan Seva Sansthan education center - Collaborative learning and academic development programs"
   },
   {
     src: "/images/woman3.png",
-    alt: "Women in community discussion"
+    alt: "Women in community discussion at Priya Sarv Utthan self-help group meeting - Community development and women empowerment initiatives"
   },
   {
     src: "/images/woman4.png",
-    alt: "Women empowerment group"
+    alt: "Women empowerment group at Priya Sarv Utthan Seva Sansthan - Skill development and economic independence training"
   },
   {
     src: "/images/child5.png",
-    alt: "Teacher guiding students"
+    alt: "Teacher guiding students at Priya Sarv Utthan learning center - Quality education and mentorship for underprivileged children"
   },
   {
     src: "/images/child6.png",
-    alt: "Happy children at the center"
+    alt: "Happy children at the Priya Sarv Utthan education center - Joyful learning environment and child development programs"
   },
   {
     src: "/images/woman5.png",
-    alt: "Women achieving milestones"
+    alt: "Women achieving milestones at Priya Sarv Utthan Seva Sansthan - Success stories from empowerment and skill training programs"
   }
 ];
 

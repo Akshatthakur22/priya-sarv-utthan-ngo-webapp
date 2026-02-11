@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 
 const heroImage = {
   src: "/images/child1.png",
-  alt: "Children learning together in a classroom",
+  alt: "Children receiving education support at Priya Sarv Utthan Seva Sansthan's learning center in Indore - Empowering underprivileged children through quality education programs",
   credit: "Priya Sarv Utthan Foundation"
 };
 
