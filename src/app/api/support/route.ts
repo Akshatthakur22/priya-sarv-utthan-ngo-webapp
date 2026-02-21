@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Check for email configuration
-    if (!env.EMAIL_APP_PASSWORD) {
+    if (!env.EMAIL_APP_PASSWORD || !env.EMAIL_USER) {
       logger.warn("Email service not configured", { 
         caseId, 
         name, 
@@ -100,6 +100,15 @@ export async function POST(req: NextRequest) {
         headers: getRateLimitHeaders(rateLimitResult)
       });
     }
+
+    // Create email transporter only if configured
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: env.EMAIL_USER,
+        pass: env.EMAIL_APP_PASSWORD,
+      },
+    });
 
     // Build conditional fields HTML
     let conditionalFields = "";
@@ -218,18 +227,9 @@ export async function POST(req: NextRequest) {
 </html>
     `;
 
-    // Configure Nodemailer
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: env.EMAIL_USER,
-        pass: env.EMAIL_APP_PASSWORD,
-      },
-    });
-
     // Send email
     await transporter.sendMail({
-      from: `"PSU Case System" <${env.EMAIL_USER}>`,
+      from: `"PSU Case System" <${env.EMAIL_FROM || env.EMAIL_USER}>`,
       to: env.EMAIL_USER,
       subject: `[${caseId}] New ${serviceType} Request from ${name}`,
       html: emailHtml,

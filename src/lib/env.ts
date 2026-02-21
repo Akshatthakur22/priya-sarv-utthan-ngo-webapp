@@ -1,13 +1,18 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
-  EMAIL_USER: z.string().email(),
-  EMAIL_APP_PASSWORD: z.string().min(1),
-  EMAIL_FROM: z.string().email(),
-  NEXT_PUBLIC_RAZORPAY_KEY_ID: z.string().min(1),
-  RAZORPAY_KEY_SECRET: z.string().min(1),
-  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  // Email configuration (optional for deployment)
+  EMAIL_USER: z.string().email().optional(),
+  EMAIL_APP_PASSWORD: z.string().min(1).optional(),
+  EMAIL_FROM: z.string().email().optional(),
+  
+  // Razorpay configuration (optional for deployment)
+  NEXT_PUBLIC_RAZORPAY_KEY_ID: z.string().min(1).optional(),
+  RAZORPAY_KEY_SECRET: z.string().min(1).optional(),
+  
+  // Application configuration
   NEXT_PUBLIC_APP_URL: z.string().url().default('http://localhost:3000'),
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 });
 
 type Env = z.infer<typeof envSchema>;

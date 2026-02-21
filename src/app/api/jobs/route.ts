@@ -7,14 +7,14 @@ import { logger } from "@/lib/logger";
 import { validateRequest, jobApplicationSchema, sanitizeString, sanitizeEmail } from "@/lib/validation";
 import { jobsRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
 
-// Email transporter
-const transporter = nodemailer.createTransport({
+// Email transporter (only if email is configured)
+const transporter = env.EMAIL_USER && env.EMAIL_APP_PASSWORD ? nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: env.EMAIL_USER,
     pass: env.EMAIL_APP_PASSWORD,
   },
-});
+}) : null;
 
 // Generate application ID
 function generateApplicationId(): string {
@@ -33,6 +33,14 @@ async function sendApplicationEmail(application: {
   coverLetter?: string;
   applicationId: string;
 }) {
+  if (!transporter || !env.EMAIL_USER) {
+    logger.warn("Email service not configured - job application logged locally", {
+      applicationId: application.applicationId,
+      applicant: application.applicant,
+    });
+    return;
+  }
+
   // Find job title
   const job = db.jobs.find((j) => j.id === application.jobId);
   const jobTitle = job?.title || "Unknown Position";
@@ -136,10 +144,11 @@ async function sendApplicationEmail(application: {
 
   try {
     await transporter.sendMail({
-      from: `"PSUSS Careers" <${env.EMAIL_USER}>`,
+      from: `"PSUSS Careers" <${env.EMAIL_FROM || env.EMAIL_USER}>`,
       to: env.EMAIL_USER,
-      subject: `📋 New Application: ${jobTitle} - ${application.applicant}`,
+      subject: `[${application.applicationId}] New Job Application: ${jobTitle}`,
       html: htmlContent,
+      replyTo: application.email,
     });
     logger.emailSent(env.EMAIL_USER, `📋 New Application: ${jobTitle}`, {
       applicant: application.applicant,
