@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getMetadata } from "@/lib/seo-utils";
+import { TeamMemberImage } from "@/components/ui/OptimizedImage";
 
 export const metadata: Metadata = getMetadata("/team", {
   title: "Our Team | Priya Sarv Utthan Seva Sansthan",
@@ -91,7 +92,7 @@ export default function TeamPage() {
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {team.map((member) => (
               <div key={member.name} className="bg-white rounded-[2rem] p-6 text-center shadow-lg border border-neutral-100 hover:shadow-xl transition-shadow">
-                <img src={member.image} alt={member.name} className="w-28 h-28 mx-auto rounded-full mb-4 object-cover ring-4 ring-orange-100" />
+                <TeamMemberImage src={member.image} alt={member.name} name={member.name} />
                 <h2 className="text-xl font-bold text-neutral-900 mb-1">{member.name}</h2>
                 <p className="text-orange-600 font-semibold mb-3">{member.role}</p>
                 <p className="text-neutral-600 text-sm leading-relaxed">{member.bio}</p>

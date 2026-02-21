@@ -1,5 +1,6 @@
 "use client";
 
+import { LogoImage } from "@/components/ui/OptimizedImage";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -117,9 +118,9 @@ export default function DonateClient() {
         {/* UPI LOGO BAR */}
         <div className="flex justify-center items-center gap-6 py-4 opacity-100">
    {/* Remove 'grayscale' classes to restore color */}
-   <img src="/images/gpay-logo.png" alt="Google Pay UPI" className="h-5 w-auto" />
-   <img src="/images/phonepe-logo.png" alt="PhonePe UPI" className="h-6 w-auto" />
-   <img src="/images/paytm-logo.png" alt="Paytm UPI" className="h-5 w-auto" />
+   <LogoImage src="/images/gpay-logo.png" alt="Google Pay UPI" className="h-5 w-auto" />
+   <LogoImage src="/images/phonepe-logo.png" alt="PhonePe UPI" className="h-6 w-auto" />
+   <LogoImage src="/images/paytm-logo.png" alt="Paytm UPI" className="h-5 w-auto" />
          </div>
       </motion.div>
 
