@@ -9,31 +9,31 @@ import { ChevronDown } from "lucide-react";
 const heroSlides = [
   {
     src: "/images/child1.png",
-    alt: "Children learning together in a bright classroom",
+    alt: "Children receiving quality education at Priya Sarv Utthan Seva Sansthan's learning center in Indore - Empowering underprivileged students through academic excellence",
     headline: "Every Child Deserves a Chance",
     subtext: "Education opens doors that change lives forever.",
   },
   {
     src: "/images/woman.png",
-    alt: "Women empowerment session at the center",
+    alt: "Women empowerment session at Priya Sarv Utthan Seva Sansthan - Skill development and economic independence programs in Madhya Pradesh",
     headline: "Empowering Women, Building Futures",
     subtext: "When women rise, families and communities rise with them.",
   },
   {
     src: "/images/child3.png",
-    alt: "Happy children at the learning center",
+    alt: "Happy children at Priya Sarv Utthan learning center in Gandhi Nagar, Indore - Transforming young lives through education since 1999",
     headline: "Hope Begins Here",
     subtext: "In Gandhi Nagar, Indore — transforming lives since 1999.",
   },
   {
     src: "/images/woman2.png",
-    alt: "Women learning new skills together",
+    alt: "Women learning new skills together at Priya Sarv Utthan vocational training center - Building economic independence through skill development",
     headline: "Skills That Transform Lives",
     subtext: "From tailoring to computers — creating paths to independence.",
   },
   {
     src: "/images/child4.png",
-    alt: "Children enjoying educational activities",
+    alt: "Children enjoying educational activities at Priya Sarv Utthan Seva Sansthan - Holistic child development and learning programs",
     headline: "Nurturing Tomorrow's Leaders",
     subtext: "Every smile tells a story of hope and possibilities.",
   },

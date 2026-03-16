@@ -2,15 +2,19 @@ import { NextResponse } from "next/server";
 import { applyToJob, getJobs } from "@/services/job.service";
 import nodemailer from "nodemailer";
 import { db } from "@/lib/db";
+import { env } from "@/lib/env";
+import { logger } from "@/lib/logger";
+import { validateRequest, jobApplicationSchema, sanitizeString, sanitizeEmail } from "@/lib/validation";
+import { jobsRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
 
-// Email transporter
-const transporter = nodemailer.createTransport({
+// Email transporter (only if email is configured)
+const transporter = env.EMAIL_USER && env.EMAIL_APP_PASSWORD ? nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER || "priyasarvuthan@gmail.com",
-    pass: process.env.EMAIL_APP_PASSWORD,
+    user: env.EMAIL_USER,
+    pass: env.EMAIL_APP_PASSWORD,
   },
-});
+}) : null;
 
 // Generate application ID
 function generateApplicationId(): string {
@@ -29,6 +33,14 @@ async function sendApplicationEmail(application: {
   coverLetter?: string;
   applicationId: string;
 }) {
+  if (!transporter || !env.EMAIL_USER) {
+    logger.warn("Email service not configured - job application logged locally", {
+      applicationId: application.applicationId,
+      applicant: application.applicant,
+    });
+    return;
+  }
+
   // Find job title
   const job = db.jobs.find((j) => j.id === application.jobId);
   const jobTitle = job?.title || "Unknown Position";
@@ -132,14 +144,23 @@ async function sendApplicationEmail(application: {
 
   try {
     await transporter.sendMail({
-      from: `"PSUSS Careers" <${process.env.EMAIL_USER || "priyasarvuthan@gmail.com"}>`,
-      to: process.env.EMAIL_USER || "priyasarvuthan@gmail.com",
-      subject: `📋 New Application: ${jobTitle} - ${application.applicant}`,
+      from: `"PSUSS Careers" <${env.EMAIL_FROM || env.EMAIL_USER}>`,
+      to: env.EMAIL_USER,
+      subject: `[${application.applicationId}] New Job Application: ${jobTitle}`,
       html: htmlContent,
+      replyTo: application.email,
     });
-    console.log(`✅ Application email sent for: ${application.applicant}`);
+    logger.emailSent(env.EMAIL_USER, `📋 New Application: ${jobTitle}`, {
+      applicant: application.applicant,
+      jobTitle,
+      applicationId: application.applicationId,
+    });
   } catch (error) {
-    console.error("❌ Failed to send application email:", error);
+    logger.emailError(env.EMAIL_USER, `📋 New Application: ${jobTitle}`, error, {
+      applicant: application.applicant,
+      jobTitle,
+      applicationId: application.applicationId,
+    });
   }
 }
 
@@ -150,14 +171,45 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    // Check rate limit
+    const rateLimitResult = await jobsRateLimit(request as any);
+    if (!rateLimitResult.success) {
+      logger.warn('Jobs API rate limit exceeded', {
+        ip: request.headers.get('x-forwarded-for') || 'unknown',
+        retryAfter: rateLimitResult.retryAfter,
+      });
+
+      return NextResponse.json(
+        { 
+          ok: false, 
+          error: 'Too many job applications. Please try again later.',
+          retryAfter: rateLimitResult.retryAfter 
+        },
+        { 
+          status: 429,
+          headers: getRateLimitHeaders(rateLimitResult)
+        }
+      );
+    }
+
     const body = await request.json();
     const applicationId = generateApplicationId();
     
-    const application = await applyToJob({
-      applicant: body.applicant,
-      email: body.email,
+    // Validate and sanitize input
+    const validatedData = validateRequest(jobApplicationSchema, {
+      applicant: sanitizeString(body.applicant),
+      email: sanitizeEmail(body.email),
       jobId: body.jobId,
-      coverLetter: body.coverLetter
+      coverLetter: body.coverLetter ? sanitizeString(body.coverLetter) : undefined,
+    });
+
+    const application = await applyToJob(validatedData);
+
+    logger.formSubmission('job_application', validatedData);
+    logger.info('Job application submitted successfully', { 
+      applicant: validatedData.applicant,
+      jobId: validatedData.jobId,
+      applicationId,
     });
 
     // Send email notification (non-blocking)
@@ -166,9 +218,21 @@ export async function POST(request: Request) {
       applicationId,
     });
 
-    return NextResponse.json({ ok: true, application, applicationId });
+    return NextResponse.json(
+      { ok: true, application, applicationId }, 
+      { headers: getRateLimitHeaders(rateLimitResult) }
+    );
   } catch (error) {
+    if (error.name === 'ValidationError') {
+      logger.warn('Job application validation failed', { errors: error.errors });
+      return NextResponse.json(
+        { ok: false, error: 'Validation failed', details: error.errors },
+        { status: 400 }
+      );
+    }
+    
+    logger.apiError('POST', '/api/jobs', error);
     const message = error instanceof Error ? error.message : "Unable to apply";
-    return NextResponse.json({ ok: false, error: message }, { status: 400 });
+    return NextResponse.json({ ok: false, error: message }, { status: 500 });
   }
 }

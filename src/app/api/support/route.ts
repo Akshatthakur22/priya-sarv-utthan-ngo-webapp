@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { env } from "@/lib/env";
+import { logger } from "@/lib/logger";
+import { validateRequest, supportCaseSchema, sanitizeString, sanitizeEmail, sanitizePhone } from "@/lib/validation";
+import { supportRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
 
 // Generate a unique Case ID
 function generateCaseId(): string {
@@ -20,37 +24,71 @@ function formatDate(dateStr: string): string {
 }
 
 export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
-    const {
-      name,
-      phone,
-      email,
-      message,
-      serviceType,
-      opposingParty,
-      courtDeadline,
-      department,
-    } = body;
+  let caseId: string | null = null;
+  let name: string | null = null;
+  let serviceType: string | null = null;
 
-    // Validation
-    if (!name || !phone || !message || !serviceType) {
+  try {
+    // Check rate limit
+    const rateLimitResult = await supportRateLimit(req);
+    if (!rateLimitResult.success) {
+      logger.warn('Support API rate limit exceeded', {
+        ip: req.headers.get('x-forwarded-for') || 'unknown',
+        retryAfter: rateLimitResult.retryAfter,
+      });
+
       return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
+        { 
+          success: false, 
+          error: 'Too many support requests. Please try again later.',
+          retryAfter: rateLimitResult.retryAfter 
+        },
+        { 
+          status: 429,
+          headers: getRateLimitHeaders(rateLimitResult)
+        }
       );
     }
 
-    const caseId = generateCaseId();
+    const body = await req.json();
+    
+    // Validate and sanitize input
+    const validatedData = validateRequest(supportCaseSchema, {
+      name: sanitizeString(body.name),
+      phone: sanitizePhone(body.phone),
+      email: body.email ? sanitizeEmail(body.email) : undefined,
+      message: sanitizeString(body.message),
+      serviceType: body.serviceType,
+      opposingParty: body.opposingParty ? sanitizeString(body.opposingParty) : undefined,
+      courtDeadline: body.courtDeadline,
+      department: body.department ? sanitizeString(body.department) : undefined,
+    });
+
+    name = validatedData.name;
+    serviceType = validatedData.serviceType;
+
+    caseId = generateCaseId();
     const submittedAt = new Date().toLocaleString("en-IN", {
       timeZone: "Asia/Kolkata",
       dateStyle: "full",
       timeStyle: "short",
     });
 
+    logger.formSubmission('support_case', validatedData);
+    logger.info('Support case submitted successfully', { 
+      caseId,
+      name,
+      serviceType,
+    });
+
     // Check for email configuration
-    if (!process.env.EMAIL_APP_PASSWORD) {
-      console.warn("EMAIL_APP_PASSWORD not configured. Case logged locally:", { caseId, name, serviceType });
+    if (!env.EMAIL_APP_PASSWORD || !env.EMAIL_USER) {
+      logger.warn("Email service not configured", { 
+        caseId, 
+        name, 
+        serviceType,
+        message: "EMAIL_APP_PASSWORD not configured"
+      });
       
       // Return success for UI but note email wasn't sent
       return NextResponse.json({
@@ -58,27 +96,38 @@ export async function POST(req: NextRequest) {
         caseId,
         message: "Case submitted successfully (email service in development mode)",
         warning: "Email notifications are currently disabled"
+      }, {
+        headers: getRateLimitHeaders(rateLimitResult)
       });
     }
 
+    // Create email transporter only if configured
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: env.EMAIL_USER,
+        pass: env.EMAIL_APP_PASSWORD,
+      },
+    });
+
     // Build conditional fields HTML
     let conditionalFields = "";
-    if (serviceType === "Legal") {
+    if (validatedData.serviceType === "Legal") {
       conditionalFields = `
         <tr>
           <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #6b7280; font-weight: 600;">Opposing Party</td>
-          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827;">${opposingParty || "Not specified"}</td>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827;">${validatedData.opposingParty || "Not specified"}</td>
         </tr>
         <tr>
           <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #6b7280; font-weight: 600;">Court Deadline</td>
-          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827; ${courtDeadline ? "font-weight: bold; color: #dc2626;" : ""}">${formatDate(courtDeadline)}</td>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827; ${validatedData.courtDeadline ? "font-weight: bold; color: #dc2626;" : ""}">${formatDate(validatedData.courtDeadline || "")}</td>
         </tr>
       `;
-    } else if (serviceType === "Grievance") {
+    } else if (validatedData.serviceType === "Grievance") {
       conditionalFields = `
         <tr>
           <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #6b7280; font-weight: 600;">Department</td>
-          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827; font-weight: bold;">${department || "Not specified"}</td>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827; font-weight: bold;">${validatedData.department || "Not specified"}</td>
         </tr>
       `;
     }
@@ -129,12 +178,12 @@ export async function POST(req: NextRequest) {
         <tr>
           <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #6b7280; font-weight: 600;">WhatsApp</td>
           <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6;">
-            <a href="https://wa.me/${phone.replace(/\D/g, "")}" style="color: #16a34a; font-weight: bold; text-decoration: none;">${phone}</a>
+            <a href="https://wa.me/${validatedData.phone.replace(/\D/g, "")}" style="color: #16a34a; font-weight: bold; text-decoration: none;">${validatedData.phone}</a>
           </td>
         </tr>
         <tr>
           <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #6b7280; font-weight: 600;">Email</td>
-          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827;">${email || "Not provided"}</td>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827;">${validatedData.email || "Not provided"}</td>
         </tr>
         ${conditionalFields}
       </table>
@@ -149,14 +198,14 @@ export async function POST(req: NextRequest) {
           </td>
         </tr>
         <tr>
-          <td style="padding: 20px; color: #374151; line-height: 1.6; font-size: 15px; white-space: pre-wrap;">${message}</td>
+          <td style="padding: 20px; color: #374151; line-height: 1.6; font-size: 15px; white-space: pre-wrap;">${validatedData.message}</td>
         </tr>
       </table>
     </div>
     
     <!-- Action Button -->
     <div style="background: white; padding: 24px; text-align: center; border-left: 1px solid #e5e7eb; border-right: 1px solid #e5e7eb;">
-      <a href="https://wa.me/${phone.replace(/\D/g, "")}?text=नमस्ते%20${encodeURIComponent(name)}%2C%20हमनें%20आपकी%20केस%20${encodeURIComponent(caseId)}%20प्राप्ति%20है।%20हमारा%20टीम%20जल्दी%20से%20आपकी%20सहायता%20करेंगे।" 
+      <a href="https://wa.me/${validatedData.phone.replace(/\D/g, "")}?text=नमस्ते%20${encodeURIComponent(name)}%2C%20हमनें%20आपकी%20केस%20${encodeURIComponent(caseId)}%20प्राप्ति%20है।%20हमारा%20टीम%20जल्दी%20से%20आपकी%20सहायता%20करेंगे।" 
          style="display: inline-block; background: #16a34a; color: white; padding: 14px 32px; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 14px;">
         💬 Reply on WhatsApp
       </a>
@@ -178,31 +227,42 @@ export async function POST(req: NextRequest) {
 </html>
     `;
 
-    // Configure Nodemailer
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER || "priyasarvuthan@gmail.com",
-        pass: process.env.EMAIL_APP_PASSWORD,
-      },
-    });
-
     // Send email
     await transporter.sendMail({
-      from: `"PSU Case System" <${process.env.EMAIL_USER || "priyasarvuthan@gmail.com"}>`,
-      to: process.env.EMAIL_USER || "priyasarvuthan@gmail.com",
+      from: `"PSU Case System" <${env.EMAIL_FROM || env.EMAIL_USER}>`,
+      to: env.EMAIL_USER,
       subject: `[${caseId}] New ${serviceType} Request from ${name}`,
       html: emailHtml,
-      replyTo: email || undefined,
+      replyTo: validatedData.email || undefined,
+    });
+
+    logger.emailSent(env.EMAIL_USER, `[${caseId}] New ${serviceType} Request`, {
+      caseId,
+      name,
+      serviceType,
     });
 
     return NextResponse.json({
       success: true,
       caseId,
       message: "Case submitted successfully",
+    }, {
+      headers: getRateLimitHeaders(rateLimitResult)
     });
   } catch (error) {
-    console.error("Support API Error:", error);
+    if (error.name === 'ValidationError') {
+      logger.warn('Support case validation failed', { errors: error.errors });
+      return NextResponse.json(
+        { success: false, error: 'Validation failed', details: error.errors },
+        { status: 400 }
+      );
+    }
+    
+    logger.apiError('POST', '/api/support', error, {
+      caseId: caseId || 'unknown',
+      name: name || 'unknown',
+      serviceType: serviceType || 'unknown',
+    });
     return NextResponse.json(
       { error: "Failed to submit case. Please try again." },
       { status: 500 }

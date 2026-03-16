@@ -6,6 +6,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import FloatingHelpWidget from "@/components/help/FloatingHelpWidget";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 const nunito = Nunito({ subsets: ["latin"], variable: "--font-display", display: 'swap' });
 const inter = Inter({ subsets: ["latin"], variable: "--font-body", display: 'swap' });
@@ -256,13 +257,15 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen font-body antialiased overflow-x-hidden">
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader />
-          <main className="flex-1">{children}</main>
-          <SiteFooter />
-        </div>
-        <FloatingHelpWidget />
-        <Analytics />
+        <ErrorBoundary>
+          <div className="flex min-h-screen flex-col">
+            <SiteHeader />
+            <main className="flex-1">{children}</main>
+            <SiteFooter />
+          </div>
+          <FloatingHelpWidget />
+          <Analytics />
+        </ErrorBoundary>
       </body>
     </html>
   );

@@ -1,13 +1,13 @@
 "use client";
 
-import Image from "next/image";
+import { HeroImage } from "@/components/ui/OptimizedImage";
 import Link from "next/link";
 import { SoftDecor } from "@/components/layout/SoftDecor";
 import { motion } from "framer-motion";
 
 const heroImage = {
   src: "/images/child1.png",
-  alt: "Children learning together in a classroom",
+  alt: "Children receiving education support at Priya Sarv Utthan Seva Sansthan's learning center in Indore - Empowering underprivileged children through quality education programs",
   credit: "Priya Sarv Utthan Foundation"
 };
 
@@ -111,16 +111,13 @@ export function Hero() {
           </ul>
         </div>
         <div className="overflow-hidden rounded-3xl bg-surface-paper shadow-md ring-1 ring-neutral-muted/15 transition-all hover:shadow-xl">
-          <Image
+          <HeroImage
             src={heroImage.src}
             alt={heroImage.alt}
-            width={900}
-            height={700}
-            className="h-full w-full object-cover"
-            sizes="(min-width: 1024px) 480px, 100vw"
-            priority
-            fetchPriority="high"
           />
+          <div className="absolute bottom-4 right-4 bg-black/50 text-white px-2 py-1 rounded-md text-xs">
+            {heroImage.credit}
+          </div>
         </div>
       </motion.div>
     </section>

@@ -9,7 +9,7 @@ const stories = [
   {
     id: "legal",
     image: "/images/random1.png",
-    imageAlt: "Legal aid camp in progress",
+    imageAlt: "Legal aid camp in progress by Priya Sarv Utthan Seva Sansthan - Free legal consultation and rights education for marginalized communities in Madhya Pradesh",
     imagePosition: "left",
     icon: Scale,
     badge: "Legal Aid",
@@ -25,7 +25,7 @@ const stories = [
   {
     id: "education",
     image: "/images/child3.png",
-    imageAlt: "Happy child with a book at the learning center",
+    imageAlt: "Happy child with a book at Priya Sarv Utthan learning center in Gandhi Nagar, Indore - Free education and mentorship for underprivileged children",
     imagePosition: "right",
     icon: BookOpen,
     badge: "Education",
@@ -41,7 +41,7 @@ const stories = [
   {
     id: "women",
     image: "/images/woman2.png",
-    imageAlt: "Women learning vocational skills",
+    imageAlt: "Women learning vocational skills at Priya Sarv Utthan Seva Sansthan - Economic empowerment through tailoring, handicrafts, and computer literacy programs",
     imagePosition: "left",
     icon: Heart,
     badge: "Women Empowerment",
@@ -57,7 +57,7 @@ const stories = [
   {
     id: "community",
     image: "/images/child4.png",
-    imageAlt: "Community health and welfare camp",
+    imageAlt: "Community health and welfare camp by Priya Sarv Utthan Seva Sansthan - Healthcare services and ration distribution for rural families in Madhya Pradesh",
     imagePosition: "right",
     icon: Users,
     badge: "Community Welfare",

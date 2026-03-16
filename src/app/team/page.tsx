@@ -1,41 +1,22 @@
 import type { Metadata } from "next";
-// Metadata for SEO and social sharing
-export const metadata: Metadata = {
+import { getMetadata } from "@/lib/seo-utils";
+import { TeamMemberImage } from "@/components/ui/OptimizedImage";
+
+export const metadata: Metadata = getMetadata("/team", {
   title: "Our Team | Priya Sarv Utthan Seva Sansthan",
   description: "Meet the dedicated team behind Priya Sarv Utthan Seva Sansthan.",
   keywords: ["team", "NGO", "leadership", "Priya Sarv Utthan Seva Sansthan"],
-  openGraph: {
-    title: "Our Team | Priya Sarv Utthan Seva Sansthan",
-    description: "Meet the dedicated team behind Priya Sarv Utthan Seva Sansthan.",
-    url: "https://priyasarvutthan.org/team",
-    type: "profile",
-    images: [
-      {
-        url: "/images/og-team.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Our Team at Priya Sarv Utthan Seva Sansthan",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Our Team | Priya Sarv Utthan Seva Sansthan",
-    description: "Meet the dedicated team behind Priya Sarv Utthan Seva Sansthan's mission for social impact.",
-    images: ["/images/og-team.jpg"],
-    site: "@priyasarvutthan",
-    creator: "@priyasarvutthan",
-  },
-  alternates: { canonical: "https://priyasarvutthan.org/team" }
-};
+  ogImage: "/images/og-team.jpg",
+  ogType: "profile"
+});
 
 const team = [
   ,
   {
     name: "Preeti Jadhav",
-    role: "President",
+    role: "Secretary",
     image: "/images/Preeti_Jadhav.png",
-    bio: "Mrs. Preeti Jadhav is the President of the organization, leading administrative work and women empowerment programs."
+    bio: "Mrs. Preeti Jadhav is the Secretary of the organization, leading administrative work and women empowerment programs."
   },
   {
     name: "Praveen Soni",
@@ -51,8 +32,8 @@ const team = [
   },
   {
     name: "Sunita Chauhan",
-    role: "vice president",
-    image: "/images/sunita_chauhan.png",
+    role: "Vice President",
+    image: "/images/Sunita_chauhan.png",
     bio: "Sunita oversees all program operations and community outreach initiatives. श्रीमती संगठीता चोहन कोषाध्यक्ष (Commitment to women's empowerment)"
   },
   {
@@ -111,7 +92,7 @@ export default function TeamPage() {
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {team.map((member) => (
               <div key={member.name} className="bg-white rounded-[2rem] p-6 text-center shadow-lg border border-neutral-100 hover:shadow-xl transition-shadow">
-                <img src={member.image} alt={member.name} className="w-28 h-28 mx-auto rounded-full mb-4 object-cover ring-4 ring-orange-100" />
+                <TeamMemberImage src={member.image} alt={member.name} name={member.name} />
                 <h2 className="text-xl font-bold text-neutral-900 mb-1">{member.name}</h2>
                 <p className="text-orange-600 font-semibold mb-3">{member.role}</p>
                 <p className="text-neutral-600 text-sm leading-relaxed">{member.bio}</p>
