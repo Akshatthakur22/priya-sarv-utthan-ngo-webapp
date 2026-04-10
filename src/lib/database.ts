@@ -85,7 +85,99 @@ export async function initializeDatabase(): Promise<void> {
       CREATE INDEX IF NOT EXISTS idx_donations_created_at ON donations(created_at);
     `);
 
-    console.log('✅ Database schema initialized successfully');
+    // Create contacts table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS contacts (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        message TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_contacts_email ON contacts(email);
+      CREATE INDEX IF NOT EXISTS idx_contacts_created_at ON contacts(created_at);
+    `);
+
+    // Create applications table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS applications (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        phone VARCHAR(20),
+        role VARCHAR(255) NOT NULL,
+        cover_letter TEXT,
+        message TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_applications_email ON applications(email);
+      CREATE INDEX IF NOT EXISTS idx_applications_role ON applications(role);
+      CREATE INDEX IF NOT EXISTS idx_applications_created_at ON applications(created_at);
+    `);
+
+    // Create support_cases table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS support_cases (
+        id SERIAL PRIMARY KEY,
+        case_id VARCHAR(50) NOT NULL UNIQUE,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        phone VARCHAR(20),
+        service_type VARCHAR(50) NOT NULL,
+        message TEXT NOT NULL,
+        opposing_party VARCHAR(255),
+        court_deadline TIMESTAMP,
+        department VARCHAR(100),
+        status VARCHAR(50) DEFAULT 'open',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_support_cases_case_id ON support_cases(case_id);
+      CREATE INDEX IF NOT EXISTS idx_support_cases_email ON support_cases(email);
+      CREATE INDEX IF NOT EXISTS idx_support_cases_service_type ON support_cases(service_type);
+      CREATE INDEX IF NOT EXISTS idx_support_cases_status ON support_cases(status);
+      CREATE INDEX IF NOT EXISTS idx_support_cases_created_at ON support_cases(created_at);
+    `);
+
+    // Create jobs table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS jobs (
+        id VARCHAR(100) PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        location VARCHAR(255) NOT NULL,
+        commitment VARCHAR(100) NOT NULL,
+        description TEXT NOT NULL,
+        open BOOLEAN DEFAULT true,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_jobs_open ON jobs(open);
+      CREATE INDEX IF NOT EXISTS idx_jobs_created_at ON jobs(created_at);
+    `);
+
+    // Create events table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS events (
+        id VARCHAR(100) PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        date VARCHAR(50) NOT NULL,
+        location VARCHAR(255) NOT NULL,
+        description TEXT NOT NULL,
+        published BOOLEAN DEFAULT false,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_events_published ON events(published);
+      CREATE INDEX IF NOT EXISTS idx_events_date ON events(date);
+      CREATE INDEX IF NOT EXISTS idx_events_created_at ON events(created_at);
+    `);
+
+    console.log('✅ Database schema initialized successfully with all tables');
   } catch (error: any) {
     // Table might already exist
     if (!error.message.includes('already exists')) {

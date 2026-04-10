@@ -41,17 +41,17 @@ const SUCCESS_MESSAGES: Record<number, string> = {
   5000: "You just changed a family's life this month 🌟",
 };
 
-// ─── Goal progress data ───────────────────────────────────────────────────────
-const GOAL = {
-  target:  500000,   // ₹5L
-  raised:  240000,   // ₹2.4L
-  donors:  1247,
+// ─── Default values (will be overridden by API) ──────────────────────────────
+const DEFAULT_GOAL = {
+  target:  5000,   // ₹5L target
+  raised:  0,        // Will be fetched
+  donors:  0,        // Will be fetched
   period:  "this month",
 };
 
-const SOCIAL_PROOF = {
-  donors: "1,200+",
-  raised: "₹2.4L+",
+const DEFAULT_SOCIAL_PROOF = {
+  donors: "0",
+  raised: "₹0",
   period: "this month",
 };
 
@@ -64,6 +64,19 @@ interface PaymentState {
   receiptEmail?: string;
 }
 
+interface DonationStats {
+  totalAmount: number;
+  totalDonors: number;
+  todayAmount: number;
+  thisMonthAmount: number;
+  donationCount: number;
+  recentDonations: Array<{
+    amount: number;
+    timestamp: string;
+    donorName: string;
+  }>;
+}
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function formatINR(n: number): string {
   if (n >= 100000) return `₹${(n / 100000).toFixed(1)}L`;
@@ -74,9 +87,15 @@ function formatINR(n: number): string {
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 /** Animated fundraising progress bar */
-function GoalProgress() {
-  const pct = Math.min((GOAL.raised / GOAL.target) * 100, 100);
-  const remaining = GOAL.target - GOAL.raised;
+function GoalProgress({ stats }: { stats: DonationStats | null }) {
+  const goal = {
+    target: DEFAULT_GOAL.target,
+    raised: stats?.thisMonthAmount ?? 0,
+    donors: stats?.totalDonors ?? 0,
+  };
+
+  const pct = Math.min((goal.raised / goal.target) * 100, 100);
+  const remaining = goal.target - goal.raised;
 
   return (
     <motion.div
@@ -98,7 +117,7 @@ function GoalProgress() {
     </p>
 
     <p className="text-xs font-bold text-emerald-700">
-      {formatINR(GOAL.raised)}
+      {formatINR(goal.raised)}
     </p>
   </div>
 
@@ -116,7 +135,7 @@ function GoalProgress() {
   <div className="flex flex-col gap-1 text-center">
 
     <p className="text-xs font-semibold text-neutral-600">
-      ❤️ {GOAL.donors}+ people already helped
+      ❤️ {goal.donors}+ people already helped
     </p>
 
     <p className="text-sm font-bold text-neutral-700">
@@ -124,7 +143,7 @@ function GoalProgress() {
       <span className="text-orange-600 font-black">
         {formatINR(remaining)}
       </span>{" "}
-      left to complete today's impact
+      left to complete {DEFAULT_GOAL.period}'s impact
     </p>
 
     <p className="text-[11px] text-neutral-400">
@@ -159,7 +178,10 @@ function LossAversionBanner() {
 }
 
 /** Social proof strip */
-function SocialProofStrip() {
+function SocialProofStrip({ stats }: { stats: DonationStats | null }) {
+  const donors = stats?.totalDonors ?? 0;
+  const raised = formatINR(stats?.thisMonthAmount ?? 0);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -179,14 +201,14 @@ function SocialProofStrip() {
           ))}
         </div>
         <p className="text-xs font-black text-neutral-700">
-          {SOCIAL_PROOF.donors} people donated {SOCIAL_PROOF.period}
+          {donors}+ people donated this month
         </p>
       </div>
       <div className="w-px h-5 bg-neutral-200" />
       <div className="flex items-center gap-1.5">
         <TrendingUp size={13} className="text-emerald-600" />
         <p className="text-xs font-black text-neutral-700">
-          {SOCIAL_PROOF.raised} raised
+          {raised} raised this month
         </p>
       </div>
     </motion.div>
@@ -201,6 +223,7 @@ function SuccessScreen({
   successMessage,
   onReceiptChange,
   onDonateAgain,
+  stats,
 }: {
   amount: number | "";
   paymentId?: string;
@@ -208,15 +231,17 @@ function SuccessScreen({
   successMessage: string;
   onReceiptChange: (email: string) => void;
   onDonateAgain: () => void;
+  stats: DonationStats | null;
 }) {
   // Get impact message for this donation amount
   const impactTier = DONATION_TIERS.find((t) => t.amount === amount);
   const impactMessage = impactTier?.impact || "Made a real difference";
+  const donors = stats?.totalDonors ?? 0;
   
   // Enhanced share message with impact, social proof, and call-to-action
   const shareText = `🌟 I just donated ₹${amount} to Priya Sarv Utthan!
 
-${impactMessage} — help me inspire ${SOCIAL_PROOF.donors} changemakers to support nutrition, education & empowerment for children in need.
+${impactMessage} — help me inspire ${donors}+ changemakers to support nutrition, education & empowerment for children in need.
 
 Join our mission → Every rupee counts! 🙏
 
@@ -252,7 +277,7 @@ Join our mission → Every rupee counts! 🙏
           transition={{ delay: 0.3 }}
           className="font-black text-emerald-900 text-xl mb-1 leading-tight"
         >
-          You are now part of {SOCIAL_PROOF.donors} changemakers ❤️
+          You are now part of {donors}+ changemakers ❤️
         </motion.h3>
 
         {/* Impact message */}
@@ -337,22 +362,48 @@ export default function DonateClient() {
     status: "idle",
     message: "",
   });
+  const [stats, setStats] = useState<DonationStats | null>(null);
+  const [statsLoading, setStatsLoading] = useState(true);
 
   const mainCtaRef = useRef<HTMLButtonElement>(null);
   const [showSticky, setShowSticky] = useState(false);
+
+  // Fetch real donation stats from API
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch("/api/donations/stats");
+        if (response.ok) {
+          const data = await response.json();
+          setStats(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch donation stats:", error);
+        // Fall back to defaults
+      } finally {
+        setStatsLoading(false);
+      }
+    };
+
+    fetchStats();
+    // Refresh stats every 30 seconds for real-time updates
+    const interval = setInterval(fetchStats, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
+    if (!mounted) return; // Only run after hydration
     const observer = new IntersectionObserver(
       ([entry]) => setShowSticky(!entry.isIntersecting),
       { threshold: 0.1 }
     );
     if (mainCtaRef.current) observer.observe(mainCtaRef.current);
     return () => observer.disconnect();
-  }, []);
+  }, [mounted]);
 
   // ─── Payment Logic (unchanged) ────────────────────────────────────────────
 
@@ -543,7 +594,7 @@ export default function DonateClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-orange-50 pb-28 md:pb-0">
+    <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-orange-50 pb-28 md:pb-0" suppressHydrationWarning>
 
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
       <motion.section
@@ -608,19 +659,19 @@ export default function DonateClient() {
           >
             <Users size={13} className="text-emerald-600 shrink-0" />
             <span className="text-xs font-black text-neutral-800">
-              {SOCIAL_PROOF.donors} donors
+              {stats?.totalDonors ?? 0} donors
             </span>
             <span className="w-px h-3 bg-neutral-200" />
             <TrendingUp size={13} className="text-emerald-600 shrink-0" />
             <span className="text-xs font-black text-neutral-800">
-              {SOCIAL_PROOF.raised} raised {SOCIAL_PROOF.period}
+              {formatINR(stats?.thisMonthAmount ?? 0)} raised this month
             </span>
           </motion.div>
         </motion.div>
       </motion.section>
 
       {/* ── Goal progress bar ────────────────────────────────────────────────── */}
-      <GoalProgress />
+      <GoalProgress stats={stats} />
 
       {/* ── Loss aversion / emotional banner ────────────────────────────────── */}
       <LossAversionBanner />
@@ -645,6 +696,7 @@ export default function DonateClient() {
                 setPaymentState((prev) => ({ ...prev, receiptEmail: email }))
               }
               onDonateAgain={handleDonateAgain}
+              stats={stats}
             />
           )}
 
@@ -696,7 +748,7 @@ export default function DonateClient() {
               </p>
 
               {/* Social proof strip inline */}
-              <SocialProofStrip />
+              <SocialProofStrip stats={stats} />
 
               {/* Donation tier grid — 3 cols on mobile for compact layout */}
               <div className="grid grid-cols-3 md:grid-cols-3 gap-2.5">

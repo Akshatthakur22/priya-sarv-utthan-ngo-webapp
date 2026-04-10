@@ -15,14 +15,37 @@ import { initializeDatabase } from "@/lib/database";
 
 export async function POST(request: NextRequest) {
   try {
-    // ⚠️ TODO: Add authentication here before production deployment
-    // Example: Check for API key header
-    // const apiKey = request.headers.get("x-api-key");
-    // if (apiKey !== process.env.ADMIN_API_KEY) {
-    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    // }
+    // ✅ SECURITY: Verify API key before allowing database initialization
+    const apiKey = request.headers.get("x-api-key");
+    const expectedKey = process.env.ADMIN_API_KEY;
 
-    console.log("[INIT-DB] Starting database initialization...");
+    if (!expectedKey) {
+      console.error("[INIT-DB] ADMIN_API_KEY not configured in environment");
+      return NextResponse.json(
+        { 
+          error: "Server misconfiguration", 
+          message: "ADMIN_API_KEY not set" 
+        },
+        { status: 500 }
+      );
+    }
+
+    if (!apiKey || apiKey !== expectedKey) {
+      console.warn("[INIT-DB] Unauthorized database initialization attempt", {
+        ip: request.headers.get("x-forwarded-for") || "unknown",
+        hasKey: !!apiKey,
+      });
+
+      return NextResponse.json(
+        { 
+          error: "Unauthorized", 
+          message: "Invalid or missing API key" 
+        },
+        { status: 401 }
+      );
+    }
+
+    console.log("[INIT-DB] Starting database initialization (authorized)...");
 
     await initializeDatabase();
 
@@ -55,14 +78,19 @@ export async function GET(request: NextRequest) {
     {
       message: "Database Initialization API",
       description: "POST to this endpoint to initialize database schema",
-      warning:
-        "⚠️ This endpoint should be protected with authentication in production",
+      security: "✅ PROTECTED - Requires valid API key",
       usage: {
         method: "POST",
         url: "/api/admin/init-database",
-        authentication: "TODO: Add authentication header check",
+        headers: {
+          "x-api-key": "your-admin-api-key-here (set ADMIN_API_KEY env var)",
+          "Content-Type": "application/json",
+        },
+        example: `curl -X POST http://localhost:3000/api/admin/init-database \\
+  -H "x-api-key: your-key" \\
+  -H "Content-Type: application/json"`,
       },
-      status: "Ready",
+      status: "Ready (secured)",
     },
     { status: 200 }
   );
