@@ -1,7 +1,13 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
+  // Database configuration
+  DATABASE_URL: z.string().url().optional(),
+  
   // Email configuration (optional for deployment)
+  EMAIL_HOST: z.string().optional(),
+  EMAIL_PORT: z.string().optional(),
+  EMAIL_SECURE: z.string().optional(),
   EMAIL_USER: z.string().email().optional(),
   EMAIL_APP_PASSWORD: z.string().min(1).optional(),
   EMAIL_FROM: z.string().email().optional(),

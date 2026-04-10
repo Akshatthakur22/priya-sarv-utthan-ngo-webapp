@@ -29,7 +29,6 @@ export function SiteFooter() {
         {/* Navigation links */}
         <div className="flex flex-wrap gap-4 text-sm text-neutral-muted">
           <Link href="/about" className="hover:text-primary">About</Link>
-          <Link href="/programs" className="hover:text-primary">Programs</Link>
           <Link href="/events" className="hover:text-primary">Events</Link>
           <Link href="/careers" className="hover:text-primary">Careers</Link>
           <Link href="/contact" className="hover:text-primary">Contact</Link>

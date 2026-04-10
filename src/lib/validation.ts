@@ -35,10 +35,10 @@ export const supportCaseSchema = z.object({
 
 // Donation validation (for future use)
 export const donationSchema = z.object({
-  amount: z.number().min(50, 'Minimum donation amount is ₹50').max(100000, 'Maximum donation amount is ₹100,000'),
+  amount: z.number().min(1, 'Minimum donation amount is ₹1').max(100000, 'Maximum donation amount is ₹100,000'),
   name: nameSchema,
   email: emailSchema,
-  phone: phoneSchema,
+  phone: phoneSchema.optional(),
   pan: z.string().regex(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, 'Invalid PAN number').optional(),
   address: z.string().max(500).optional(),
 });

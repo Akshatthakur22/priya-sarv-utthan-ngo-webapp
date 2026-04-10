@@ -35,10 +35,6 @@ export default function AboutPage() {
         "name": "Indore"
       },
       {
-        "@type": "City", 
-        "name": "Jabalpur"
-      },
-      {
         "@type": "City",
         "name": "Bhopal"
       }

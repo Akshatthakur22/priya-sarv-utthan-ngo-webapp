@@ -36,30 +36,6 @@ const cities = [
     localContact: null
   },
   {
-    id: "jabalpur",
-    name: "Jabalpur",
-    nameHi: "जबलपुर",
-    type: "Branch Office",
-    typeHi: "शाखा कार्यालय",
-    icon: Home,
-    color: "from-emerald-500 to-teal-500",
-    description: "Expanding our mission with dedicated elderly care facilities and educational programs.",
-    projects: [
-      { name: "Deva Prabhu Rambhau Jadhav Old Age Home & Rehabilitation Center", desc: "Comprehensive elderly care and rehabilitation services", featured: true },
-      { name: "Sanskar Classes", desc: "Quality education at JDA Block, Bajnamath" }
-    ],
-    address: "Sanjivani Nagar, behind the Red Building, past Rani Durgavati School, Jabalpur",
-    image: "/images/woman3.png",
-    localContact: {
-      name: "Praveen Soni",
-      nameHi: "प्रवीण सोनी",
-      role: "Division In-Charge",
-      roleHi: "संभागी प्रभारी",
-      phone: "7582079991",
-      message: "Managing Jabalpur operations and overseeing the Old Age Home & Sanskar Classes."
-    }
-  },
-  {
     id: "ujjain",
     name: "Ujjain",
     nameHi: "उज्जैन",
