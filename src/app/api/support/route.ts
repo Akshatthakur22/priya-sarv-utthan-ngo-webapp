@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
+import { queryDatabase } from "@/lib/database";
 import { validateRequest, supportCaseSchema, sanitizeString, sanitizeEmail, sanitizePhone } from "@/lib/validation";
 import { supportRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
 
@@ -80,6 +81,43 @@ export async function POST(req: NextRequest) {
       name,
       serviceType,
     });
+
+    // ✅ STORE IN DATABASE FIRST (non-blocking, doesn't fail submission)
+    try {
+      await queryDatabase(
+        `
+        INSERT INTO support_cases (
+          case_id,
+          name,
+          email,
+          phone,
+          service_type,
+          message,
+          opposing_party,
+          court_deadline,
+          department,
+          status,
+          created_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW())
+        `,
+        [
+          caseId,
+          validatedData.name,
+          validatedData.email,
+          validatedData.phone || null,
+          validatedData.serviceType,
+          validatedData.message,
+          validatedData.opposingParty || null,
+          validatedData.courtDeadline || null,
+          validatedData.department || null,
+          'open'
+        ]
+      );
+      logger.info('Support case stored in database', { caseId });
+    } catch (dbError) {
+      logger.warn('Failed to store support case in database', { caseId, error: dbError });
+      // Don't fail the submission if DB insert fails
+    }
 
     // Check for email configuration
     if (!env.EMAIL_APP_PASSWORD || !env.EMAIL_USER) {

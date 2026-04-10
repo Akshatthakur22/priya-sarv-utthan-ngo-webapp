@@ -6,13 +6,10 @@ export const siteConfig = {
   address: "69B, Mangal Marg, Gandhi Nagar, Indore, Madhya Pradesh – 452005",
   workingHours: "11:00 AM – 5:00 PM (All Days)",
 
-  // Payments
-  upiId: "9755533614-2@axl",
-  upiQrCodeUrl: "/images/upi-qr.png",
-
-  // Optional but VERY useful later
+  // Payments - Razorpay
+  donationMinAmount: 1,
+  donationMaxAmount: 100000,
   donationReferencePrefix: "PSUF",
-  donationMinAmount: 50,
 
   // Transparency (future use)
   registrationNumber: "XXXXXXX", // NGO reg no (optional)

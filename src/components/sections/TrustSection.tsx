@@ -6,7 +6,6 @@ import { triggerHaptic } from "@/utils/haptics";
 
 const cities = [
   { name: "Indore", nameHi: "इंदौर", type: "Headquarters" },
-  { name: "Jabalpur", nameHi: "जबलपुर", type: "Branch Office" },
   { name: "Bhopal", nameHi: "भोपाल", type: "Outreach" }
 ];
 

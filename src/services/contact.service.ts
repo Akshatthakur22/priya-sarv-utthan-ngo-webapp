@@ -1,37 +1,70 @@
-import { db } from "@/lib/db";
-import { ContactMessage } from "@/types";
-import { ensure, isValidEmail, sanitizeText } from "@/utils/validators";
-import { randomUUID } from "crypto";
-import { sendMail } from "@/lib/mail";
+import { queryDatabase } from "@/lib/database";
+import { logger } from "@/lib/logger";
+import { sendDonationReceipt } from "@/lib/email";
 
 export async function submitContact(input: {
   name: string;
   email: string;
   message: string;
-}): Promise<ContactMessage> {
-  const name = sanitizeText(input.name);
-  const email = sanitizeText(input.email).toLowerCase();
-  const message = sanitizeText(input.message);
+}): Promise<any> {
+  try {
+    // Insert contact message into database
+    const result = await queryDatabase(
+      `
+      INSERT INTO contacts (name, email, message, created_at)
+      VALUES ($1, $2, $3, NOW())
+      RETURNING id, name, email, message, created_at;
+      `,
+      [input.name, input.email, input.message]
+    );
 
-  ensure(name.length > 1, "Name is required");
-  ensure(isValidEmail(email), "Valid email required");
-  ensure(message.length > 5, "Message is too short");
+    if (!result.rows || result.rows.length === 0) {
+      throw new Error("Failed to insert contact record");
+    }
 
-  const record: ContactMessage = {
-    id: randomUUID(),
-    name,
-    email,
-    message,
-    createdAt: new Date().toISOString()
-  };
+    const record = result.rows[0];
 
-  db.contacts.unshift(record);
+    logger.info("Contact message saved to database", {
+      id: record.id,
+      email: record.email,
+      name: record.name,
+    });
 
-  await sendMail({
-    to: email,
-    subject: "We received your message",
-    body: `Hi ${name}, thank you for reaching out. Our team will respond soon.`
-  });
+    // Send confirmation email to submitter
+    try {
+      await sendDonationReceipt({
+        donorEmail: input.email,
+        donorName: input.name,
+        amount: 0, // Not a donation
+        orderId: `CONTACT-${record.id}`,
+        paymentId: `CONTACT-${record.id}`,
+        createdAt: new Date(record.created_at),
+        ngoName: "Priya Sarv Utthan Seva Sansthan",
+      });
 
-  return record;
+      logger.info("Contact confirmation email sent", {
+        email: input.email,
+      });
+    } catch (emailError: any) {
+      logger.warn("Failed to send contact confirmation email", {
+        email: input.email,
+        error: emailError.message,
+      });
+      // Don't fail the contact submission if email fails
+    }
+
+    return {
+      id: record.id,
+      name: record.name,
+      email: record.email,
+      message: record.message,
+      createdAt: record.created_at,
+    };
+  } catch (error: any) {
+    logger.error("Failed to submit contact", {
+      email: input.email,
+      message: error.message,
+    });
+    throw error;
+  }
 }

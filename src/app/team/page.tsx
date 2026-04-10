@@ -19,12 +19,6 @@ const team = [
     bio: "Mrs. Preeti Jadhav is the Secretary of the organization, leading administrative work and women empowerment programs."
   },
   {
-    name: "Praveen Soni",
-    role: "Division In-Charge (Jabalpur)",
-    image: "/images/Praveen_Soni.png",
-    bio: "Praveen manages Jabalpur operations and oversees the Old Age Home & Sanskar Classes. Contact: 7582079991"
-  },
-  {
     name: "Jyoti Mandal",
     role: "Division In-Charge (Ujjain)",
     image: "/images/Jyoti_Mandal.png",
@@ -49,11 +43,11 @@ const team = [
     bio: "Baal Sadhvi Vimla Devi Jain leads our Animal & Bird Welfare initiatives, focusing on compassion, care, feeding, and protection of animals and birds. (पशु पक्षी सेवा)"
   },
   {
-    name: "Akshat Thakur",
-    role: "Software Developer & Platform Builder",
-    image: "/images/akki.png",
-    bio: "Akshat is the developer behind our entire web platform. He designed, built, and maintains the NGO’s website, handling everything from the frontend and backend to forms, automation, events, and donations. As a B.Tech CSE student passionate about software development, Akshat uses his skills to support social impact and help the organization reach more people effectively."
-  }
+  "name": "Akshat Thakur",
+  "role": "Software Developer & Platform Builder",
+  "image": "/images/akki.png",
+  "bio": "Akshat built and manages the NGO’s complete web platform, handling frontend, backend, automation, and integrations. A B.Tech CSE student, he leverages technology to drive impact and scale the organization’s reach."
+}
 ];
 
 

@@ -48,7 +48,13 @@ NGOs often struggle with digital presence and online donation collection. This p
 
 - ✅ **Mobile-first responsive design** for accessibility across devices
 - ✅ **Bilingual support** (English & Hindi) for local community reach
-- ✅ **Donation integration** with UPI payment system
+- ✅ **Production-grade payment system** with Razorpay integration (Phase 3)
+- ✅ **PostgreSQL database** for donation persistence (Phase 3)
+- ✅ **Email receipt system** for donor confirmations (Phase 3)
+- ✅ **Automatic retry logic** for payment verification (Phase 3)
+- ✅ **Secure input validation** to prevent fraud and attacks (Phase 3)
+- ✅ **Comprehensive logging** for debugging in production (Phase 3)
+- ✅ **Donation integration** with Razorpay payment gateway
 - ✅ **Career portal** for volunteer and job applications
 - ✅ **Contact forms** with validation for community engagement
 - ✅ **SEO optimization** for better discoverability
@@ -75,14 +81,96 @@ NGOs often struggle with digital presence and online donation collection. This p
 - **Home** - Hero section, impact highlights, and organizational values
 - **About** - Mission, vision, and 27-year history
 - **Programs** - 7+ focus areas with detailed descriptions
-- **Donate** - UPI integration with QR code support
+- **Donate** - Razorpay integration with preset and custom donation amounts
 - **Careers** - Job listings and application forms
 - **Events** - Community events and activities
 - **Contact** - Form with email integration (mock)
 
 ---
 
-## 🛠️ Tech Stack
+## � Phase 3: Production Payment System (Latest)
+
+### What's New in Phase 3 ✨
+
+This version includes a **complete, production-grade payment system** with enterprise-level reliability, security, and user experience:
+
+#### 💾 Database Integration
+- PostgreSQL database via [Neon.tech](https://neon.tech/) for reliable data persistence
+- Connection pooling for optimal performance
+- Automatic schema initialization
+- ACID compliance for transaction safety
+
+#### 🔐 Security & Validation
+- HMAC SHA256 signature verification (fraud prevention)
+- Input sanitization to prevent XSS attacks
+- SQL injection prevention with parameterized queries
+- Zod schema validation for all inputs
+- Payment ID uniqueness constraints
+
+#### ⚡ Reliability & Retry Logic
+- Automatic 3-attempt verification retry
+- 2-second delays between retries
+- Distinguishes temporary vs permanent failures
+- Prevents false "Payment Failed" messages
+- Non-blocking email (doesn't fail donation if email service down)
+
+#### 📧 Email Receipts
+- Professional HTML donation receipt templates
+- Tax benefit information (Section 80G)
+- Automatic email sending via Gmail SMTP
+- Fallback handling if email service unavailable
+
+#### 🎯 Better User Experience
+- Progress indicators during payment verification
+- Contextual error messages (specific to what went wrong)
+- Prevents double-charging via unique constraints
+- Payment cancellation detection
+- Razorpay failure event handling
+
+#### 📊 Comprehensive Logging
+- Context-aware logging with `[PAYMENT]` prefix
+- Order ID, Payment ID in all logs
+- Error tracking for debugging
+- Non-intrusive (uses console.log, no external logging service required)
+
+### Setup & Configuration
+
+**Quick Start:** See [QUICK_START_PHASE3.md](./QUICK_START_PHASE3.md)
+
+**Detailed Setup:** See [ENV_SETUP_GUIDE.md](./ENV_SETUP_GUIDE.md)
+
+**Technical Docs:** See [PAYMENT_SYSTEM_PHASE3.md](./PAYMENT_SYSTEM_PHASE3.md)
+
+### Required Environment Variables
+
+```env
+# Database (PostgreSQL via Neon)
+DATABASE_URL=postgresql://...
+
+# Razorpay (Payment Gateway)
+NEXT_PUBLIC_RAZORPAY_KEY_ID=...
+RAZORPAY_KEY_SECRET=...
+
+# Email (Gmail SMTP - Optional but recommended)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=...
+EMAIL_APP_PASSWORD=...
+```
+
+### Key Files Added/Updated
+
+| File | Status | Changes |
+|------|--------|---------|
+| `src/lib/database.ts` | ✨ NEW | Connection pooling, schema management |
+| `src/lib/email.ts` | ✨ NEW | Email service, receipt templates |
+| `src/services/payment.service.ts` | 🔄 UPDATED | Real database integration |
+| `src/app/api/razorpay/order/route.ts` | 🔄 UPDATED | Input validation, sanitization |
+| `src/app/api/razorpay/verify/route.ts` | 🔄 UPDATED | Email sending, error handling |
+| `src/app/donate/DonateClient.tsx` | 🔄 UPDATED | Retry logic, failure handlers |
+| `src/lib/env.ts` | 🔄 UPDATED | Database & email env vars |
+
+---
 
 ### Frontend
 - **[Next.js 14](https://nextjs.org/)** - React framework with App Router
@@ -90,6 +178,12 @@ NGOs often struggle with digital presence and online donation collection. This p
 - **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first styling
 - **[Framer Motion](https://www.framer.com/motion/)** - Animation library
 - **[Lucide React](https://lucide.dev/)** - Icon library
+
+### Backend & Database (Phase 3)
+- **[Razorpay](https://razorpay.com/)** - Payment gateway with HMAC signature verification
+- **[PostgreSQL](https://www.postgresql.org/)** - Neon.tech serverless database
+- **[pg](https://node-postgres.com/)** - PostgreSQL client with connection pooling
+- **[Nodemailer](https://nodemailer.com/)** - Email service for donation receipts
 
 ### Development Tools
 - **ESLint** - Code linting
@@ -168,11 +262,15 @@ priya-sarv-utthan-ngo-webapp/
 │   │   ├── config.ts          # Site configuration
 │   │   ├── db.ts              # Database mock
 │   │   ├── mail.ts            # Email service mock
-│   │   └── payments.ts        # Payment processing mock
+│   │   ├── razorpay.ts        # Razorpay config & types
+│   │   ├── seo-utils.ts       # SEO utilities
+│   │   ├── logger.ts          # Logging utility
+│   │   ├── rate-limit.ts      # Rate limiting
+│   │   └── validation.ts      # Form validation
 │   │
 │   ├── services/              # Business logic layer
 │   │   ├── contact.service.ts
-│   │   ├── donation.service.ts
+│   │   ├── payment.service.ts # Payment processing & verification
 │   │   ├── event.service.ts
 │   │   └── job.service.ts
 │   │
@@ -208,16 +306,48 @@ Content-Type: application/json
 }
 ```
 
-### Donation
+### Razorpay Donation - Create Order
 ```http
-POST /api/donate
+POST /api/razorpay/order
 Content-Type: application/json
 
 {
   "name": "string",
   "email": "string",
-  "amount": "number",
+  "phone": "string (optional)",
+  "amount": "number (₹50-₹1,00,000)",
   "message": "string (optional)"
+}
+
+Response:
+{
+  "success": true,
+  "orderId": "string",
+  "amount": "number (in paise)",
+  "currency": "INR",
+  "reference": "string",
+  "keyId": "string"
+}
+```
+
+### Razorpay Donation - Verify Payment
+```http
+POST /api/razorpay/verify
+Content-Type: application/json
+
+{
+  "razorpay_order_id": "string",
+  "razorpay_payment_id": "string",
+  "razorpay_signature": "string"
+}
+
+Response:
+{
+  "success": true,
+  "orderId": "string",
+  "paymentId": "string",
+  "message": "Payment verified and recorded successfully",
+  "recordId": "string"
 }
 ```
 
