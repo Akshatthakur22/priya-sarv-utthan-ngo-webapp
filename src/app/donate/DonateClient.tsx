@@ -23,30 +23,30 @@ import { siteConfig } from "@/lib/config";
 
 // ─── Donation tiers – micro-entry included for low-budget donors ─────────────
 const DONATION_TIERS = [
-  { amount: 10,   impact: "Start helping",       icon: "❤️",  label: "Just ₹10" },
-  { amount: 50,   impact: "Support a meal",       icon: "🍱",  label: "₹50" },
-  { amount: 100,  impact: "Feed a child today",   icon: "🍲",  label: "₹100" },
-  { amount: 500,  impact: "Food for a week",      icon: "📚",  label: "₹500", popular: true },
-  { amount: 1000, impact: "Education support",    icon: "✏️",  label: "₹1000" },
-  { amount: 5000, impact: "Full monthly care",    icon: "🏠",  label: "₹5000" },
+  { amount: 10, impact: "Start helping", icon: "❤️", label: "Just ₹10" },
+  { amount: 50, impact: "Support a meal", icon: "🍱", label: "₹50" },
+  { amount: 100, impact: "Feed a child today", icon: "🍲", label: "₹100" },
+  { amount: 500, impact: "Food for a week", icon: "📚", label: "₹500", popular: true },
+  { amount: 1000, impact: "Education support", icon: "✏️", label: "₹1000" },
+  { amount: 5000, impact: "Full monthly care", icon: "🏠", label: "₹5000" },
 ];
 
 // ─── Emotional success messages keyed by amount ───────────────────────────────
 const SUCCESS_MESSAGES: Record<number, string> = {
-  10:   "Even ₹10 matters — you just took the first step ❤️",
-  50:   "You just helped a child eat today 🙏",
-  100:  "You just helped feed a child for a full day ❤️",
-  500:  "You just gave a child food security for a week 🙏",
+  10: "Even ₹10 matters — you just took the first step ❤️",
+  50: "You just helped a child eat today 🙏",
+  100: "You just helped feed a child for a full day ❤️",
+  500: "You just gave a child food security for a week 🙏",
   1000: "You just funded a month of education for a child ✨",
   5000: "You just changed a family's life this month 🌟",
 };
 
 // ─── Default values (will be overridden by API) ──────────────────────────────
 const DEFAULT_GOAL = {
-  target:  5000,   // ₹5L target
-  raised:  0,        // Will be fetched
-  donors:  0,        // Will be fetched
-  period:  "this month",
+  target: 5000,   // ₹5L target
+  raised: 0,        // Will be fetched
+  donors: 0,        // Will be fetched
+  period: "this month",
 };
 
 const DEFAULT_SOCIAL_PROOF = {
@@ -80,7 +80,7 @@ interface DonationStats {
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function formatINR(n: number): string {
   if (n >= 100000) return `₹${(n / 100000).toFixed(1)}L`;
-  if (n >= 1000)   return `₹${(n / 1000).toFixed(1)}K`;
+  if (n >= 1000) return `₹${(n / 1000).toFixed(1)}K`;
   return `₹${n}`;
 }
 
@@ -104,54 +104,54 @@ function GoalProgress({ stats }: { stats: DonationStats | null }) {
       transition={{ delay: 0.3 }}
       className="mx-auto max-w-2xl px-4 mb-4"
     >
-     <div className="bg-white rounded-2xl shadow-md border border-emerald-100 px-5 py-4">
+      <div className="bg-white rounded-2xl shadow-md border border-emerald-100 px-5 py-4">
 
-  {/* 🔥 Emotional headline */}
-  <div className="flex items-center justify-between mb-2">
-    <p className="text-xs font-black text-orange-600 uppercase tracking-widest flex items-center gap-1.5">
-      <span className="relative flex h-2 w-2">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
-        <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500" />
-      </span>
-      Help us feed children today
-    </p>
+        {/* 🔥 Emotional headline */}
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-xs font-black text-orange-600 uppercase tracking-widest flex items-center gap-1.5">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500" />
+            </span>
+            Help us feed children today
+          </p>
 
-    <p className="text-xs font-bold text-emerald-700">
-      {formatINR(goal.raised)}
-    </p>
-  </div>
+          <p className="text-xs font-bold text-emerald-700">
+            {formatINR(goal.raised)}
+          </p>
+        </div>
 
-  {/* 🔥 Progress bar */}
-  <div className="relative h-3 bg-emerald-100 rounded-full overflow-hidden mb-2">
-    <motion.div
-      className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full"
-      initial={{ width: 0 }}
-      animate={{ width: `${pct}%` }}
-      transition={{ duration: 1.2, ease: "easeOut", delay: 0.5 }}
-    />
-  </div>
+        {/* 🔥 Progress bar */}
+        <div className="relative h-3 bg-emerald-100 rounded-full overflow-hidden mb-2">
+          <motion.div
+            className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full"
+            initial={{ width: 0 }}
+            animate={{ width: `${pct}%` }}
+            transition={{ duration: 1.2, ease: "easeOut", delay: 0.5 }}
+          />
+        </div>
 
-  {/* 🔥 Emotion + urgency */}
-  <div className="flex flex-col gap-1 text-center">
+        {/* 🔥 Emotion + urgency */}
+        <div className="flex flex-col gap-1 text-center">
 
-    <p className="text-xs font-semibold text-neutral-600">
-      ❤️ {goal.donors}+ people already helped
-    </p>
+          <p className="text-xs font-semibold text-neutral-600">
+            ❤️ {goal.donors}+ people already helped
+          </p>
 
-    <p className="text-sm font-bold text-neutral-700">
-      Only{" "}
-      <span className="text-orange-600 font-black">
-        {formatINR(remaining)}
-      </span>{" "}
-      left to complete {DEFAULT_GOAL.period}'s impact
-    </p>
+          <p className="text-sm font-bold text-neutral-700">
+            Only{" "}
+            <span className="text-orange-600 font-black">
+              {formatINR(remaining)}
+            </span>{" "}
+            left to complete {DEFAULT_GOAL.period}'s impact
+          </p>
 
-    <p className="text-[11px] text-neutral-400">
-      Every ₹10 brings us closer 🙏
-    </p>
+          <p className="text-[11px] text-neutral-400">
+            Every ₹10 brings us closer 🙏
+          </p>
 
-  </div>
-</div>
+        </div>
+      </div>
     </motion.div>
   );
 }
@@ -237,7 +237,7 @@ function SuccessScreen({
   const impactTier = DONATION_TIERS.find((t) => t.amount === amount);
   const impactMessage = impactTier?.impact || "Made a real difference";
   const donors = stats?.totalDonors ?? 0;
-  
+
   // Enhanced share message with impact, social proof, and call-to-action
   const shareText = `🌟 I just donated ₹${amount} to Priya Sarv Utthan!
 
@@ -372,7 +372,13 @@ export default function DonateClient() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch("/api/donations/stats");
+        const response = await fetch(`/api/donations/stats?t=${Date.now()}`, {
+          cache: "no-store",
+          headers: {
+            "Pragma": "no-cache",
+            "Cache-Control": "no-cache",
+          },
+        });
         if (response.ok) {
           const data = await response.json();
           setStats(data);
@@ -404,6 +410,7 @@ export default function DonateClient() {
     if (mainCtaRef.current) observer.observe(mainCtaRef.current);
     return () => observer.disconnect();
   }, [mounted]);
+
 
   // ─── Payment Logic (unchanged) ────────────────────────────────────────────
 
@@ -586,12 +593,6 @@ export default function DonateClient() {
     ? `Help a child with ₹${amount} ❤️`
     : "Choose an amount to give ❤️";
 
-  // ─── Render ────────────────────────────────────────────────────────────────
-  if (!mounted) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-orange-50 pb-28 md:pb-0" />
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-orange-50 pb-28 md:pb-0" suppressHydrationWarning>
@@ -765,13 +766,12 @@ export default function DonateClient() {
                       <motion.div
                         whileTap={{ scale: 0.97 }}
                         onClick={() => setAmount(tier.amount)}
-                        className={`relative cursor-pointer rounded-2xl transition-all duration-200 ${
-                          isSelected
-                            ? "bg-emerald-600 text-white shadow-xl ring-2 ring-emerald-400"
-                            : tier.popular
+                        className={`relative cursor-pointer rounded-2xl transition-all duration-200 ${isSelected
+                          ? "bg-emerald-600 text-white shadow-xl ring-2 ring-emerald-400"
+                          : tier.popular
                             ? "bg-orange-50 text-neutral-800 border-2 border-orange-200 hover:border-orange-300"
                             : "bg-neutral-50 text-neutral-800 border-2 border-neutral-200 hover:border-emerald-300"
-                        }`}
+                          }`}
                       >
                         {/* Main info */}
                         <div className="p-3 pb-2 text-center">
@@ -780,9 +780,8 @@ export default function DonateClient() {
                             {tier.label}
                           </div>
                           <div
-                            className={`text-[10px] font-semibold mt-1 leading-tight ${
-                              isSelected ? "text-emerald-100" : "text-neutral-500"
-                            }`}
+                            className={`text-[10px] font-semibold mt-1 leading-tight ${isSelected ? "text-emerald-100" : "text-neutral-500"
+                              }`}
                           >
                             {tier.impact}
                           </div>
@@ -798,13 +797,12 @@ export default function DonateClient() {
                             triggerDonation(tier.amount);
                           }}
                           disabled={isProcessing}
-                          className={`w-full py-1.5 rounded-b-2xl text-[10px] font-black flex items-center justify-center gap-1 transition-all ${
-                            isSelected
-                              ? "bg-emerald-700 text-white hover:bg-emerald-800"
-                              : tier.popular
+                          className={`w-full py-1.5 rounded-b-2xl text-[10px] font-black flex items-center justify-center gap-1 transition-all ${isSelected
+                            ? "bg-emerald-700 text-white hover:bg-emerald-800"
+                            : tier.popular
                               ? "bg-orange-100 text-orange-700 hover:bg-orange-200"
                               : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-                          }`}
+                            }`}
                         >
                           <Zap size={9} />
                           Give {tier.label}
@@ -854,11 +852,10 @@ export default function DonateClient() {
               disabled={!amount || isProcessing}
               whileHover={!isProcessing && amount ? { scale: 1.02 } : {}}
               whileTap={!isProcessing && amount ? { scale: 0.97 } : {}}
-              className={`w-full py-4 px-8 rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all duration-200 ${
-                amount && !isProcessing
-                  ? "bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-lg hover:shadow-xl hover:from-emerald-700 hover:to-emerald-800 cursor-pointer"
-                  : "bg-neutral-200 text-neutral-400 cursor-not-allowed"
-              }`}
+              className={`w-full py-4 px-8 rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all duration-200 ${amount && !isProcessing
+                ? "bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-lg hover:shadow-xl hover:from-emerald-700 hover:to-emerald-800 cursor-pointer"
+                : "bg-neutral-200 text-neutral-400 cursor-not-allowed"
+                }`}
             >
               {isProcessing ? (
                 <>
@@ -963,11 +960,10 @@ export default function DonateClient() {
                 disabled={!amount || isProcessing}
                 whileTap={amount && !isProcessing ? { scale: 0.97 } : {}}
                 onClick={() => triggerDonation()}
-                className={`w-full py-4 rounded-2xl font-black text-base flex items-center justify-center gap-2.5 transition-all ${
-                  amount && !isProcessing
-                    ? "bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-lg active:from-emerald-700"
-                    : "bg-neutral-200 text-neutral-400"
-                }`}
+                className={`w-full py-4 rounded-2xl font-black text-base flex items-center justify-center gap-2.5 transition-all ${amount && !isProcessing
+                  ? "bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-lg active:from-emerald-700"
+                  : "bg-neutral-200 text-neutral-400"
+                  }`}
               >
                 {isProcessing ? (
                   <>

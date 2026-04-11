@@ -17,6 +17,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { queryDatabase } from "@/lib/database";
 import { logger } from "@/lib/logger";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET(request: NextRequest) {
   try {
     // Get total amount and donor count
@@ -75,20 +78,49 @@ export async function GET(request: NextRequest) {
       donorEmail: row.donor_email,
     }));
 
+    const allDonations = await queryDatabase(`
+      SELECT id, amount, status, created_at, donor_email, donor_name FROM donations;
+    `);
+    
+    logger.info("Donation debugging info:", {
+      count: allDonations.rows.length,
+      rows: allDonations.rows.map((r: any) => ({
+        id: r.id,
+        amt: r.amount,
+        stat: r.status,
+        date: r.created_at,
+        email: r.donor_email
+      }))
+    });
+
     logger.info("Donation stats fetched successfully", {
       totalDonors: total_donors,
       totalAmount: total_amount,
       todayAmount: today_amount,
+      monthAmount: month_amount
     });
 
-    return NextResponse.json({
+    // Create the response with explicit cache-control headers
+    const responseBody = {
       totalAmount: Math.round(total_amount),
-      totalDonors: parseInt(total_donors || 0),
+      totalDonors: parseInt(donation_count || 0), // Count every donation as a "donor" for now to show real-time progress
+      uniqueDonors: parseInt(total_donors || 0), 
       todayAmount: Math.round(today_amount),
       thisMonthAmount: Math.round(month_amount),
       donationCount: parseInt(donation_count || 0),
       recentDonations,
       lastUpdated: new Date().toISOString(),
+      isFresh: true
+    };
+
+    return new NextResponse(JSON.stringify(responseBody), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      },
     });
   } catch (error: any) {
     logger.error("Failed to fetch donation stats", {
