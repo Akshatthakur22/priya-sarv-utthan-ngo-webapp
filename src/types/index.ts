@@ -1,9 +1,10 @@
-export type DonationStatus = "pending" | "succeeded" | "failed";
+export type DonationStatus = "pending" | "completed" | "failed";
 
 export interface Donation {
   id: string;
   name: string;
   email: string;
+  phone: string;
   amount: number;
   message?: string;
   status: DonationStatus;

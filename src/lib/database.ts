@@ -60,21 +60,17 @@ export async function initializeDatabase(): Promise<void> {
   const client = await getPool().connect();
 
   try {
-    // Create donations table
+    // Create donations table (Production-Grade Schema)
     await client.query(`
       CREATE TABLE IF NOT EXISTS donations (
         id SERIAL PRIMARY KEY,
-        order_id VARCHAR(255) NOT NULL UNIQUE,
+        order_id VARCHAR(255),
         payment_id VARCHAR(255) NOT NULL UNIQUE,
-        amount DECIMAL(10, 2) NOT NULL,
-        currency VARCHAR(3) DEFAULT 'INR',
-        donor_name VARCHAR(255),
+        donor_name VARCHAR(255) NOT NULL DEFAULT 'Anonymous Donor',
         donor_email VARCHAR(255),
         donor_phone VARCHAR(20),
-        donor_message TEXT,
+        amount INTEGER NOT NULL,
         status VARCHAR(50) DEFAULT 'completed',
-        razorpay_notes JSONB,
-        metadata JSONB,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
@@ -82,7 +78,8 @@ export async function initializeDatabase(): Promise<void> {
       CREATE INDEX IF NOT EXISTS idx_donations_payment_id ON donations(payment_id);
       CREATE INDEX IF NOT EXISTS idx_donations_order_id ON donations(order_id);
       CREATE INDEX IF NOT EXISTS idx_donations_donor_email ON donations(donor_email);
-      CREATE INDEX IF NOT EXISTS idx_donations_created_at ON donations(created_at);
+      CREATE INDEX IF NOT EXISTS idx_donations_created_at ON donations(created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_donations_status ON donations(status);
     `);
 
     // Create contacts table
