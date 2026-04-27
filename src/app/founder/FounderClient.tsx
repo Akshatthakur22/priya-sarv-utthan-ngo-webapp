@@ -189,22 +189,13 @@ export default function FounderClient() {
                 src="/images/founder_founderpage.png" 
                 alt="Mr. Jagdish Jadhav - Founder and Social Activist"
                 priority
-                width={400}
-                height={400}
+                width={900}
+                height={900}
                 className="w-full h-auto"
               />
             </div>
             
-            <div className="statsGrid">
-              <div className="statCard">
-                <h2>50K+</h2>
-                <p>Lives Impacted</p>
-              </div>
-              <div className="statCard">
-                <h2>500+</h2>
-                <p>NGO Partners</p>
-              </div>
-            </div>
+            
           </motion.aside>
 
           {/* RIGHT SIDE: Information */}

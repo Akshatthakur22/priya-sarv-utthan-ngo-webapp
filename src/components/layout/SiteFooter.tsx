@@ -38,7 +38,6 @@ export function SiteFooter() {
 
           <Link href="/privacy-policy" className="hover:text-primary">Policy</Link>
           <Link href="/terms" className="hover:text-primary">Terms</Link>
-          <Link href="/testimonials" className="hover:text-primary">Testimonials</Link>
         </div>
 
       </div>

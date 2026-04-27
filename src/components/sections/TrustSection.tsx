@@ -6,7 +6,7 @@ import { triggerHaptic } from "@/utils/haptics";
 
 const cities = [
   { name: "Indore", nameHi: "इंदौर", type: "Headquarters" },
-  { name: "Bhopal", nameHi: "भोपाल", type: "Outreach" }
+  { name: "ujjain", nameHi: "उज्जैन", type: "Outreach" }
 ];
 
 const certificates = [
@@ -113,7 +113,7 @@ export function TrustSection() {
                       <p className="text-xs text-emerald-300/70">Lives Impacted</p>
                     </div>
                     <div>
-                      <p className="text-lg font-bold text-emerald-100">3</p>
+                      <p className="text-lg font-bold text-emerald-100">2</p>
                       <p className="text-xs text-emerald-300/70">Cities Served</p>
                     </div>
                   </div>
@@ -139,7 +139,7 @@ export function TrustSection() {
               >
                 <div className="flex items-center gap-2 mb-4">
                   <MapPin className="w-5 h-5 text-orange-500" />
-                  <h3 className="font-bold text-neutral-900">Serving 3 Cities</h3>
+                  <h3 className="font-bold text-neutral-900">Serving 2 Cities</h3>
                   <span className="text-sm text-neutral-500">• तीन शहरों में सेवा</span>
                 </div>
                 <div className="flex flex-wrap gap-2">
