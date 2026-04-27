@@ -46,5 +46,52 @@ export const db = {
 
   ] as JobItem[],
   jobApplications: [] as JobApplication[],
-  contacts: [] as ContactMessage[]
+  contacts: [] as ContactMessage[],
+  donations: [
+    {
+      id: "don_1",
+      name: "Donor",
+      email: "donor@ngo.org",
+      phone: "+91-1234567890",
+      amount: 1,
+      status: "completed",
+      createdAt: "2026-04-10T17:40:56.729Z"
+    },
+    {
+      id: "don_2",
+      name: "Donor",
+      email: "donor@ngo.org",
+      phone: "+91-1234567890",
+      amount: 1,
+      status: "completed",
+      createdAt: "2026-04-10T17:58:23.027Z"
+    },
+    {
+      id: "don_3",
+      name: "Donor",
+      email: "donor@ngo.org",
+      phone: "+91-1234567890",
+      amount: 1,
+      status: "completed",
+      createdAt: "2026-04-10T18:25:19.890Z"
+    },
+    {
+      id: "don_4",
+      name: "Donor",
+      email: "donor@ngo.org",
+      phone: "+91-1234567890",
+      amount: 1,
+      status: "completed",
+      createdAt: "2026-04-11T05:49:38.368Z"
+    },
+    {
+      id: "don_5",
+      name: "Donor",
+      email: "donor@ngo.org",
+      phone: "+91-1234567890",
+      amount: 1,
+      status: "completed",
+      createdAt: "2026-04-11T06:26:07.630Z"
+    }
+  ] as Donation[]
 };

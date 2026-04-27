@@ -63,7 +63,7 @@ const cities = [
 
 const stats = [
   { value: "27+", label: "Years of Service", labelHi: "वर्षों की सेवा" },
-  { value: "3", label: "Cities", labelHi: "शहर" },
+  { value: "2", label: "Cities", labelHi: "शहर" },
   { value: "50,000+", label: "Lives Impacted", labelHi: "प्रभावित जीवन" },
   { value: "100+", label: "Active Programs", labelHi: "सक्रिय कार्यक्रम" }
 ];

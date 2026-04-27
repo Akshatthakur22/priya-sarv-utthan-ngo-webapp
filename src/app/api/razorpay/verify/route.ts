@@ -22,7 +22,7 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   verifyPaymentSignature,
   fetchPaymentDetails,
-  storeDonationRecord,
+  processPaymentVerification,
 } from "@/services/payment.service";
 import { logPaymentEvent } from "@/lib/razorpay";
 import { sendDonationReceipt } from "@/lib/email";
@@ -107,49 +107,50 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // ✅ PAYMENT VERIFIED - Store in database
+    // ✅ PAYMENT VERIFIED - Store in PostgreSQL database
     try {
-      const donationRecord = await storeDonationRecord({
-        orderId: razorpay_order_id,
-        paymentId: razorpay_payment_id,
-        amount: paymentDetails.amount / 100, // Convert paise to rupees
-        currency: paymentDetails.currency,
-        donorName: paymentDetails.notes?.donor_name || "Anonymous",
-        donorEmail: paymentDetails.notes?.donor_email || "Unknown",
-        donorPhone: paymentDetails.notes?.donor_phone,
-        donorMessage: paymentDetails.notes?.message,
-        status: "completed",
-        timestamp: new Date(),
-      });
+      const donationRecord = await processPaymentVerification(
+        paymentDetails,
+        razorpay_order_id
+      );
 
-      // Send donation receipt email (non-blocking)
+      // Send donation receipt email (non-blocking - don't fail if email fails)
       try {
-        const emailSent = await sendDonationReceipt({
-          donorEmail: paymentDetails.notes?.donor_email || "Unknown",
-          donorName: paymentDetails.notes?.donor_name || "Donor",
-          amount: paymentDetails.amount / 100,
-          orderId: razorpay_order_id,
-          paymentId: razorpay_payment_id,
-          createdAt: new Date(),
-          ngoName: siteConfig.name,
-          ngoPhone: siteConfig.phone,
-        });
+        const recipientEmail = donationRecord.donorEmail;
+        
+        const recipientName = donationRecord.donorName;
 
-        if (emailSent) {
-          logPaymentEvent("Receipt Email Sent", {
-            donorEmail: paymentDetails.notes?.donor_email,
+        if (recipientEmail) {
+          const emailSent = await sendDonationReceipt({
+            donorEmail: recipientEmail,
+            donorName: recipientName,
+            amount: donationRecord.amount,
+            orderId: razorpay_order_id,
+            paymentId: razorpay_payment_id,
+            createdAt: new Date(),
+            ngoName: siteConfig.name,
+            ngoPhone: siteConfig.phone,
           });
+
+          if (emailSent) {
+            logPaymentEvent("Receipt Email Sent", {
+              donorEmail: recipientEmail,
+            });
+          }
         }
-      } catch (emailError) {
-        console.warn("[PAYMENT] Email receipt failed but donation was recorded:", emailError);
+      } catch (emailError: any) {
+        console.warn(
+          "[PAYMENT] Email receipt failed but donation was recorded:",
+          emailError.message
+        );
         // Don't fail the donation if email sending fails
       }
 
       logPaymentEvent("Payment Success", {
         orderId: razorpay_order_id,
         paymentId: razorpay_payment_id,
-        amount: paymentDetails.amount / 100,
-        recordId: donationRecord.id,
+        amount: donationRecord.amount,
+        recordId: donationRecord.recordId,
       });
 
       return NextResponse.json(
@@ -158,12 +159,14 @@ export async function POST(request: NextRequest) {
           orderId: razorpay_order_id,
           paymentId: razorpay_payment_id,
           message: "Payment verified and recorded successfully",
-          recordId: donationRecord.id,
+          recordId: donationRecord.recordId,
+          isNewRecord: donationRecord.isNewRecord,
         },
         { status: 200 }
       );
     } catch (dbError: any) {
       // Database error - payment was successful but couldn't be stored
+      // WEBHOOK will handle this as backup
       console.error("[PAYMENT] Database Error:", dbError.message);
 
       logPaymentEvent("Database Storage Error", {
@@ -172,17 +175,18 @@ export async function POST(request: NextRequest) {
         error: dbError.message,
       });
 
-      // Return success but indicate storage issue
-      // Client should retry or contact support
+      // Still return 200 since payment was captured successfully
+      // Webhook will ensure recording via redundancy
       return NextResponse.json(
         {
-          success: false,
+          success: true,
           orderId: razorpay_order_id,
           paymentId: razorpay_payment_id,
-          error: "Payment verified but storage failed. Please contact support with Payment ID.",
-          retryable: true,
+          message: "Payment captured. Recording via backup webhook handler.",
+          recordId: null,
+          warning: "Database storage pending - webhook will ensure recording",
         },
-        { status: 500 }
+        { status: 200 }
       );
     }
   } catch (error: any) {
