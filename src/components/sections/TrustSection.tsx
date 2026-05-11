@@ -86,17 +86,6 @@ export function TrustSection() {
                   Social reformer with 27+ years of dedicated service to community development and women empowerment across Madhya Pradesh.
                 </p>
                 
-                <div className="flex flex-wrap gap-2">
-                  <span className="inline-flex items-center px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs font-medium">
-                    🎓 Education Advocate
-                  </span>
-                  <span className="inline-flex items-center px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs font-medium">
-                    👥 Community Leader
-                  </span>
-                  <span className="inline-flex items-center px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs font-medium">
-                    🌱 Rural Development
-                  </span>
-                </div>
                 
                 <p className="text-emerald-100/80 text-sm italic leading-relaxed">
                   &ldquo;Building a self-reliant society through compassion and collective action. Every child deserves education, every woman deserves empowerment.&rdquo;
