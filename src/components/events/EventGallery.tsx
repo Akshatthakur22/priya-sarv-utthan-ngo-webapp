@@ -4,6 +4,7 @@
 
 import { MapPin, Calendar, Heart, Users, Sparkles, Shield, X, ZoomIn, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { generateEventSchema } from "@/lib/schema-utils";
 
 const eventGallery = [
   {
@@ -205,20 +206,18 @@ interface EventGalleryProps {
 
 const eventsJsonLd = {
   "@context": "https://schema.org",
-  "@graph": [
-    ...eventGallery.map(event => ({
-      "@type": "Event",
-      "name": event.title,
-      "description": event.description,
-      "startDate": event.date,
-      "location": {
-        "@type": "Place",
-        "name": event.location
+  "@graph": eventGallery.map((event) =>
+    generateEventSchema(
+      {
+        name: event.title,
+        description: event.description,
+        startDate: event.date,
+        location: event.location,
+        image: Array.isArray(event.image) ? event.image[0] : event.image,
       },
-      "image": event.image,
-      "category": event.category
-    }))
-  ]
+      { includeContext: false }
+    )
+  ),
 };
 
 

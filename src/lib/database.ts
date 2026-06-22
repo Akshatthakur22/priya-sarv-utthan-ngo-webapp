@@ -1,4 +1,5 @@
 import { Pool, PoolClient } from 'pg';
+import { db } from './db';
 
 // Create connection pool
 let pool: Pool | null = null;
@@ -114,6 +115,13 @@ export async function initializeDatabase(): Promise<void> {
       CREATE INDEX IF NOT EXISTS idx_applications_created_at ON applications(created_at);
     `);
 
+    // Resume columns (safe migration for existing databases)
+    await client.query(`
+      ALTER TABLE applications ADD COLUMN IF NOT EXISTS resume_filename VARCHAR(255);
+      ALTER TABLE applications ADD COLUMN IF NOT EXISTS resume_mime_type VARCHAR(100);
+      ALTER TABLE applications ADD COLUMN IF NOT EXISTS resume_data BYTEA;
+    `);
+
     // Create support_cases table
     await client.query(`
       CREATE TABLE IF NOT EXISTS support_cases (
@@ -155,6 +163,18 @@ export async function initializeDatabase(): Promise<void> {
       CREATE INDEX IF NOT EXISTS idx_jobs_open ON jobs(open);
       CREATE INDEX IF NOT EXISTS idx_jobs_created_at ON jobs(created_at);
     `);
+
+    // Seed default job listings (idempotent)
+    for (const job of db.jobs) {
+      await client.query(
+        `
+        INSERT INTO jobs (id, title, location, commitment, description, open)
+        VALUES ($1, $2, $3, $4, $5, $6)
+        ON CONFLICT (id) DO NOTHING
+        `,
+        [job.id, job.title, job.location, job.commitment, job.description, job.open]
+      );
+    }
 
     // Create events table
     await client.query(`

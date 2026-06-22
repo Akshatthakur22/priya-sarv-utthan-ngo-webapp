@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { queryDatabase } from "@/lib/database";
+import { getApplications } from "@/services/job.service";
 import { logger } from "@/lib/logger";
 
 async function verifyAdminKey(request: NextRequest): Promise<boolean> {
@@ -26,36 +26,23 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const result = await queryDatabase(
-      `
-      SELECT 
-        id,
-        name,
-        email,
-        phone,
-        role,
-        cover_letter,
-        created_at
-      FROM applications
-      ORDER BY created_at DESC
-      LIMIT 500
-      `
-    );
+    const applications = await getApplications();
 
-    logger.info("Admin: Applications fetched", { count: result.rows.length });
+    logger.info("Admin: Applications fetched", { count: applications.length });
 
     return NextResponse.json({
       success: true,
-      data: result.rows.map((row: any) => ({
-        id: row.id,
-        name: row.name,
-        email: row.email,
-        phone: row.phone,
-        role: row.role,
-        coverLetter: row.cover_letter,
-        createdAt: new Date(row.created_at).toISOString(),
+      data: applications.map((app) => ({
+        id: app.id,
+        name: app.applicant,
+        email: app.email,
+        role: app.jobId,
+        coverLetter: app.coverLetter,
+        resumeFilename: app.resumeFilename,
+        hasResume: app.hasResume,
+        createdAt: app.createdAt,
       })),
-      count: result.rows.length,
+      count: applications.length,
     });
   } catch (error: any) {
     logger.error("Failed to fetch applications", { error: error.message });
