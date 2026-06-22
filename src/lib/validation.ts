@@ -17,8 +17,15 @@ export const contactFormSchema = z.object({
 export const jobApplicationSchema = z.object({
   applicant: nameSchema,
   email: emailSchema,
-  jobId: z.string().uuid('Invalid job ID'),
-  coverLetter: z.string().max(1000, 'Cover letter must be less than 1000 characters').optional(),
+  jobId: z
+    .string()
+    .min(1, 'Job is required')
+    .max(100)
+    .regex(/^[a-zA-Z0-9_-]+$/, 'Invalid job ID'),
+  coverLetter: z
+    .string()
+    .max(1000, 'Cover letter must be less than 1000 characters')
+    .optional(),
 });
 
 // Support case validation

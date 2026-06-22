@@ -46,6 +46,7 @@ export const db = {
 
   ] as JobItem[],
   jobApplications: [] as JobApplication[],
+  jobApplicationResumes: {} as Record<string, { filename: string; mimeType: string; dataBase64: string }>,
   contacts: [] as ContactMessage[],
   donations: [
     {

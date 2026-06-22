@@ -93,6 +93,74 @@ export async function sendDonationReceipt(data: {
 }
 
 /**
+ * Send confirmation email to job applicant
+ */
+export async function sendJobApplicationConfirmation(data: {
+  applicantEmail: string;
+  applicantName: string;
+  jobTitle: string;
+  applicationId: string;
+}): Promise<boolean> {
+  try {
+    const transporter = getEmailTransporter();
+    if (!transporter) {
+      console.log("[EMAIL] Email service not configured, skipping application confirmation");
+      return false;
+    }
+
+    const fromEmail = process.env.EMAIL_FROM || process.env.EMAIL_USER;
+    if (!fromEmail) return false;
+
+    const ngoName = "Priya Sarv Utthan Seva Sansthan";
+    const safeName = escapeHtml(data.applicantName);
+    const safeTitle = escapeHtml(data.jobTitle);
+
+    const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f8fafc;">
+  <div style="max-width:600px;margin:0 auto;padding:40px 20px;">
+    <div style="background:linear-gradient(135deg,#f97316 0%,#f59e0b 100%);border-radius:16px 16px 0 0;padding:32px;text-align:center;">
+      <h1 style="color:white;margin:0;font-size:24px;">Application Received</h1>
+      <p style="color:rgba(255,255,255,0.9);margin:8px 0 0;font-size:14px;">Thank you for your interest in joining us</p>
+    </div>
+    <div style="background:white;padding:32px;border-radius:0 0 16px 16px;box-shadow:0 4px 6px rgba(0,0,0,0.05);">
+      <p style="color:#374151;font-size:16px;line-height:1.7;">Dear ${safeName},</p>
+      <p style="color:#374151;font-size:16px;line-height:1.7;">
+        We have received your application for <strong>${safeTitle}</strong>.
+        Our team will review it and get back to you soon.
+      </p>
+      <div style="background:#fff7ed;border-radius:12px;padding:16px;margin:24px 0;border-left:4px solid #f97316;">
+        <p style="margin:0;color:#9a3412;font-size:12px;text-transform:uppercase;font-weight:600;">Reference ID</p>
+        <p style="margin:4px 0 0;color:#1f2937;font-family:monospace;font-weight:700;">${escapeHtml(data.applicationId)}</p>
+      </div>
+      <p style="color:#6b7280;font-size:14px;line-height:1.6;">
+        If you have questions, call us at <a href="tel:+917000078439" style="color:#f97316;">+91 70000 78439</a>
+        (Mon–Sun, 11 AM – 5 PM).
+      </p>
+    </div>
+    <p style="text-align:center;color:#9ca3af;font-size:12px;margin-top:24px;">${ngoName} | Indore, MP</p>
+  </div>
+</body>
+</html>`;
+
+    await transporter.sendMail({
+      from: `"${ngoName}" <${fromEmail}>`,
+      to: data.applicantEmail,
+      subject: `Application Received – ${data.jobTitle} | ${ngoName}`,
+      html,
+      text: `Dear ${data.applicantName},\n\nWe have received your application for ${data.jobTitle}. Reference ID: ${data.applicationId}\n\nOur team will review it and contact you soon.`,
+    });
+
+    return true;
+  } catch (error: any) {
+    console.error("[EMAIL] Failed to send job application confirmation:", error.message);
+    return false;
+  }
+}
+
+/**
  * Escape HTML special characters (server-side)
  */
 function escapeHtml(text: string): string {

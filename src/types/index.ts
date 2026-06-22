@@ -35,6 +35,9 @@ export interface JobApplication {
   email: string;
   jobId: string;
   coverLetter?: string;
+  resumeFilename?: string;
+  resumeMimeType?: string;
+  hasResume?: boolean;
   createdAt: string;
 }
 

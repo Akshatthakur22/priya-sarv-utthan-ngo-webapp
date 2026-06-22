@@ -25,6 +25,30 @@ export default function AdminPage() {
   const [sortBy, setSortBy] = useState("date");
   const [sortOrder, setSortOrder] = useState("desc");
 
+  const downloadResume = async (appId: string, filename?: string) => {
+    const key = localStorage.getItem("admin_api_key") || apiKey;
+    if (!key) return;
+
+    const res = await fetch(`/api/admin/applications/${appId}/resume`, {
+      headers: { "x-admin-key": key },
+    });
+
+    if (!res.ok) {
+      alert("Could not download resume");
+      return;
+    }
+
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename || "resume";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  };
+
   const handleAuth = () => {
     if (apiKey.trim()) {
       setAuthenticated(true);
@@ -675,8 +699,8 @@ export default function AdminPage() {
                   <th className="px-6 py-3 text-left font-semibold text-slate-700">Date</th>
                   <th className="px-6 py-3 text-left font-semibold text-slate-700">Name</th>
                   <th className="px-6 py-3 text-left font-semibold text-slate-700">Email</th>
-                  <th className="px-6 py-3 text-left font-semibold text-slate-700">Phone</th>
                   <th className="px-6 py-3 text-left font-semibold text-slate-700">Position</th>
+                  <th className="px-6 py-3 text-left font-semibold text-slate-700">Resume</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
@@ -694,8 +718,21 @@ export default function AdminPage() {
                       </td>
                       <td className="px-6 py-3 text-slate-900 font-medium">{app.name}</td>
                       <td className="px-6 py-3 text-slate-600 text-xs">{app.email}</td>
-                      <td className="px-6 py-3 text-slate-600">{app.phone || "—"}</td>
                       <td className="px-6 py-3 text-slate-900">{app.role}</td>
+                      <td className="px-6 py-3">
+                        {app.hasResume ? (
+                          <button
+                            type="button"
+                            onClick={() => downloadResume(app.id, app.resumeFilename)}
+                            className="inline-flex items-center gap-1.5 text-orange-600 hover:text-orange-700 font-medium text-xs"
+                          >
+                            <Download className="w-3.5 h-3.5" />
+                            {app.resumeFilename || "Download"}
+                          </button>
+                        ) : (
+                          <span className="text-slate-400 text-xs">—</span>
+                        )}
+                      </td>
                     </tr>
                   ))
                 )}

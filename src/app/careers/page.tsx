@@ -1,6 +1,7 @@
 
 import { Metadata } from "next";
 import { generateCanonicalUrl, generateBreadcrumbSchema } from "@/lib/seo-utils";
+import { generateJobPostingSchema } from "@/lib/schema-utils";
 import { getJobs } from "@/services/job.service";
 import { FloatingDonate } from "@/components/layout/FloatingDonate";
 import CareersClient from "./CareersClient";
@@ -53,31 +54,7 @@ export default async function CareersPage() {
 
   const jobsJsonLd = {
     "@context": "https://schema.org",
-    "@graph": jobs.map(job => ({
-      "@type": "JobPosting",
-      "title": job.title,
-      "description": job.description,
-      "datePosted": new Date().toISOString().split('T')[0],
-      "employmentType": job.commitment,
-      "jobLocation": {
-        "@type": "Place",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "69B, Mangal Marg, Gandhi Nagar",
-          "addressLocality": "Indore",
-          "addressRegion": "Madhya Pradesh",
-          "postalCode": "452005",
-          "addressCountry": "IN"
-        }
-      },
-      "hiringOrganization": {
-        "@type": "Organization",
-        "name": "Priya Sarv Utthan Seva Sansthan",
-        "sameAs": "https://priyasarvutthan.org",
-        "logo": "https://priyasarvutthan.org/icon.png",
-        "description": "A registered NGO dedicated to women empowerment, education, and community development in Indore since 1999."
-      }
-    }))
+    "@graph": jobs.map((job) => generateJobPostingSchema(job)),
   };
 
   // Breadcrumb Schema

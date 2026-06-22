@@ -6,6 +6,7 @@ import UpcomingEvents from "@/components/events/UpcomingEvents";
 import type { Metadata } from "next";
 import { Users, Calendar } from "lucide-react";
 import { generateCanonicalUrl, generateBreadcrumbSchema } from "@/lib/seo-utils";
+import { generateEventSchema } from "@/lib/schema-utils";
 
 const canonicalUrl = generateCanonicalUrl("/events");
 
@@ -52,30 +53,15 @@ export const metadata: Metadata = {
 export default async function EventsPage() {
   const events = await getEvents();
 
-  // Event Schema JSON-LD
-  const eventSchema = events.map((event: any) => ({
-    "@context": "https://schema.org",
-    "@type": "Event",
-    "name": event.title,
-    "startDate": event.date,
-    "location": {
-      "@type": "Place",
-      "name": event.location || "Indore, Madhya Pradesh",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Indore",
-        "addressRegion": "Madhya Pradesh",
-        "addressCountry": "IN"
-      }
-    },
-    "image": event.image,
-    "description": event.description,
-    "organizer": {
-      "@type": "Organization",
-      "name": "Priya Sarv Utthan Seva Sansthan",
-      "url": "https://priyasarvutthan.org"
-    }
-  }));
+  const eventSchema = events.map((event: any) =>
+    generateEventSchema({
+      name: event.title,
+      description: event.description,
+      startDate: event.date,
+      location: event.location || "Indore, Madhya Pradesh",
+      image: event.image,
+    })
+  );
 
   // Breadcrumb Schema
   const breadcrumbSchema = generateBreadcrumbSchema("/events");

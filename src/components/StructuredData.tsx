@@ -1,58 +1,13 @@
 "use client";
 
+import { generateEventSchema } from "@/lib/schema-utils";
+
+export { generateEventSchema };
+
 interface StructuredDataProps {
   type: "Event" | "DonateAction" | "ContactPoint";
   data?: any;
 }
-
-// Event Schema Generator
-export const generateEventSchema = (eventData: {
-  name: string;
-  description: string;
-  startDate: string;
-  endDate?: string;
-  location: string;
-  image?: string;
-  url?: string;
-  organizer?: string;
-}) => ({
-  "@context": "https://schema.org",
-  "@type": "Event",
-  "name": eventData.name,
-  "description": eventData.description,
-  "startDate": eventData.startDate,
-  "endDate": eventData.endDate || eventData.startDate,
-  "eventStatus": "https://schema.org/EventScheduled",
-  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-  "location": {
-    "@type": "Place",
-    "name": eventData.location,
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": eventData.location.includes("Indore") ? "Indore" : eventData.location,
-      "addressRegion": "Madhya Pradesh",
-      "addressCountry": "IN"
-    }
-  },
-  "organizer": {
-    "@type": "Organization",
-    "name": eventData.organizer || "Priya Sarv Utthan Seva Sansthan",
-    "url": "https://priyasarvutthan.org"
-  },
-  "image": eventData.image || "https://priyasarvutthan.org/images/og-default.jpg",
-  "url": eventData.url || "https://priyasarvutthan.org/events",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "INR",
-    "availability": "https://schema.org/InStock",
-    "validFrom": eventData.startDate
-  },
-  "performer": {
-    "@type": "Organization",
-    "name": "Priya Sarv Utthan Seva Sansthan"
-  }
-});
 
 // DonateAction Schema Generator
 export const generateDonateActionSchema = (donateData?: {

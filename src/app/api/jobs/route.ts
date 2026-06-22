@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { applyToJob, getJobs } from "@/services/job.service";
+import { applyToJob, getApplicationResume, getJobById, getJobs } from "@/services/job.service";
 import nodemailer from "nodemailer";
-import { db } from "@/lib/db";
 import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
+import { parseResumeFromFormData, ResumeFile } from "@/lib/resume-storage";
 import { validateRequest, jobApplicationSchema, sanitizeString, sanitizeEmail } from "@/lib/validation";
 import { jobsRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
 
@@ -32,7 +32,8 @@ async function sendApplicationEmail(application: {
   jobId: string;
   coverLetter?: string;
   applicationId: string;
-}) {
+  hasResume?: boolean;
+}, resume?: ResumeFile) {
   if (!transporter || !env.EMAIL_USER) {
     logger.warn("Email service not configured - job application logged locally", {
       applicationId: application.applicationId,
@@ -42,7 +43,7 @@ async function sendApplicationEmail(application: {
   }
 
   // Find job title
-  const job = db.jobs.find((j) => j.id === application.jobId);
+  const job = await getJobById(application.jobId);
   const jobTitle = job?.title || "Unknown Position";
   const jobLocation = job?.location || "Indore";
 
@@ -120,6 +121,16 @@ async function sendApplicationEmail(application: {
         <p style="margin: 0; color: #92400e; font-size: 14px;">⚠️ No cover letter provided</p>
       </div>
       `}
+
+      ${application.hasResume ? `
+      <div style="background: #eff6ff; border-radius: 12px; padding: 16px; margin-bottom: 24px; border: 1px solid #bfdbfe;">
+        <p style="margin: 0; color: #1e40af; font-size: 14px;">📎 Resume attached to this email</p>
+      </div>
+      ` : `
+      <div style="background: #fef3c7; border-radius: 12px; padding: 16px; margin-bottom: 24px; text-align: center;">
+        <p style="margin: 0; color: #92400e; font-size: 14px;">⚠️ No resume provided</p>
+      </div>
+      `}
       
       <!-- Quick Actions -->
       <div style="background: #f0fdf4; border-radius: 12px; padding: 20px; text-align: center; border: 1px solid #bbf7d0;">
@@ -149,6 +160,9 @@ async function sendApplicationEmail(application: {
       subject: `[${application.applicationId}] New Job Application: ${jobTitle}`,
       html: htmlContent,
       replyTo: application.email,
+      attachments: resume
+        ? [{ filename: resume.filename, content: resume.data, contentType: resume.mimeType }]
+        : undefined,
     });
     logger.emailSent(env.EMAIL_USER, `📋 New Application: ${jobTitle}`, {
       applicant: application.applicant,
@@ -192,18 +206,34 @@ export async function POST(request: Request) {
       );
     }
 
-    const body = await request.json();
+    const contentType = request.headers.get("content-type") || "";
     const applicationId = generateApplicationId();
-    
-    // Validate and sanitize input
-    const validatedData = validateRequest(jobApplicationSchema, {
-      applicant: sanitizeString(body.applicant),
-      email: sanitizeEmail(body.email),
-      jobId: body.jobId,
-      coverLetter: body.coverLetter ? sanitizeString(body.coverLetter) : undefined,
-    });
 
-    const application = await applyToJob(validatedData);
+    let validatedData;
+    let resume: ResumeFile | undefined;
+
+    if (contentType.includes("multipart/form-data")) {
+      const formData = await request.formData();
+      resume = await parseResumeFromFormData(formData);
+      validatedData = validateRequest(jobApplicationSchema, {
+        applicant: sanitizeString(String(formData.get("applicant") || "")),
+        email: sanitizeEmail(String(formData.get("email") || "")),
+        jobId: String(formData.get("jobId") || ""),
+        coverLetter: formData.get("coverLetter")
+          ? sanitizeString(String(formData.get("coverLetter")))
+          : undefined,
+      });
+    } else {
+      const body = await request.json();
+      validatedData = validateRequest(jobApplicationSchema, {
+        applicant: sanitizeString(body.applicant),
+        email: sanitizeEmail(body.email),
+        jobId: body.jobId,
+        coverLetter: body.coverLetter ? sanitizeString(body.coverLetter) : undefined,
+      });
+    }
+
+    const application = await applyToJob({ ...validatedData, resume });
 
     logger.formSubmission('job_application', validatedData);
     logger.info('Job application submitted successfully', { 
@@ -213,10 +243,14 @@ export async function POST(request: Request) {
     });
 
     // Send email notification (non-blocking)
-    sendApplicationEmail({
-      ...application,
-      applicationId,
-    });
+    const emailResume = resume || (application.hasResume ? await getApplicationResume(application.id) : null);
+    sendApplicationEmail(
+      {
+        ...application,
+        applicationId,
+      },
+      emailResume ?? undefined
+    );
 
     return NextResponse.json(
       { ok: true, application, applicationId }, 
@@ -230,9 +264,16 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    const message = error instanceof Error ? error.message : "Unable to apply";
+    if (message === "Job not found") {
+      return NextResponse.json({ ok: false, error: message }, { status: 404 });
+    }
+    if (message === "This position is no longer accepting applications") {
+      return NextResponse.json({ ok: false, error: message }, { status: 410 });
+    }
     
     logger.apiError('POST', '/api/jobs', error);
-    const message = error instanceof Error ? error.message : "Unable to apply";
     return NextResponse.json({ ok: false, error: message }, { status: 500 });
   }
 }
