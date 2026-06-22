@@ -1,33 +1,54 @@
 import nodemailer from "nodemailer";
+import { ResumeFile } from "./resume-storage";
 
-// Email configuration
-const emailConfig = {
-  host: process.env.EMAIL_HOST || "smtp.gmail.com",
-  port: parseInt(process.env.EMAIL_PORT || "587"),
-  secure: process.env.EMAIL_SECURE === "true", // true for 465, false for other ports
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_APP_PASSWORD,
-  },
-};
+function normalizeAppPassword(password?: string): string | undefined {
+  return password?.replace(/\s+/g, "") || undefined;
+}
+
+function getSmtpConfig() {
+  const user = process.env.EMAIL_USER;
+  const pass = normalizeAppPassword(process.env.EMAIL_APP_PASSWORD);
+
+  return {
+    host: process.env.EMAIL_HOST || "smtp.gmail.com",
+    port: parseInt(process.env.EMAIL_PORT || "587", 10),
+    secure: process.env.EMAIL_SECURE === "true",
+    auth: user && pass ? { user, pass } : undefined,
+  };
+}
 
 let transporter: nodemailer.Transporter | null = null;
+
+/** Official inbox that receives form/application alerts */
+export function getNotificationEmail(): string | undefined {
+  return process.env.NOTIFY_EMAIL || process.env.EMAIL_USER;
+}
+
+export function isEmailConfigured(): boolean {
+  const config = getSmtpConfig();
+  return Boolean(config.auth?.user && config.auth?.pass);
+}
 
 /**
  * Get or create email transporter
  */
 function getEmailTransporter(): nodemailer.Transporter | null {
-  // Return null if email is not configured
-  if (!emailConfig.auth.user || !emailConfig.auth.pass) {
-    console.warn("[EMAIL] Email service not configured. Receipts will not be sent.");
+  const config = getSmtpConfig();
+
+  if (!config.auth?.user || !config.auth?.pass) {
+    console.warn("[EMAIL] Email service not configured. Set EMAIL_USER and EMAIL_APP_PASSWORD.");
     return null;
   }
 
   if (!transporter) {
-    transporter = nodemailer.createTransport(emailConfig);
+    transporter = nodemailer.createTransport(config);
   }
 
   return transporter;
+}
+
+function getFromEmail(): string | undefined {
+  return process.env.EMAIL_FROM || process.env.EMAIL_USER;
 }
 
 /**
@@ -156,6 +177,87 @@ export async function sendJobApplicationConfirmation(data: {
     return true;
   } catch (error: any) {
     console.error("[EMAIL] Failed to send job application confirmation:", error.message);
+    return false;
+  }
+}
+
+/**
+ * Notify NGO admin when a new job application is submitted
+ */
+export async function sendAdminJobApplicationNotification(data: {
+  applicationId: string;
+  applicant: string;
+  email: string;
+  jobTitle: string;
+  jobLocation: string;
+  coverLetter?: string;
+  hasResume?: boolean;
+  resume?: ResumeFile;
+}): Promise<boolean> {
+  try {
+    const transporter = getEmailTransporter();
+    const notifyEmail = getNotificationEmail();
+    const fromEmail = getFromEmail();
+
+    if (!transporter || !notifyEmail || !fromEmail) {
+      console.warn("[EMAIL] Admin notification skipped — email not configured");
+      return false;
+    }
+
+    const safeApplicant = escapeHtml(data.applicant);
+    const safeEmail = escapeHtml(data.email);
+    const safeTitle = escapeHtml(data.jobTitle);
+    const safeLocation = escapeHtml(data.jobLocation);
+    const safeCoverLetter = data.coverLetter ? escapeHtml(data.coverLetter) : "";
+
+    const html = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f8fafc;">
+  <div style="max-width:600px;margin:0 auto;padding:40px 20px;">
+    <div style="background:linear-gradient(135deg,#f97316 0%,#f59e0b 100%);border-radius:16px 16px 0 0;padding:32px;text-align:center;">
+      <h1 style="color:white;margin:0;font-size:24px;">📋 New Job Application</h1>
+      <p style="color:rgba(255,255,255,0.9);margin:8px 0 0;font-size:14px;">Application ID: <strong>${escapeHtml(data.applicationId)}</strong></p>
+    </div>
+    <div style="background:white;padding:32px;border-radius:0 0 16px 16px;box-shadow:0 4px 6px rgba(0,0,0,0.05);">
+      <div style="background:linear-gradient(135deg,#fff7ed 0%,#fef3c7 100%);border-radius:12px;padding:20px;margin-bottom:24px;border-left:4px solid #f97316;">
+        <p style="margin:0 0 4px;font-size:12px;color:#9a3412;text-transform:uppercase;font-weight:600;">Position Applied For</p>
+        <p style="margin:0;font-size:20px;color:#1f2937;font-weight:700;">${safeTitle}</p>
+        <p style="margin:4px 0 0;font-size:14px;color:#6b7280;">📍 ${safeLocation}</p>
+      </div>
+      <h3 style="color:#1f2937;margin:0 0 16px;font-size:16px;font-weight:600;border-bottom:2px solid #f3f4f6;padding-bottom:8px;">👤 Applicant Information</h3>
+      <table style="width:100%;border-collapse:collapse;margin-bottom:24px;">
+        <tr><td style="padding:12px 0;border-bottom:1px solid #f3f4f6;width:120px;color:#6b7280;font-size:14px;">Full Name</td><td style="padding:12px 0;border-bottom:1px solid #f3f4f6;color:#1f2937;font-size:14px;font-weight:600;">${safeApplicant}</td></tr>
+        <tr><td style="padding:12px 0;border-bottom:1px solid #f3f4f6;color:#6b7280;font-size:14px;">Email</td><td style="padding:12px 0;border-bottom:1px solid #f3f4f6;"><a href="mailto:${safeEmail}" style="color:#f97316;font-size:14px;text-decoration:none;font-weight:500;">${safeEmail}</a></td></tr>
+        <tr><td style="padding:12px 0;color:#6b7280;font-size:14px;">Applied On</td><td style="padding:12px 0;color:#1f2937;font-size:14px;">${new Date().toLocaleDateString("en-IN", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</td></tr>
+      </table>
+      ${safeCoverLetter ? `<h3 style="color:#1f2937;margin:0 0 12px;font-size:16px;font-weight:600;">✉️ Cover Letter</h3><div style="background:#f9fafb;border-radius:12px;padding:20px;margin-bottom:24px;border:1px solid #e5e7eb;"><p style="margin:0;color:#374151;font-size:14px;line-height:1.7;white-space:pre-wrap;">${safeCoverLetter}</p></div>` : `<div style="background:#fef3c7;border-radius:12px;padding:16px;margin-bottom:24px;text-align:center;"><p style="margin:0;color:#92400e;font-size:14px;">⚠️ No cover letter provided</p></div>`}
+      ${data.hasResume ? `<div style="background:#eff6ff;border-radius:12px;padding:16px;margin-bottom:24px;border:1px solid #bfdbfe;"><p style="margin:0;color:#1e40af;font-size:14px;">📎 Resume attached to this email</p></div>` : `<div style="background:#fef3c7;border-radius:12px;padding:16px;margin-bottom:24px;text-align:center;"><p style="margin:0;color:#92400e;font-size:14px;">⚠️ No resume provided</p></div>`}
+      <div style="background:#f0fdf4;border-radius:12px;padding:20px;text-align:center;border:1px solid #bbf7d0;">
+        <a href="mailto:${safeEmail}?subject=Re: Your Application for ${safeTitle}" style="display:inline-block;background:linear-gradient(135deg,#f97316 0%,#f59e0b 100%);color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">📧 Reply to Applicant</a>
+      </div>
+    </div>
+    <p style="text-align:center;color:#9ca3af;font-size:12px;margin-top:24px;">Priya Sarv Utthan Seva Sansthan | Indore, MP</p>
+  </div>
+</body>
+</html>`;
+
+    await transporter.sendMail({
+      from: `"PSUSS Careers" <${fromEmail}>`,
+      to: notifyEmail,
+      subject: `[${data.applicationId}] New Job Application: ${data.jobTitle}`,
+      html,
+      replyTo: data.email,
+      attachments: data.resume
+        ? [{ filename: data.resume.filename, content: data.resume.data, contentType: data.resume.mimeType }]
+        : undefined,
+    });
+
+    console.log(`[EMAIL] Admin job application notification sent to ${notifyEmail}`);
+    return true;
+  } catch (error: any) {
+    console.error("[EMAIL] Failed to send admin job application notification:", error.message);
     return false;
   }
 }

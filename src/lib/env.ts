@@ -11,6 +11,7 @@ const envSchema = z.object({
   EMAIL_USER: z.string().email().optional(),
   EMAIL_APP_PASSWORD: z.string().min(1).optional(),
   EMAIL_FROM: z.string().email().optional(),
+  NOTIFY_EMAIL: z.string().email().optional(),
   
   // Razorpay configuration (optional for deployment)
   NEXT_PUBLIC_RAZORPAY_KEY_ID: z.string().min(1).optional(),
