@@ -5,6 +5,7 @@ import { logger } from "@/lib/logger";
 import { queryDatabase } from "@/lib/database";
 import { validateRequest, supportCaseSchema, sanitizeString, sanitizeEmail, sanitizePhone } from "@/lib/validation";
 import { supportRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
+import { escapeHtml, sanitizeEmailHeader } from "@/lib/escape-html";
 
 // Generate a unique Case ID
 function generateCaseId(): string {
@@ -148,24 +149,39 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Build conditional fields HTML
+    // Build conditional fields HTML (escaped user input)
+    const safeOpposingParty = validatedData.opposingParty
+      ? escapeHtml(validatedData.opposingParty)
+      : "Not specified";
+    const safeDepartment = validatedData.department
+      ? escapeHtml(validatedData.department)
+      : "Not specified";
+    const safeCourtDeadline = escapeHtml(formatDate(validatedData.courtDeadline || ""));
+    const safeName = escapeHtml(validatedData.name);
+    const safeEmail = validatedData.email ? escapeHtml(validatedData.email) : "Not provided";
+    const safeMessage = escapeHtml(validatedData.message);
+    const safeCaseId = escapeHtml(caseId);
+    const safePhone = escapeHtml(validatedData.phone);
+    const safeSubmittedAt = escapeHtml(submittedAt);
+    const phoneDigits = validatedData.phone.replace(/\D/g, "");
+
     let conditionalFields = "";
     if (validatedData.serviceType === "Legal") {
       conditionalFields = `
         <tr>
           <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #6b7280; font-weight: 600;">Opposing Party</td>
-          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827;">${validatedData.opposingParty || "Not specified"}</td>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827;">${safeOpposingParty}</td>
         </tr>
         <tr>
           <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #6b7280; font-weight: 600;">Court Deadline</td>
-          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827; ${validatedData.courtDeadline ? "font-weight: bold; color: #dc2626;" : ""}">${formatDate(validatedData.courtDeadline || "")}</td>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827; ${validatedData.courtDeadline ? "font-weight: bold; color: #dc2626;" : ""}">${safeCourtDeadline}</td>
         </tr>
       `;
     } else if (validatedData.serviceType === "Grievance") {
       conditionalFields = `
         <tr>
           <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #6b7280; font-weight: 600;">Department</td>
-          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827; font-weight: bold;">${validatedData.department || "Not specified"}</td>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827; font-weight: bold;">${safeDepartment}</td>
         </tr>
       `;
     }
@@ -190,8 +206,8 @@ export async function POST(req: NextRequest) {
     <!-- Case ID Banner -->
     <div style="background: #fff7ed; padding: 20px; text-align: center; border-left: 1px solid #fed7aa; border-right: 1px solid #fed7aa;">
       <p style="margin: 0 0 4px; color: #9a3412; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Case ID</p>
-      <p style="margin: 0; color: #c2410c; font-size: 28px; font-weight: 800;">${caseId}</p>
-      <p style="margin: 8px 0 0; color: #78716c; font-size: 12px;">${submittedAt}</p>
+      <p style="margin: 0; color: #c2410c; font-size: 28px; font-weight: 800;">${safeCaseId}</p>
+      <p style="margin: 8px 0 0; color: #78716c; font-size: 12px;">${safeSubmittedAt}</p>
     </div>
     
     <!-- Service Type Badge -->
@@ -211,17 +227,17 @@ export async function POST(req: NextRequest) {
         </tr>
         <tr>
           <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #6b7280; font-weight: 600; width: 140px;">Name</td>
-          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827; font-weight: bold;">${name}</td>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827; font-weight: bold;">${safeName}</td>
         </tr>
         <tr>
           <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #6b7280; font-weight: 600;">WhatsApp</td>
           <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6;">
-            <a href="https://wa.me/${validatedData.phone.replace(/\D/g, "")}" style="color: #16a34a; font-weight: bold; text-decoration: none;">${validatedData.phone}</a>
+            <a href="https://wa.me/${phoneDigits}" style="color: #16a34a; font-weight: bold; text-decoration: none;">${safePhone}</a>
           </td>
         </tr>
         <tr>
           <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #6b7280; font-weight: 600;">Email</td>
-          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827;">${validatedData.email || "Not provided"}</td>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #111827;">${safeEmail}</td>
         </tr>
         ${conditionalFields}
       </table>
@@ -236,14 +252,14 @@ export async function POST(req: NextRequest) {
           </td>
         </tr>
         <tr>
-          <td style="padding: 20px; color: #374151; line-height: 1.6; font-size: 15px; white-space: pre-wrap;">${validatedData.message}</td>
+          <td style="padding: 20px; color: #374151; line-height: 1.6; font-size: 15px; white-space: pre-wrap;">${safeMessage}</td>
         </tr>
       </table>
     </div>
     
     <!-- Action Button -->
     <div style="background: white; padding: 24px; text-align: center; border-left: 1px solid #e5e7eb; border-right: 1px solid #e5e7eb;">
-      <a href="https://wa.me/${validatedData.phone.replace(/\D/g, "")}?text=नमस्ते%20${encodeURIComponent(name)}%2C%20हमनें%20आपकी%20केस%20${encodeURIComponent(caseId)}%20प्राप्ति%20है।%20हमारा%20टीम%20जल्दी%20से%20आपकी%20सहायता%20करेंगे।" 
+      <a href="https://wa.me/${phoneDigits}?text=नमस्ते%20${encodeURIComponent(validatedData.name)}%2C%20हमनें%20आपकी%20केस%20${encodeURIComponent(caseId)}%20प्राप्ति%20है।%20हमारा%20टीम%20जल्दी%20से%20आपकी%20सहायता%20करेंगे।" 
          style="display: inline-block; background: #16a34a; color: white; padding: 14px 32px; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 14px;">
         💬 Reply on WhatsApp
       </a>
@@ -269,7 +285,7 @@ export async function POST(req: NextRequest) {
     await transporter.sendMail({
       from: `"PSU Case System" <${env.EMAIL_FROM || env.EMAIL_USER}>`,
       to: env.EMAIL_USER,
-      subject: `[${caseId}] New ${serviceType} Request from ${name}`,
+      subject: `[${caseId}] New ${serviceType} Request from ${sanitizeEmailHeader(name)}`,
       html: emailHtml,
       replyTo: validatedData.email || undefined,
     });

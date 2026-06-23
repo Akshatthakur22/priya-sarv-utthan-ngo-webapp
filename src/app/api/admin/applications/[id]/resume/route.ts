@@ -6,30 +6,40 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getApplicationResume } from "@/services/job.service";
 import { logger } from "@/lib/logger";
-
-async function verifyAdminKey(request: NextRequest): Promise<boolean> {
-  const apiKey = request.headers.get("x-admin-key");
-  const expectedKey = process.env.ADMIN_API_KEY;
-  return Boolean(expectedKey && apiKey && apiKey === expectedKey);
-}
+import { isAdminAuthorized } from "@/lib/admin-auth";
+import { adminRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const rateLimitResult = await adminRateLimit(request);
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      { error: "Too many requests" },
+      { status: 429, headers: getRateLimitHeaders(rateLimitResult) }
+    );
+  }
+
   try {
-    if (!(await verifyAdminKey(request))) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!isAdminAuthorized(request)) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401, headers: getRateLimitHeaders(rateLimitResult) }
+      );
     }
 
     const { id } = await params;
     const resume = await getApplicationResume(id);
 
     if (!resume) {
-      return NextResponse.json({ error: "Resume not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Resume not found" },
+        { status: 404, headers: getRateLimitHeaders(rateLimitResult) }
+      );
     }
 
-    logger.info("Admin: Resume downloaded", { applicationId: id, filename: resume.filename });
+    logger.info("Admin: Resume downloaded", { applicationId: id });
 
     return new NextResponse(new Uint8Array(resume.data), {
       status: 200,
@@ -37,10 +47,15 @@ export async function GET(
         "Content-Type": resume.mimeType,
         "Content-Disposition": `attachment; filename="${resume.filename}"`,
         "Content-Length": String(resume.data.length),
+        ...getRateLimitHeaders(rateLimitResult),
       },
     });
-  } catch (error: any) {
-    logger.error("Failed to download resume", { error: error.message });
-    return NextResponse.json({ error: "Failed to download resume" }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    logger.error("Failed to download resume", { error: message });
+    return NextResponse.json(
+      { error: "Failed to download resume" },
+      { status: 500, headers: getRateLimitHeaders(rateLimitResult) }
+    );
   }
 }

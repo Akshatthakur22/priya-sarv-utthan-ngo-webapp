@@ -105,4 +105,5 @@ export const RATE_LIMITS = {
   support: { windowMs: 60 * 60 * 1000, maxRequests: 3 }, // 3 requests per hour
   jobs: { windowMs: 60 * 60 * 1000, maxRequests: 10 }, // 10 applications per hour
   donation: { windowMs: 15 * 60 * 1000, maxRequests: 3 }, // 3 donations per 15 minutes
+  admin: { windowMs: 15 * 60 * 1000, maxRequests: 30 }, // 30 admin requests per 15 minutes
 };

@@ -2,6 +2,7 @@
 import { Metadata } from "next";
 import { generateCanonicalUrl, generateBreadcrumbSchema } from "@/lib/seo-utils";
 import { generateJobPostingSchema } from "@/lib/schema-utils";
+import { serializeJsonLd } from "@/lib/safe-json-ld";
 import { getJobs } from "@/services/job.service";
 import { FloatingDonate } from "@/components/layout/FloatingDonate";
 import CareersClient from "./CareersClient";
@@ -62,8 +63,8 @@ export default async function CareersPage() {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jobsJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jobsJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbSchema) }} />
       <CareersClient jobs={jobs} />
       <FloatingDonate />
     </>

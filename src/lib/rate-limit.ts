@@ -149,6 +149,7 @@ export const contactRateLimit = createRateLimitMiddleware('contact');
 export const supportRateLimit = createRateLimitMiddleware('support');
 export const jobsRateLimit = createRateLimitMiddleware('jobs');
 export const donationRateLimit = createRateLimitMiddleware('donation');
+export const adminRateLimit = createRateLimitMiddleware('admin');
 
 // Helper function to get rate limit headers
 export function getRateLimitHeaders(result: {
