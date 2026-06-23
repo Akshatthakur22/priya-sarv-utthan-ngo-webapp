@@ -20,7 +20,7 @@ const securityHeaders = [
       "img-src 'self' data: blob: https:",
       "font-src 'self' data:",
       "connect-src 'self' https://api.razorpay.com https://checkout.razorpay.com https://vitals.vercel-insights.com",
-      "frame-src https://api.razorpay.com https://checkout.razorpay.com",
+      "frame-src https://api.razorpay.com https://checkout.razorpay.com https://www.google.com https://maps.google.com",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
