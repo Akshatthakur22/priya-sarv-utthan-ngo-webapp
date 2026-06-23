@@ -1,444 +1,514 @@
 <div align="center">
 
-# 🌟 Priya Sarv Utthan Seva Sansthan
+# Priya Sarv Utthan Seva Sansthan
 
-### Empowering Communities, Building Futures
+**A full-stack NGO web platform for donations, community support, careers, and organizational outreach — built with Next.js and PostgreSQL.**
 
-[![Next.js](https://img.shields.io/badge/Next.js-14.2-black?style=flat-square&logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
-[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-16.1-black?logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=node.js)](https://nodejs.org/)
+[![Status](https://img.shields.io/badge/Status-Active-brightgreen)](https://priyasarvutthan.org)
+[![Live](https://img.shields.io/badge/Live-priyasarvutthan.org-orange)](https://priyasarvutthan.org)
 
-**A modern, responsive web platform for a 27-year-old NGO dedicated to women and child development in Indore, Madhya Pradesh**
-
-[Live Demo](#) · [Report Bug](https://github.com/Akshatthakur22/priya-sarv-utthan-ngo-webapp/issues) · [Request Feature](https://github.com/Akshatthakur22/priya-sarv-utthan-ngo-webapp/issues)
+[Live Website](https://priyasarvutthan.org) · [Report Issue](https://github.com/Akshatthakur22/priya-sarv-utthan-ngo-webapp/issues)
 
 </div>
 
 ---
 
-## 📋 Table of Contents
+## Overview
 
-- [About the Project](#-about-the-project)
-- [Key Features](#-key-features)
-- [Tech Stack](#-tech-stack)
-- [Live Preview](#-live-preview)
-- [Project Structure](#-project-structure)
-- [API Routes](#-api-routes)
-- [Design System](#-design-system)
-- [Performance](#-performance)
-- [License](#-license)
-- [Contact](#-contact)
+This is a production web application built for **Priya Sarv Utthan Seva Sansthan**, a registered NGO in Indore, Madhya Pradesh. The platform gives the organization a modern digital presence for outreach, online donations, volunteer recruitment, and community support intake.
 
----
+**Problem it solves:** Many NGOs lack reliable infrastructure for accepting online donations, managing inbound requests, and presenting their work professionally. This project consolidates those needs into a single, maintainable application.
 
-## 🎯 About the Project
+**Built for:**
+- Community members seeking help, legal aid, or welfare support
+- Donors contributing via Razorpay
+- Volunteers and applicants exploring career opportunities
+- NGO staff reviewing submissions through a protected admin dashboard
 
-This is a full-stack web application built for **Priya Sarv Utthan Seva Sansthan**, an NGO established in 1999 with over 27 years of service in Gandhi Nagar, Indore. The platform serves as a digital presence to showcase their impactful work in:
-
-- 👩‍👧 Women & Child Development
-- 📚 Education & Literacy Programs
-- 💪 Women Empowerment
-- ⚖️ Social Justice & Legal Services
-- 🛠️ Skill Training & Self-Employment
-
-### Why This Project?
-
-NGOs often struggle with digital presence and online donation collection. This project solves that by providing:
-
-- ✅ **Mobile-first responsive design** for accessibility across devices
-- ✅ **Bilingual support** (English & Hindi) for local community reach
-- ✅ **Production-grade payment system** with Razorpay integration (Phase 3)
-- ✅ **PostgreSQL database** for donation persistence (Phase 3)
-- ✅ **Email receipt system** for donor confirmations (Phase 3)
-- ✅ **Automatic retry logic** for payment verification (Phase 3)
-- ✅ **Secure input validation** to prevent fraud and attacks (Phase 3)
-- ✅ **Comprehensive logging** for debugging in production (Phase 3)
-- ✅ **Donation integration** with Razorpay payment gateway
-- ✅ **Career portal** for volunteer and job applications
-- ✅ **Contact forms** with validation for community engagement
-- ✅ **SEO optimization** for better discoverability
+**Developer:** Designed and implemented as a portfolio-grade full-stack project demonstrating real-world API design, payment integration, data persistence, and security-conscious engineering.
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-### 🎨 User Experience
-- **Animated UI** with Framer Motion for smooth, engaging interactions
-- **Floating Donate Button** for easy access to donation page
-- **Responsive Navigation** with mobile-friendly hamburger menu
-- **Impact Metrics Display** showcasing 27 years of service
-- **Bilingual Content** with Hindi translations for cultural connection
+### Donations & Payments
 
-### 🏗️ Technical Excellence
-- **Server-Side Rendering** for optimal performance and SEO
-- **Type-Safe Development** with TypeScript across the entire codebase
-- **API Routes** with proper request validation and error handling
-- **Modular Architecture** with clear separation of concerns
-- **Custom Design System** with semantic color tokens and reusable components
+- Razorpay checkout integration with server-side order creation
+- HMAC-SHA256 payment signature verification with timing-safe comparison
+- Order amount cross-checked against captured payment before recording
+- Webhook handler as a redundant recording path (`payment.captured`, `payment.failed`)
+- Client-side verification retry logic (up to 3 attempts)
+- Donation persistence in PostgreSQL with idempotent `payment_id` constraints
+- HTML donation receipt emails via Gmail SMTP (Section 80G messaging)
+- Rate limiting on donation endpoints (3 requests / 15 minutes per IP)
 
-### 📱 Pages Implemented
-- **Home** - Hero section, impact highlights, and organizational values
-- **About** - Mission, vision, and 27-year history
-- **Programs** - 7+ focus areas with detailed descriptions
-- **Donate** - Razorpay integration with preset and custom donation amounts
-- **Careers** - Job listings and application forms
-- **Events** - Community events and activities
-- **Contact** - Form with email integration (mock)
+### Admin Dashboard
+
+- Protected `/admin` portal with API key authentication
+- Session verification via `/api/admin/session` before unlocking the UI
+- Tabbed dashboard for donations, contacts, job applications, and support cases
+- Search, date/amount filters, and sorting on donation records
+- Resume download for job applications (admin-only)
+- Timing-safe API key comparison and per-route rate limiting
+
+### Job Portal & Applications
+
+- Public careers page with structured JobPosting schema (Google Search Console–compatible)
+- Job listings served from PostgreSQL with in-memory fallback
+- Application form with Zod validation and optional resume upload
+- Drag-and-drop resume dropzone (PDF, DOC, DOCX — max 5 MB)
+- Multipart `form-data` API support with server-side file validation
+- Admin email notifications on new applications
+
+### Support & Community Intake
+
+- Multi-channel help system: Legal Aid, Grievance, and Welfare
+- Dedicated intake pages under `/help/legal`, `/help/complaint`, `/help/welfare`
+- Unique case ID generation (e.g. `#PSU-XXXX`)
+- Conditional form fields based on service type (opposing party, court deadline, department)
+- HTML email alerts to staff with escaped user input
+- PostgreSQL persistence for all support cases
+
+### Contact & Engagement
+
+- Contact form with validation, sanitization, and rate limiting
+- Email notifications and database storage
+- Floating help widget and donate CTA across pages
+- Events gallery with structured Event schema (ISO 8601 dates)
+
+### Security
+
+- Environment-based secrets (no credentials in source)
+- Zod schemas for all form and API inputs
+- Parameterized SQL queries via `pg`
+- HTML escaping for outbound emails (`escape-html.ts`)
+- Security headers: CSP, HSTS, X-Frame-Options, Referrer-Policy, Permissions-Policy
+- In-memory IP rate limiting on public and admin routes
+- Safe JSON-LD serialization to prevent script breakout in inline schemas
+- Razorpay client/server module split (no secrets in client bundle)
+
+### SEO & Content
+
+- Per-page metadata, Open Graph, and Twitter cards
+- JSON-LD structured data (Organization, Event, JobPosting, FAQ, BreadcrumbList)
+- Auto-generated `sitemap.xml` and `robots.txt`
+- Canonical URLs via `seo-utils.ts`
+- English-first UI with Hindi content on key pages (founder, events, privacy, terms)
+
+### Performance
+
+- Next.js App Router with Server Components by default
+- `next/image` with AVIF/WebP formats and responsive device sizes
+- Google Fonts (`Nunito`, `Inter`) loaded with `display: swap`
+- Vercel Analytics integration
+- Code splitting via Next.js automatic bundling
 
 ---
 
-## � Phase 3: Production Payment System (Latest)
+## Screenshots
 
-### What's New in Phase 3 ✨
+| Home | Donate |
+|:---:|:---:|
+| ![Home](docs/screenshots/home.png) | ![Donation](docs/screenshots/donation.png) |
 
-This version includes a **complete, production-grade payment system** with enterprise-level reliability, security, and user experience:
+| Events | Careers |
+|:---:|:---:|
+| ![Events](docs/screenshots/event_page.png) | ![Careers](docs/screenshots/career.png) |
 
-#### 💾 Database Integration
-- PostgreSQL database via [Neon.tech](https://neon.tech/) for reliable data persistence
-- Connection pooling for optimal performance
-- Automatic schema initialization
-- ACID compliance for transaction safety
+| Legal Aid | Donate (Mobile) |
+|:---:|:---:|
+| ![Legal Aid](docs/screenshots/legal_help.png) | ![Donate Mobile](docs/screenshots/donation_mobile.png) |
 
-#### 🔐 Security & Validation
-- HMAC SHA256 signature verification (fraud prevention)
-- Input sanitization to prevent XSS attacks
-- SQL injection prevention with parameterized queries
-- Zod schema validation for all inputs
-- Payment ID uniqueness constraints
+| About |
+|:---:|
+| ![About](docs/screenshots/about.png) |
 
-#### ⚡ Reliability & Retry Logic
-- Automatic 3-attempt verification retry
-- 2-second delays between retries
-- Distinguishes temporary vs permanent failures
-- Prevents false "Payment Failed" messages
-- Non-blocking email (doesn't fail donation if email service down)
+---
 
-#### 📧 Email Receipts
-- Professional HTML donation receipt templates
-- Tax benefit information (Section 80G)
-- Automatic email sending via Gmail SMTP
-- Fallback handling if email service unavailable
+## Live Demo
 
-#### 🎯 Better User Experience
-- Progress indicators during payment verification
-- Contextual error messages (specific to what went wrong)
-- Prevents double-charging via unique constraints
-- Payment cancellation detection
-- Razorpay failure event handling
+| Resource | URL |
+|----------|-----|
+| **Website** | [https://priyasarvutthan.org](https://priyasarvutthan.org) |
+| **Donate** | [https://priyasarvutthan.org/donate](https://priyasarvutthan.org/donate) |
+| **Careers** | [https://priyasarvutthan.org/careers](https://priyasarvutthan.org/careers) |
+| **Help & Support** | [https://priyasarvutthan.org/help](https://priyasarvutthan.org/help) |
+| **Admin** | [https://priyasarvutthan.org/admin](https://priyasarvutthan.org/admin) *(API key required)* |
 
-#### 📊 Comprehensive Logging
-- Context-aware logging with `[PAYMENT]` prefix
-- Order ID, Payment ID in all logs
-- Error tracking for debugging
-- Non-intrusive (uses console.log, no external logging service required)
+> Admin access requires a valid `ADMIN_API_KEY` configured in the deployment environment. Demo credentials are not published publicly.
 
-### Setup & Configuration
+---
 
-**Quick Start:** See [QUICK_START_PHASE3.md](./QUICK_START_PHASE3.md)
+## Tech Stack
 
-**Detailed Setup:** See [ENV_SETUP_GUIDE.md](./ENV_SETUP_GUIDE.md)
+| Layer | Technology |
+|-------|------------|
+| **Frontend** | Next.js 16 (App Router), React 18, TypeScript |
+| **Styling** | Tailwind CSS 3.4, Framer Motion, Lucide React |
+| **Forms** | React Hook Form, Zod 4, `@hookform/resolvers` |
+| **Backend** | Next.js API Routes (Route Handlers) |
+| **Database** | PostgreSQL via Neon (`pg` connection pool) |
+| **Payments** | Razorpay (REST API + Checkout + Webhooks) |
+| **Email** | Nodemailer (Gmail SMTP) |
+| **Authentication** | API key (`ADMIN_API_KEY`) with timing-safe verification |
+| **Validation** | Zod schemas, input sanitization utilities |
+| **Security** | CSP headers, rate limiting, HMAC verification, HTML escaping |
+| **Analytics** | Vercel Analytics |
+| **Developer Tools** | ESLint, Prettier, TypeScript |
 
-**Technical Docs:** See [PAYMENT_SYSTEM_PHASE3.md](./PAYMENT_SYSTEM_PHASE3.md)
+---
 
-### Required Environment Variables
+## Architecture
 
-```env
-# Database (PostgreSQL via Neon)
-DATABASE_URL=postgresql://...
+The application follows a layered architecture: **pages and components** handle UI, **API routes** handle HTTP, **services** encapsulate business logic, and **lib** provides shared infrastructure.
 
-# Razorpay (Payment Gateway)
-NEXT_PUBLIC_RAZORPAY_KEY_ID=...
-RAZORPAY_KEY_SECRET=...
+```mermaid
+flowchart TB
+    subgraph Client
+        Pages[App Router Pages]
+        Components[React Components]
+        AdminUI[Admin Dashboard]
+    end
 
-# Email (Gmail SMTP - Optional but recommended)
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USER=...
-EMAIL_APP_PASSWORD=...
+    subgraph API["Next.js API Routes"]
+        Contact[/api/contact]
+        Support[/api/support]
+        Jobs[/api/jobs]
+        Razorpay[/api/razorpay/*]
+        Admin[/api/admin/*]
+    end
+
+    subgraph Services
+        PaymentSvc[payment.service]
+        JobSvc[job.service]
+        ContactSvc[contact.service]
+        EventSvc[event.service]
+    end
+
+    subgraph Infrastructure
+        DB[(PostgreSQL / Neon)]
+        Email[Nodemailer SMTP]
+        RazorpayAPI[Razorpay API]
+    end
+
+    Pages --> API
+    Components --> API
+    AdminUI --> Admin
+
+    Contact --> ContactSvc
+    Support --> DB
+    Support --> Email
+    Jobs --> JobSvc
+    Razorpay --> PaymentSvc
+    Admin --> DB
+    Admin --> JobSvc
+
+    PaymentSvc --> DB
+    PaymentSvc --> RazorpayAPI
+    PaymentSvc --> Email
+    JobSvc --> DB
+    ContactSvc --> DB
+    ContactSvc --> Email
+    EventSvc --> DB
 ```
 
-### Key Files Added/Updated
-
-| File | Status | Changes |
-|------|--------|---------|
-| `src/lib/database.ts` | ✨ NEW | Connection pooling, schema management |
-| `src/lib/email.ts` | ✨ NEW | Email service, receipt templates |
-| `src/services/payment.service.ts` | 🔄 UPDATED | Real database integration |
-| `src/app/api/razorpay/order/route.ts` | 🔄 UPDATED | Input validation, sanitization |
-| `src/app/api/razorpay/verify/route.ts` | 🔄 UPDATED | Email sending, error handling |
-| `src/app/donate/DonateClient.tsx` | 🔄 UPDATED | Retry logic, failure handlers |
-| `src/lib/env.ts` | 🔄 UPDATED | Database & email env vars |
+| Layer | Responsibility |
+|-------|----------------|
+| **Frontend** | Server and Client Components, forms, animations, admin UI |
+| **API Routes** | Request validation, rate limiting, auth checks, HTTP responses |
+| **Services** | Payment verification, job applications, contact handling, events |
+| **Database** | Donations, contacts, applications, support cases, jobs, events |
+| **Storage** | Resume files stored as `BYTEA` in PostgreSQL |
+| **External** | Razorpay (payments), Gmail SMTP (notifications & receipts) |
 
 ---
 
-### Frontend
-- **[Next.js 14](https://nextjs.org/)** - React framework with App Router
-- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe development
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first styling
-- **[Framer Motion](https://www.framer.com/motion/)** - Animation library
-- **[Lucide React](https://lucide.dev/)** - Icon library
+## Folder Structure
 
-### Backend & Database (Phase 3)
-- **[Razorpay](https://razorpay.com/)** - Payment gateway with HMAC signature verification
-- **[PostgreSQL](https://www.postgresql.org/)** - Neon.tech serverless database
-- **[pg](https://node-postgres.com/)** - PostgreSQL client with connection pooling
-- **[Nodemailer](https://nodemailer.com/)** - Email service for donation receipts
-
-### Development Tools
-- **ESLint** - Code linting
-- **Prettier** - Code formatting
-- **PostCSS** - CSS processing
-- **Autoprefixer** - CSS vendor prefixing
-
-### Architecture Patterns
-- **Server Components** - Default for performance
-- **Client Components** - Used strategically for interactivity
-- **API Routes** - RESTful endpoints for form submissions
-- **Service Layer** - Business logic separation
-- **Type Definitions** - Centralized in `src/types`
-
----
-
-## 🚀 Live Preview
-
-🌐 **[View Live Website](#)** _(Add your deployment link here)_
-
-### Development Details
-
-**Built With:**
-- Next.js 14 App Router for optimal performance
-- TypeScript for type-safe development
-- Tailwind CSS with custom design system
-- Framer Motion for smooth animations
-- Deployed on [Vercel/Platform Name]
-
-**Build Process:**
-- Automated CI/CD pipeline
-- TypeScript compilation with strict mode
-- ESLint & Prettier for code quality
-- Optimized production build
-
----
-
-## 📁 Project Structure
-
-```
+```text
 priya-sarv-utthan-ngo-webapp/
 ├── src/
-│   ├── app/                    # Next.js App Router pages
-│   │   ├── about/             # About page
-│   │   ├── api/               # API routes
-│   │   │   ├── contact/       # Contact form handler
-│   │   │   ├── donate/        # Donation handler
-│   │   │   └── jobs/          # Job applications
-│   │   ├── careers/           # Careers page
-│   │   ├── contact/           # Contact page
-│   │   ├── donate/            # Donation page
-│   │   ├── events/            # Events page
-│   │   ├── programs/          # Programs page
-│   │   ├── layout.tsx         # Root layout
-│   │   └── page.tsx           # Homepage
+│   ├── app/                      # Next.js App Router
+│   │   ├── api/                  # REST API route handlers
+│   │   │   ├── admin/            # Protected admin endpoints
+│   │   │   ├── contact/          # Contact form
+│   │   │   ├── events/           # Events data
+│   │   │   ├── jobs/             # Job listings & applications
+│   │   │   ├── razorpay/         # Order, verify, webhook
+│   │   │   └── support/          # Support case intake
+│   │   ├── admin/                # Admin dashboard (client)
+│   │   ├── careers/              # Job portal
+│   │   ├── donate/               # Donation flow
+│   │   ├── help/                 # Legal, grievance, welfare intake
+│   │   ├── events/               # Community events
+│   │   ├── contact/              # Contact page
+│   │   ├── about/                # Organization story
+│   │   ├── founder/              # Founder profile
+│   │   ├── team/                 # Team page
+│   │   ├── layout.tsx            # Root layout
+│   │   ├── sitemap.ts            # Dynamic sitemap
+│   │   └── robots.ts             # Robots.txt
 │   │
 │   ├── components/
-│   │   ├── forms/             # Form components
-│   │   │   ├── ContactForm.tsx
-│   │   │   └── JobApplicationForm.tsx
-│   │   ├── layout/            # Layout components
-│   │   │   ├── FloatingDonate.tsx
-│   │   │   ├── SiteFooter.tsx
-│   │   │   ├── SiteHeader.tsx
-│   │   │   └── SoftDecor.tsx
-│   │   ├── sections/          # Page sections
-│   │   │   ├── Hero.tsx
-│   │   │   ├── ImpactHighlights.tsx
-│   │   │   └── WorkInAction.tsx
-│   │   └── ui/                # Reusable UI components
-│   │       ├── Button.tsx
-│   │       ├── Input.tsx
-│   │       └── Textarea.tsx
+│   │   ├── forms/                # Contact, job application, resume dropzone
+│   │   ├── layout/               # Header, footer, floating donate
+│   │   ├── sections/             # Hero, impact, gallery sections
+│   │   ├── events/               # Event gallery components
+│   │   ├── help/                 # Floating help widget
+│   │   └── ui/                   # Button, Input, Textarea, Skeleton
 │   │
-│   ├── lib/                   # Core utilities
-│   │   ├── config.ts          # Site configuration
-│   │   ├── db.ts              # Database mock
-│   │   ├── mail.ts            # Email service mock
-│   │   ├── razorpay.ts        # Razorpay config & types
-│   │   ├── seo-utils.ts       # SEO utilities
-│   │   ├── logger.ts          # Logging utility
-│   │   ├── rate-limit.ts      # Rate limiting
-│   │   └── validation.ts      # Form validation
-│   │
-│   ├── services/              # Business logic layer
+│   ├── services/                 # Business logic layer
+│   │   ├── payment.service.ts
+│   │   ├── job.service.ts
 │   │   ├── contact.service.ts
-│   │   ├── payment.service.ts # Payment processing & verification
-│   │   ├── event.service.ts
-│   │   └── job.service.ts
+│   │   └── event.service.ts
 │   │
-│   ├── types/                 # TypeScript definitions
-│   │   └── index.ts
+│   ├── lib/                      # Shared infrastructure
+│   │   ├── database.ts           # PostgreSQL pool & schema
+│   │   ├── email.ts              # SMTP & HTML templates
+│   │   ├── validation.ts         # Zod schemas & rate limit config
+│   │   ├── rate-limit.ts         # IP-based rate limiter
+│   │   ├── admin-auth.ts         # Timing-safe admin key verification
+│   │   ├── razorpay.ts           # Server-side Razorpay config
+│   │   ├── razorpay-client.ts    # Client-safe payment types
+│   │   ├── schema-utils.ts       # JSON-LD generators
+│   │   ├── seo-utils.ts          # Canonical URLs, breadcrumbs
+│   │   ├── escape-html.ts        # Email HTML escaping
+│   │   └── safe-json-ld.ts       # Safe inline JSON-LD serialization
 │   │
-│   └── utils/                 # Helper functions
-│       └── validators.ts      # Form validation
+│   └── types/                    # Shared TypeScript types
 │
-├── public/                    # Static assets
-│   └── images/               # Image files
-│
-└── Configuration files
-    ├── next.config.mjs       # Next.js config
-    ├── tailwind.config.ts    # Tailwind config
-    ├── tsconfig.json         # TypeScript config
-    └── package.json          # Dependencies
+├── public/                       # Static assets & images
+├── docs/screenshots/             # README screenshots
+├── .env.example                  # Environment variable template
+├── SECURITY.md                   # Security policy
+├── next.config.mjs               # Next.js + security headers
+└── package.json
 ```
 
 ---
 
-## 🔌 API Routes
+## Installation
 
-### Contact Form
-```http
-POST /api/contact
-Content-Type: application/json
+### Prerequisites
 
-{
-  "name": "string",
-  "email": "string",
-  "message": "string"
-}
+- Node.js 18+
+- npm
+- PostgreSQL database ([Neon](https://neon.tech) recommended)
+- Razorpay account (test or live keys)
+- Gmail account with App Password (for email notifications)
+
+### Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/Akshatthakur22/priya-sarv-utthan-ngo-webapp.git
+cd priya-sarv-utthan-ngo-webapp
+
+# Install dependencies
+npm install
+
+# Configure environment
+cp .env.example .env.local
+# Edit .env.local with your credentials (see Environment Variables below)
+
+# Initialize database schema (one-time, requires ADMIN_API_KEY)
+curl -X POST http://localhost:3000/api/admin/init-database \
+  -H "x-admin-key: YOUR_ADMIN_API_KEY"
+
+# Start development server
+npm run dev
 ```
 
-### Razorpay Donation - Create Order
-```http
-POST /api/razorpay/order
-Content-Type: application/json
+Open [http://localhost:3000](http://localhost:3000).
 
-{
-  "name": "string",
-  "email": "string",
-  "phone": "string (optional)",
-  "amount": "number (₹50-₹1,00,000)",
-  "message": "string (optional)"
-}
+### Build & Production
 
-Response:
-{
-  "success": true,
-  "orderId": "string",
-  "amount": "number (in paise)",
-  "currency": "INR",
-  "reference": "string",
-  "keyId": "string"
-}
+```bash
+# Lint
+npm run lint
+
+# Production build
+npm run build
+
+# Start production server
+npm start
 ```
 
-### Razorpay Donation - Verify Payment
-```http
-POST /api/razorpay/verify
-Content-Type: application/json
+<details>
+<summary><strong>Deployment notes</strong></summary>
 
-{
-  "razorpay_order_id": "string",
-  "razorpay_payment_id": "string",
-  "razorpay_signature": "string"
-}
+- Set all required environment variables in your hosting provider (Vercel recommended).
+- Run database initialization once after first deploy.
+- Configure `RAZORPAY_WEBHOOK_SECRET` in Razorpay dashboard and your environment for webhook signature verification.
+- Point `NEXT_PUBLIC_APP_URL` to your production domain.
 
-Response:
-{
-  "success": true,
-  "orderId": "string",
-  "paymentId": "string",
-  "message": "Payment verified and recorded successfully",
-  "recordId": "string"
-}
-```
-
-### Job Applications
-```http
-GET /api/jobs
-# Returns list of open positions
-
-POST /api/jobs
-Content-Type: application/json
-
-{
-  "applicant": "string",
-  "email": "string",
-  "jobId": "string",
-  "coverLetter": "string (optional)"
-}
-```
+</details>
 
 ---
 
-## 🎨 Design System
+## Environment Variables
 
-### Color Palette
+Copy `.env.example` to `.env.local`. Never commit real values.
 
-The custom Tailwind configuration implements a warm, hopeful NGO palette:
+| Variable | Purpose | Required | Example |
+|----------|---------|----------|---------|
+| `DATABASE_URL` | PostgreSQL connection string | Yes | `postgresql://user:pass@host/db?sslmode=require` |
+| `NEXT_PUBLIC_RAZORPAY_KEY_ID` | Razorpay public key (client) | Yes | `rzp_test_...` |
+| `RAZORPAY_KEY_SECRET` | Razorpay secret key (server only) | Yes | `your_razorpay_secret` |
+| `RAZORPAY_WEBHOOK_SECRET` | Webhook signature verification | Recommended | `whsec_...` |
+| `EMAIL_HOST` | SMTP host | Yes | `smtp.gmail.com` |
+| `EMAIL_PORT` | SMTP port | Yes | `587` |
+| `EMAIL_SECURE` | Use TLS | Yes | `false` |
+| `EMAIL_USER` | SMTP username | Yes | `your-email@gmail.com` |
+| `EMAIL_APP_PASSWORD` | Gmail App Password | Yes | `your-app-password` |
+| `EMAIL_FROM` | Sender address | Yes | `your-email@gmail.com` |
+| `NOTIFY_EMAIL` | Admin notification inbox | No | `your-email@gmail.com` |
+| `ADMIN_API_KEY` | Admin dashboard & API auth | Yes | `random-32-byte-string` |
+| `NEXT_PUBLIC_APP_URL` | Public site URL | Yes | `https://priyasarvutthan.org` |
+| `NODE_ENV` | Runtime environment | Yes | `production` |
+| `TOGETHER_API_KEY` | Optional AI integration | No | `your_key` |
 
-- **Primary (Amber)** - Inviting CTAs and important actions
-- **Accent (Coral/Peach)** - Friendly highlights and secondary elements
-- **Support (Green/Blue)** - Trust indicators and informational content
-- **Neutral** - Text hierarchy and backgrounds
-
-### Typography
-
-- **Display Font**: Nunito (headings, hero text)
-- **Body Font**: Inter (readable, professional)
-
-### Components
-
-All UI components follow consistent patterns:
-- Rounded corners (`rounded-full`, `rounded-2xl`)
-- Hover states with transitions
-- Mobile-first responsive design
-- Accessible contrast ratios
-
----
-
-## ⚡ Performance
-
-### Optimization Strategies
-
-✅ **Image Optimization** - Next.js Image component with automatic WebP conversion  
-✅ **Code Splitting** - Automatic with Next.js App Router  
-✅ **Server Components** - Reduced JavaScript bundle size  
-✅ **Font Optimization** - Preloaded custom fonts  
-✅ **SEO Ready** - Semantic HTML and meta tags  
-
-### Lighthouse Scores (Target)
-
-- Performance: 90+
-- Accessibility: 100
-- Best Practices: 100
-- SEO: 100
+> `ADMIN_JWT_SECRET` appears in `.env.example` but is not currently used by the application. Admin access is API-key based.
 
 ---
 
-## 📄 License
+## Security
 
-Distributed under the MIT License. See `LICENSE` for more information.
+| Control | Implementation |
+|---------|----------------|
+| **Secrets** | All credentials in environment variables; `.env.local` gitignored |
+| **Input validation** | Zod schemas on every public API route |
+| **SQL injection** | Parameterized queries via `pg` |
+| **Authentication** | Admin routes require `x-admin-key` header; timing-safe key comparison |
+| **Rate limiting** | Per-IP limits on contact, support, jobs, donations, and admin routes |
+| **Payment verification** | HMAC-SHA256 with timing-safe compare; order amount validated against payment |
+| **HTTP headers** | CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy |
+| **Email safety** | HTML escaping and header injection prevention on support emails |
+| **Data protection** | Resumes stored server-side; admin-only download endpoint |
+
+See [SECURITY.md](SECURITY.md) for the full security policy and pre-public checklist.
 
 ---
 
-## 📞 Contact
+## Performance
+
+Optimizations present in the codebase:
+
+| Optimization | Location |
+|--------------|----------|
+| Server Components by default | `src/app/**/page.tsx` |
+| Image formats AVIF + WebP | `next.config.mjs` |
+| Responsive image device sizes | `next.config.mjs` |
+| Font `display: swap` | `src/app/layout.tsx` |
+| Connection pooling (`max: 20`) | `src/lib/database.ts` |
+| Client/server code splitting | Razorpay secrets isolated in `razorpay.ts` |
+| Non-blocking email on donations | `src/app/api/razorpay/verify/route.ts` |
+
+---
+
+## API Overview
+
+<details>
+<summary><strong>Public endpoints</strong></summary>
+
+| Method | Route | Description |
+|--------|-------|-------------|
+| `POST` | `/api/contact` | Submit contact form |
+| `POST` | `/api/support` | Submit support case (Legal / Grievance / Welfare) |
+| `GET` | `/api/jobs` | List open job positions |
+| `POST` | `/api/jobs` | Submit job application (JSON or multipart with resume) |
+| `GET` | `/api/events` | Fetch events data |
+| `POST` | `/api/razorpay/order` | Create Razorpay payment order |
+| `POST` | `/api/razorpay/verify` | Verify payment signature & record donation |
+| `POST` | `/api/razorpay/webhook` | Razorpay webhook events |
+
+</details>
+
+<details>
+<summary><strong>Admin endpoints</strong> *(require <code>x-admin-key</code> header)*</summary>
+
+| Method | Route | Description |
+|--------|-------|-------------|
+| `GET` | `/api/admin/session` | Verify admin API key |
+| `GET` | `/api/admin/donations` | List completed donations |
+| `GET` | `/api/admin/contacts` | List contact submissions |
+| `GET` | `/api/admin/applications` | List job applications |
+| `GET` | `/api/admin/applications/[id]/resume` | Download applicant resume |
+| `GET` | `/api/admin/support-cases` | List support cases |
+| `POST` | `/api/admin/init-database` | Initialize database schema |
+
+</details>
+
+---
+
+## Project Highlights
+
+**Service layer separation** — Business logic lives in `src/services/`, keeping API routes thin and testable. Payment verification, database writes, and email sending are orchestrated in one place rather than scattered across route handlers.
+
+**Defense in depth for payments** — Donations are verified client-side (with retries), server-side (signature + amount check), and again via Razorpay webhooks. Idempotent `payment_id` constraints prevent duplicate records.
+
+**Pragmatic admin auth** — Rather than a heavy auth framework, admin access uses a cryptographically random API key with timing-safe comparison, session verification, and rate limiting. Appropriate for a small-team internal dashboard.
+
+**Schema-driven SEO** — Structured data generators (`schema-utils.ts`) produce Google Search Console–compatible Event and JobPosting schemas with proper ISO 8601 dates, `validThrough`, and `baseSalary` fields.
+
+**Multipart resume pipeline** — Job applications support optional file uploads with client-side validation, server-side MIME/extension checks, PostgreSQL `BYTEA` storage, and a separate admin download route.
+
+---
+
+## Challenges Solved
+
+**Slug-based job IDs vs. UUID validation** — Job IDs use human-readable slugs (e.g. `job_volunteer_coach_indore_2026`), but the original Zod schema required UUIDs. Updated validation to accept slug-format IDs while keeping strict character constraints.
+
+**Payment verification reliability** — Network failures during Razorpay verification could mark successful payments as failed. Implemented 3-attempt client retry with user-facing progress, plus a webhook fallback that records payments even if the verify endpoint fails.
+
+**Secret leakage in client bundles** — Razorpay server config and logging utilities were importable from client components. Split into `razorpay.ts` (server) and `razorpay-client.ts` (client-safe types only).
+
+**Email HTML injection** — Support case notifications embedded raw user input in HTML emails. Added `escape-html.ts` with sanitization across all template fields and email subject lines.
+
+**Structured data rejections** — Google Search Console flagged missing `startDate` ISO format and incomplete JobPosting fields. Centralized schema generation with `toIso8601Date()` and complete required properties.
+
+---
+
+## Future Improvements
+
+- HttpOnly cookie-based admin sessions (replace `sessionStorage` API key)
+- Redis-backed rate limiting for multi-instance serverless deployments
+- GitHub Actions CI (lint + build on pull requests)
+- Dependency audit remediation (`npm audit`)
+- Extend `serializeJsonLd()` to all JSON-LD pages
+- Remove unused `razorpay` npm package (payments use direct `fetch`)
+- Enable `strict: true` in TypeScript configuration
+
+---
+
+## License
+
+Distributed under the **MIT License**. See [LICENSE](LICENSE) for details.
+
+---
+
+## Developer
 
 **Akshat Thakur**
 
-- GitHub: [@Akshatthakur22](https://github.com/Akshatthakur22)
-- Project Link: [https://github.com/Akshatthakur22/priya-sarv-utthan-ngo-webapp](https://github.com/Akshatthakur22/priya-sarv-utthan-ngo-webapp)
+Full-stack engineer — built this project end-to-end including frontend, API design, payment integration, database schema, admin tooling, and security hardening.
 
-**Priya Sarv Utthan Seva Sansthan**
-
-- Email: priyasarvuthan@gmail.com
-- Phone: +91 70000 78439
-- Address: 69B, Mangal Marg, Gandhi Nagar, Indore, Madhya Pradesh – 452005
+| | |
+|---|---|
+| GitHub | [@Akshatthakur22](https://github.com/Akshatthakur22) |
+| LinkedIn | [linkedin.com/in/akshatthakur22](https://www.linkedin.com/in/akshatthakur22/) |
+| Email | [akshatthakur22@gmail.com](mailto:akshatthakur22@gmail.com) |
+| Repository | [priya-sarv-utthan-ngo-webapp](https://github.com/Akshatthakur22/priya-sarv-utthan-ngo-webapp) |
 
 ---
 
 <div align="center">
 
-### 🌟 If this project helped you, please give it a star!
-
-Made with ❤️ for social impact | Established 1999 | 27 Years of Service
+Built for social impact · [priyasarvutthan.org](https://priyasarvutthan.org)
 
 </div>
