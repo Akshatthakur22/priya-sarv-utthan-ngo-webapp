@@ -137,9 +137,6 @@ This is a production web application built for **Priya Sarv Utthan Seva Sansthan
 | **Donate** | [https://priyasarvutthan.org/donate](https://priyasarvutthan.org/donate) |
 | **Careers** | [https://priyasarvutthan.org/careers](https://priyasarvutthan.org/careers) |
 | **Help & Support** | [https://priyasarvutthan.org/help](https://priyasarvutthan.org/help) |
-| **Admin** | [https://priyasarvutthan.org/admin](https://priyasarvutthan.org/admin) *(API key required)* |
-
-> Admin access requires a valid `ADMIN_API_KEY` configured in the deployment environment. Demo credentials are not published publicly.
 
 ---
 
