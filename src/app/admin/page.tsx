@@ -25,8 +25,18 @@ export default function AdminPage() {
   const [sortBy, setSortBy] = useState("date");
   const [sortOrder, setSortOrder] = useState("desc");
 
+  const [authError, setAuthError] = useState("");
+  const [authLoading, setAuthLoading] = useState(false);
+
+  const verifyAndStoreKey = async (key: string): Promise<boolean> => {
+    const res = await fetch("/api/admin/session", {
+      headers: { "x-admin-key": key },
+    });
+    return res.ok;
+  };
+
   const downloadResume = async (appId: string, filename?: string) => {
-    const key = localStorage.getItem("admin_api_key") || apiKey;
+    const key = sessionStorage.getItem("admin_api_key") || apiKey;
     if (!key) return;
 
     const res = await fetch(`/api/admin/applications/${appId}/resume`, {
@@ -49,20 +59,33 @@ export default function AdminPage() {
     URL.revokeObjectURL(url);
   };
 
-  const handleAuth = () => {
-    if (apiKey.trim()) {
+  const handleAuth = async () => {
+    const trimmed = apiKey.trim();
+    if (!trimmed) return;
+
+    setAuthLoading(true);
+    setAuthError("");
+
+    try {
+      const ok = await verifyAndStoreKey(trimmed);
+      if (!ok) {
+        setAuthError("Invalid API key. Please try again.");
+        return;
+      }
+
       setAuthenticated(true);
-      localStorage.setItem("admin_api_key", apiKey);
-      fetchAllData(apiKey);
+      sessionStorage.setItem("admin_api_key", trimmed);
+      await fetchAllData(trimmed);
+    } catch {
+      setAuthError("Could not verify credentials. Please try again.");
+    } finally {
+      setAuthLoading(false);
     }
   };
 
   const fetchAllData = async (key: string) => {
     setLoading(true);
     try {
-      console.log("[ADMIN] Fetching data with key:", key);
-      
-      // Fetch all data in parallel
       const [donRes, conRes, appRes, supRes] = await Promise.all([
         fetch("/api/admin/donations", {
           headers: { "x-admin-key": key },
@@ -78,55 +101,34 @@ export default function AdminPage() {
         }),
       ]);
 
-      console.log("[ADMIN] API responses:", {
-        donations: donRes.status,
-        contacts: conRes.status,
-        applications: appRes.status,
-        support: supRes.status
-      });
-
-      // Handle donations
       if (donRes.ok) {
         const donData = await donRes.json();
-        console.log("[ADMIN] Donations data:", donData);
         setDonations(donData.data || []);
       } else {
-        console.error("[ADMIN] Donations fetch failed:", donRes.status);
         setDonations([]);
       }
 
-      // Handle contacts
       if (conRes.ok) {
         const conData = await conRes.json();
-        console.log("[ADMIN] Contacts data:", conData);
         setContacts(conData.data || []);
       } else {
-        console.error("[ADMIN] Contacts fetch failed:", conRes.status);
         setContacts([]);
       }
 
-      // Handle applications
       if (appRes.ok) {
         const appData = await appRes.json();
-        console.log("[ADMIN] Applications data:", appData);
         setApplications(appData.data || []);
       } else {
-        console.error("[ADMIN] Applications fetch failed:", appRes.status);
         setApplications([]);
       }
 
-      // Handle support cases
       if (supRes.ok) {
         const supData = await supRes.json();
-        console.log("[ADMIN] Support cases data:", supData);
         setSupportCases(supData.data || []);
       } else {
-        console.error("[ADMIN] Support cases fetch failed:", supRes.status);
         setSupportCases([]);
       }
-    } catch (error) {
-      console.error("[ADMIN] Failed to fetch data:", error);
-      // Reset all data on error
+    } catch {
       setDonations([]);
       setContacts([]);
       setApplications([]);
@@ -143,21 +145,22 @@ export default function AdminPage() {
   const handleLogout = () => {
     setAuthenticated(false);
     setApiKey("");
-    localStorage.removeItem("admin_api_key");
+    sessionStorage.removeItem("admin_api_key");
   };
 
-  // Load stored key on mount
   useEffect(() => {
-    const stored = localStorage.getItem("admin_api_key");
-    console.log("[ADMIN] Stored API key found:", stored ? "Yes" : "No");
-    
-    if (stored) {
-      setApiKey(stored);
-      setAuthenticated(true);
-      fetchAllData(stored);
-    } else {
-      console.log("[ADMIN] No stored API key, user needs to login");
-    }
+    const stored = sessionStorage.getItem("admin_api_key");
+    if (!stored) return;
+
+    setApiKey(stored);
+    verifyAndStoreKey(stored).then((ok) => {
+      if (ok) {
+        setAuthenticated(true);
+        fetchAllData(stored);
+      } else {
+        sessionStorage.removeItem("admin_api_key");
+      }
+    });
   }, []);
 
   if (!authenticated) {
@@ -209,14 +212,18 @@ export default function AdminPage() {
                 </button>
               </div>
               
+              {authError && (
+                <p className="text-sm text-red-600 text-center">{authError}</p>
+              )}
+
               <button
                 onClick={handleAuth}
-                disabled={!apiKey.trim()}
+                disabled={!apiKey.trim() || authLoading}
                 className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:from-slate-400 disabled:to-slate-500 text-white font-semibold py-3 rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl disabled:cursor-not-allowed"
               >
                 <span className="flex items-center justify-center gap-2">
                   <BarChart3 size={20} />
-                  Access Dashboard
+                  {authLoading ? "Verifying..." : "Access Dashboard"}
                 </span>
               </button>
             </div>

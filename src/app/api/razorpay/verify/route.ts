@@ -1,21 +1,6 @@
 /**
  * POST /api/razorpay/verify
  * Verify Razorpay payment signature (CRITICAL SECURITY ENDPOINT)
- * 
- * Request body:
- * {
- *   razorpay_order_id: string,
- *   razorpay_payment_id: string,
- *   razorpay_signature: string
- * }
- * 
- * Response:
- * {
- *   success: true/false,
- *   orderId?: string,
- *   paymentId?: string,
- *   message: string
- * }
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -27,17 +12,25 @@ import {
 import { logPaymentEvent } from "@/lib/razorpay";
 import { sendDonationReceipt } from "@/lib/email";
 import { siteConfig } from "@/lib/config";
+import { donationRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
+    const rateLimitResult = await donationRateLimit(request);
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: "Too many verification attempts. Please try again later." },
+        { status: 429, headers: getRateLimitHeaders(rateLimitResult) }
+      );
+    }
+
     const body = await request.json();
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
 
-    // Validate required fields
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return NextResponse.json(
         { error: "Missing payment verification details" },
-        { status: 400 }
+        { status: 400, headers: getRateLimitHeaders(rateLimitResult) }
       );
     }
 
@@ -46,7 +39,6 @@ export async function POST(request: NextRequest) {
       paymentId: razorpay_payment_id,
     });
 
-    // ⚠️ CRITICAL: Verify signature
     const isSignatureValid = verifyPaymentSignature(
       razorpay_order_id,
       razorpay_payment_id,
@@ -57,39 +49,32 @@ export async function POST(request: NextRequest) {
       logPaymentEvent("Signature Verification Failed", {
         orderId: razorpay_order_id,
         paymentId: razorpay_payment_id,
+        status: "invalid_signature",
       });
 
       return NextResponse.json(
         {
           success: false,
-          orderId: razorpay_order_id,
-          paymentId: razorpay_payment_id,
           error: "Payment verification failed. Invalid signature.",
         },
-        { status: 403 }
+        { status: 403, headers: getRateLimitHeaders(rateLimitResult) }
       );
     }
 
-    // Fetch payment details from Razorpay API for extra validation
     const paymentDetails = await fetchPaymentDetails(razorpay_payment_id);
 
     if (!paymentDetails) {
       logPaymentEvent("Payment Details Fetch Failed", {
         paymentId: razorpay_payment_id,
+        status: "fetch_failed",
       });
 
       return NextResponse.json(
-        {
-          success: false,
-          orderId: razorpay_order_id,
-          paymentId: razorpay_payment_id,
-          error: "Could not verify payment details",
-        },
-        { status: 400 }
+        { success: false, error: "Could not verify payment details" },
+        { status: 400, headers: getRateLimitHeaders(rateLimitResult) }
       );
     }
 
-    // Verify payment status
     if (paymentDetails.status !== "captured") {
       logPaymentEvent("Payment Not Captured", {
         paymentId: razorpay_payment_id,
@@ -97,31 +82,23 @@ export async function POST(request: NextRequest) {
       });
 
       return NextResponse.json(
-        {
-          success: false,
-          orderId: razorpay_order_id,
-          paymentId: razorpay_payment_id,
-          error: `Payment not captured. Status: ${paymentDetails.status}`,
-        },
-        { status: 400 }
+        { success: false, error: "Payment not captured" },
+        { status: 400, headers: getRateLimitHeaders(rateLimitResult) }
       );
     }
 
-    // ✅ PAYMENT VERIFIED - Store in PostgreSQL database
     try {
       const donationRecord = await processPaymentVerification(
         paymentDetails,
         razorpay_order_id
       );
 
-      // Send donation receipt email (non-blocking - don't fail if email fails)
       try {
         const recipientEmail = donationRecord.donorEmail;
-        
         const recipientName = donationRecord.donorName;
 
         if (recipientEmail) {
-          const emailSent = await sendDonationReceipt({
+          await sendDonationReceipt({
             donorEmail: recipientEmail,
             donorName: recipientName,
             amount: donationRecord.amount,
@@ -131,26 +108,15 @@ export async function POST(request: NextRequest) {
             ngoName: siteConfig.name,
             ngoPhone: siteConfig.phone,
           });
-
-          if (emailSent) {
-            logPaymentEvent("Receipt Email Sent", {
-              donorEmail: recipientEmail,
-            });
-          }
         }
-      } catch (emailError: any) {
-        console.warn(
-          "[PAYMENT] Email receipt failed but donation was recorded:",
-          emailError.message
-        );
-        // Don't fail the donation if email sending fails
+      } catch {
+        console.warn("[PAYMENT] Email receipt failed but donation was recorded");
       }
 
       logPaymentEvent("Payment Success", {
         orderId: razorpay_order_id,
         paymentId: razorpay_payment_id,
-        amount: donationRecord.amount,
-        recordId: donationRecord.recordId,
+        status: "captured",
       });
 
       return NextResponse.json(
@@ -162,21 +128,17 @@ export async function POST(request: NextRequest) {
           recordId: donationRecord.recordId,
           isNewRecord: donationRecord.isNewRecord,
         },
-        { status: 200 }
+        { status: 200, headers: getRateLimitHeaders(rateLimitResult) }
       );
-    } catch (dbError: any) {
-      // Database error - payment was successful but couldn't be stored
-      // WEBHOOK will handle this as backup
-      console.error("[PAYMENT] Database Error:", dbError.message);
+    } catch {
+      console.error("[PAYMENT] Database error during verification");
 
       logPaymentEvent("Database Storage Error", {
         orderId: razorpay_order_id,
         paymentId: razorpay_payment_id,
-        error: dbError.message,
+        status: "db_error",
       });
 
-      // Still return 200 since payment was captured successfully
-      // Webhook will ensure recording via redundancy
       return NextResponse.json(
         {
           success: true,
@@ -186,17 +148,14 @@ export async function POST(request: NextRequest) {
           recordId: null,
           warning: "Database storage pending - webhook will ensure recording",
         },
-        { status: 200 }
+        { status: 200, headers: getRateLimitHeaders(rateLimitResult) }
       );
     }
-  } catch (error: any) {
-    console.error("[PAYMENT] Verification Error:", error.message);
+  } catch {
+    console.error("[PAYMENT] Verification error");
 
     return NextResponse.json(
-      {
-        success: false,
-        error: error.message || "Payment verification failed",
-      },
+      { success: false, error: "Payment verification failed" },
       { status: 500 }
     );
   }

@@ -1,6 +1,7 @@
 "use client";
 
 import { generateEventSchema } from "@/lib/schema-utils";
+import { serializeJsonLd } from "@/lib/safe-json-ld";
 
 export { generateEventSchema };
 
@@ -127,7 +128,7 @@ export default function StructuredData({ type, data }: StructuredDataProps) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema, null, 2) }}
+      dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }}
     />
   );
 }

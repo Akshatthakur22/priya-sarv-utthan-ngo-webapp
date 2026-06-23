@@ -8,6 +8,26 @@ import { razorpayConfig, DonationData, validateDonationAmount, generateDonationR
 
 const RAZORPAY_API_URL = "https://api.razorpay.com/v1";
 
+function timingSafeEqualHex(a: string, b: string): boolean {
+  try {
+    const bufA = Buffer.from(a, "utf8");
+    const bufB = Buffer.from(b, "utf8");
+    if (bufA.length !== bufB.length) {
+      return false;
+    }
+    return crypto.timingSafeEqual(bufA, bufB);
+  } catch {
+    return false;
+  }
+}
+
+function getRazorpayAuthHeader(): string {
+  if (!razorpayConfig.keyId || !razorpayConfig.keySecret) {
+    throw new Error("Razorpay is not configured");
+  }
+  return Buffer.from(`${razorpayConfig.keyId}:${razorpayConfig.keySecret}`).toString("base64");
+}
+
 /**
  * Create a Razorpay order
  * @param donation - Donation data from user
@@ -40,9 +60,7 @@ export async function createRazorpayOrder(donation: DonationData) {
   const donationRef = generateDonationRef();
 
   try {
-    const auth = Buffer.from(
-      `${razorpayConfig.keyId}:${razorpayConfig.keySecret}`
-    ).toString("base64");
+    const auth = getRazorpayAuthHeader();
 
     const response = await fetch(`${RAZORPAY_API_URL}/orders`, {
       method: "POST",
@@ -76,8 +94,8 @@ export async function createRazorpayOrder(donation: DonationData) {
       reference: donationRef,
     };
   } catch (error: any) {
-    console.error("[PAYMENT] Order Creation Failed:", error.message);
-    throw new Error(`Failed to create payment order: ${error.message}`);
+    console.error("[PAYMENT] Order creation failed");
+    throw new Error("Failed to create payment order");
   }
 }
 
@@ -100,15 +118,10 @@ export function verifyPaymentSignature(
       .update(`${orderId}|${paymentId}`)
       .digest("hex");
 
-    // Compare with received signature
-    const isValid = generatedSignature === signature;
+    const isValid = timingSafeEqualHex(generatedSignature, signature);
 
-    if (isValid) {
-      console.log(`[PAYMENT] Signature verified for payment ${paymentId}`);
-    } else {
-      console.warn(
-        `[PAYMENT] Signature mismatch for payment ${paymentId}. Expected: ${generatedSignature}, Got: ${signature}`
-      );
+    if (!isValid) {
+      console.warn(`[PAYMENT] Signature mismatch for payment ${paymentId}`);
     }
 
     return isValid;
@@ -128,7 +141,7 @@ export function verifyWebhookSignature(
 ): boolean {
   try {
     const hash = crypto.createHmac("sha256", secret).update(body).digest("hex");
-    return hash === signature;
+    return timingSafeEqualHex(hash, signature);
   } catch (error: any) {
     console.error("[PAYMENT] Webhook Signature Error:", error.message);
     return false;
@@ -142,9 +155,7 @@ export function verifyWebhookSignature(
  */
 export async function fetchPaymentDetails(paymentId: string) {
   try {
-    const auth = Buffer.from(
-      `${razorpayConfig.keyId}:${razorpayConfig.keySecret}`
-    ).toString("base64");
+    const auth = getRazorpayAuthHeader();
 
     const response = await fetch(`${RAZORPAY_API_URL}/payments/${paymentId}`, {
       method: "GET",
@@ -160,7 +171,30 @@ export async function fetchPaymentDetails(paymentId: string) {
 
     return await response.json();
   } catch (error: any) {
-    console.error("[PAYMENT] Fetch Payment Error:", error.message);
+    console.error("[PAYMENT] Fetch payment error");
+    return null;
+  }
+}
+
+export async function fetchOrderDetails(orderId: string) {
+  try {
+    const auth = getRazorpayAuthHeader();
+
+    const response = await fetch(`${RAZORPAY_API_URL}/orders/${orderId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Basic ${auth}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch order");
+    }
+
+    return await response.json();
+  } catch {
+    console.error("[PAYMENT] Fetch order error");
     return null;
   }
 }
@@ -251,12 +285,7 @@ export async function saveDonationToDatabase(data: {
     const donorEmail = cleanValue(data.donorEmail);
     const donorPhone = cleanValue(data.donorPhone);
 
-    console.log("[PAYMENT] Saving to PostgreSQL:", {
-      paymentId: data.paymentId,
-      donorName,
-      amount: data.amount,
-      donorPhone: donorPhone || "(not provided)",
-    });
+    console.log("[PAYMENT] Saving donation", { paymentId: data.paymentId, amount: data.amount });
 
     // Insert with ON CONFLICT DO NOTHING for idempotency
     const result = await queryDatabase(
@@ -325,17 +354,18 @@ export async function processPaymentVerification(payment: any, orderId: string) 
     throw new Error(`Payment not captured. Status: ${payment.status}`);
   }
 
+  const order = await fetchOrderDetails(orderId);
+  if (!order) {
+    throw new Error("Could not verify order details");
+  }
+  if (order.amount !== payment.amount) {
+    throw new Error("Payment amount does not match order");
+  }
+
   const donorName = extractDonorName(payment.notes);
   const donorEmail = extractDonorEmail(payment);
   const donorPhone = extractDonorPhone(payment);
   const amount = payment.amount / 100;
-
-  console.log("[PAYMENT] Extracted donor info:", {
-    name: donorName,
-    email: donorEmail,
-    phone: donorPhone || "(not provided)",
-    amount,
-  });
 
   const result = await saveDonationToDatabase({
     orderId,

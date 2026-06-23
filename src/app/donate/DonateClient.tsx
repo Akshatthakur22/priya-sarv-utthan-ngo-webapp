@@ -18,7 +18,7 @@ import {
   Share2,
   RefreshCw,
 } from "lucide-react";
-import { RazorpayPaymentResponse, logPaymentEvent } from "@/lib/razorpay";
+import { RazorpayPaymentResponse, logPaymentEvent } from "@/lib/razorpay-client";
 import { siteConfig } from "@/lib/config";
 
 // ─── Donation tiers – micro-entry included for low-budget donors ─────────────
@@ -506,7 +506,7 @@ export default function DonateClient() {
           message: `Payment failed: ${errorMessage}. Please try again.`,
           paymentId: error?.metadata?.payment_id,
         });
-        logPaymentEvent("Payment Failed", { orderId: orderData.orderId, errorCode, errorMessage });
+        logPaymentEvent("Payment Failed", { orderId: orderData.orderId, status: errorCode });
       });
 
       if (process.env.NODE_ENV === "development") console.log("[RAZORPAY] Opening checkout modal");

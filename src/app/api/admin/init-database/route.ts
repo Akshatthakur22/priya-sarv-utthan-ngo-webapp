@@ -1,51 +1,41 @@
 /**
  * Database Initialization API Route
- * 
- * This endpoint should be called once to initialize the database schema.
- * Run only during deployment/setup, not on every app start.
- * 
- * Usage:
- * POST /api/admin/init-database
- * 
- * Authentication should be added before deploying to production!
+ *
+ * POST /api/admin/init-database — initialize schema (admin key required)
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { initializeDatabase } from "@/lib/database";
+import { isAdminAuthorized } from "@/lib/admin-auth";
+import { adminRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
+  const rateLimitResult = await adminRateLimit(request);
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      { error: "Too many requests" },
+      { status: 429, headers: getRateLimitHeaders(rateLimitResult) }
+    );
+  }
+
   try {
-    // ✅ SECURITY: Verify API key before allowing database initialization
-    const apiKey = request.headers.get("x-api-key");
-    const expectedKey = process.env.ADMIN_API_KEY;
-
-    if (!expectedKey) {
-      console.error("[INIT-DB] ADMIN_API_KEY not configured in environment");
+    if (!process.env.ADMIN_API_KEY) {
+      console.error("[INIT-DB] ADMIN_API_KEY not configured");
       return NextResponse.json(
-        { 
-          error: "Server misconfiguration", 
-          message: "ADMIN_API_KEY not set" 
-        },
-        { status: 500 }
+        { error: "Server misconfiguration" },
+        { status: 500, headers: getRateLimitHeaders(rateLimitResult) }
       );
     }
 
-    if (!apiKey || apiKey !== expectedKey) {
-      console.warn("[INIT-DB] Unauthorized database initialization attempt", {
-        ip: request.headers.get("x-forwarded-for") || "unknown",
-        hasKey: !!apiKey,
-      });
-
+    if (!isAdminAuthorized(request)) {
+      console.warn("[INIT-DB] Unauthorized initialization attempt");
       return NextResponse.json(
-        { 
-          error: "Unauthorized", 
-          message: "Invalid or missing API key" 
-        },
-        { status: 401 }
+        { error: "Unauthorized" },
+        { status: 401, headers: getRateLimitHeaders(rateLimitResult) }
       );
     }
 
-    console.log("[INIT-DB] Starting database initialization (authorized)...");
+    console.log("[INIT-DB] Starting database initialization (authorized)");
 
     await initializeDatabase();
 
@@ -55,43 +45,27 @@ export async function POST(request: NextRequest) {
         message: "Database schema initialized successfully",
         timestamp: new Date().toISOString(),
       },
-      { status: 200 }
+      { status: 200, headers: getRateLimitHeaders(rateLimitResult) }
     );
-  } catch (error: any) {
-    console.error("[INIT-DB] Initialization failed:", error.message);
+  } catch {
+    console.error("[INIT-DB] Initialization failed");
 
     return NextResponse.json(
-      {
-        success: false,
-        error: error.message || "Database initialization failed",
-      },
-      { status: 500 }
+      { success: false, error: "Database initialization failed" },
+      { status: 500, headers: getRateLimitHeaders(rateLimitResult) }
     );
   }
 }
 
-/**
- * GET endpoint - Shows status and documentation
- */
-export async function GET(request: NextRequest) {
-  return NextResponse.json(
-    {
-      message: "Database Initialization API",
-      description: "POST to this endpoint to initialize database schema",
-      security: "✅ PROTECTED - Requires valid API key",
-      usage: {
-        method: "POST",
-        url: "/api/admin/init-database",
-        headers: {
-          "x-api-key": "your-admin-api-key-here (set ADMIN_API_KEY env var)",
-          "Content-Type": "application/json",
-        },
-        example: `curl -X POST http://localhost:3000/api/admin/init-database \\
-  -H "x-api-key: your-key" \\
-  -H "Content-Type: application/json"`,
-      },
-      status: "Ready (secured)",
-    },
-    { status: 200 }
-  );
+/** Disabled in production — use POST with admin key only */
+export async function GET() {
+  if (process.env.NODE_ENV === "production") {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  return NextResponse.json({
+    message: "Database Initialization API",
+    usage: "POST /api/admin/init-database with x-admin-key header",
+    note: "This endpoint is disabled in production",
+  });
 }

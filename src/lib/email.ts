@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import { ResumeFile } from "./resume-storage";
+import { escapeHtml } from "./escape-html";
 
 function normalizeAppPassword(password?: string): string | undefined {
   return password?.replace(/\s+/g, "") || undefined;
@@ -260,20 +261,6 @@ export async function sendAdminJobApplicationNotification(data: {
     console.error("[EMAIL] Failed to send admin job application notification:", error.message);
     return false;
   }
-}
-
-/**
- * Escape HTML special characters (server-side)
- */
-function escapeHtml(text: string): string {
-  const map: { [key: string]: string } = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;",
-  };
-  return text.replace(/[&<>"']/g, (char) => map[char]);
 }
 
 /**

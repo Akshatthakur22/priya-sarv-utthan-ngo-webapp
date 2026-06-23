@@ -6,23 +6,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { queryDatabase } from "@/lib/database";
 import { logger } from "@/lib/logger";
-
-async function verifyAdminKey(request: NextRequest): Promise<boolean> {
-  const apiKey = request.headers.get("x-admin-key");
-  const expectedKey = process.env.ADMIN_API_KEY;
-  
-  if (!expectedKey || !apiKey || apiKey !== expectedKey) {
-    return false;
-  }
-  return true;
-}
+import { isAdminAuthorized } from "@/lib/admin-auth";
+import { adminRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
 
 export async function GET(request: NextRequest) {
+  const rateLimitResult = await adminRateLimit(request);
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      { error: "Too many requests" },
+      { status: 429, headers: getRateLimitHeaders(rateLimitResult) }
+    );
+  }
+
   try {
-    if (!(await verifyAdminKey(request))) {
+    if (!isAdminAuthorized(request)) {
       return NextResponse.json(
         { error: "Unauthorized" },
-        { status: 401 }
+        { status: 401, headers: getRateLimitHeaders(rateLimitResult) }
       );
     }
 
@@ -49,29 +49,35 @@ export async function GET(request: NextRequest) {
 
     logger.info("Admin: Support cases fetched", { count: result.rows.length });
 
-    return NextResponse.json({
-      success: true,
-      data: result.rows.map((row: any) => ({
-        id: row.id,
-        caseId: row.case_id,
-        name: row.name,
-        email: row.email,
-        phone: row.phone,
-        serviceType: row.service_type,
-        message: row.message,
-        opposingParty: row.opposing_party,
-        courtDeadline: row.court_deadline ? new Date(row.court_deadline).toISOString() : null,
-        department: row.department,
-        status: row.status,
-        createdAt: new Date(row.created_at).toISOString(),
-      })),
-      count: result.rows.length,
-    });
-  } catch (error: any) {
-    logger.error("Failed to fetch support cases", { error: error.message });
+    return NextResponse.json(
+      {
+        success: true,
+        data: result.rows.map((row: Record<string, unknown>) => ({
+          id: row.id,
+          caseId: row.case_id,
+          name: row.name,
+          email: row.email,
+          phone: row.phone,
+          serviceType: row.service_type,
+          message: row.message,
+          opposingParty: row.opposing_party,
+          courtDeadline: row.court_deadline
+            ? new Date(String(row.court_deadline)).toISOString()
+            : null,
+          department: row.department,
+          status: row.status,
+          createdAt: new Date(String(row.created_at)).toISOString(),
+        })),
+        count: result.rows.length,
+      },
+      { headers: getRateLimitHeaders(rateLimitResult) }
+    );
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    logger.error("Failed to fetch support cases", { error: message });
     return NextResponse.json(
       { error: "Failed to fetch support cases" },
-      { status: 500 }
+      { status: 500, headers: getRateLimitHeaders(rateLimitResult) }
     );
   }
 }
