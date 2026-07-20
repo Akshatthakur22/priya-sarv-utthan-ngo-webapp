@@ -29,8 +29,40 @@ const securityHeaders = [
   },
 ];
 
+// Performance optimizations
+const cacheHeaders = [
+  {
+    source: "/api/donation/receipt/:id",
+    headers: [
+      { key: "Cache-Control", value: "public, max-age=3600, immutable" },
+    ],
+  },
+  {
+    source: "/api/(.*)",
+    headers: [
+      { key: "Cache-Control", value: "no-store, must-revalidate" },
+    ],
+  },
+  {
+    source: "/(.*\\.(?:jpg|jpeg|gif|png|webp|avif|svg|ico|woff|woff2|ttf|eot)$)",
+    headers: [
+      { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+    ],
+  },
+  {
+    source: "/:path*",
+    headers: securityHeaders,
+  },
+];
+
 const nextConfig = {
   reactStrictMode: true,
+  
+  // Optimizations for Core Web Vitals
+  compress: true,
+  poweredByHeader: false,
+  productionBrowserSourceMaps: false,
+  
   images: {
     remotePatterns: [
       {
@@ -41,15 +73,31 @@ const nextConfig = {
     ],
     formats: ["image/avif", "image/webp"],
     deviceSizes: [72, 128, 256, 512, 1024],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Optimize images aggressively
+    minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
+    // AVIF support for modern browsers
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+  },
+
+  // Turbopack configuration for Next.js 16
+  // Turbopack is the default bundler now and handles optimization automatically
+  turbopack: {
+    // Turbopack will automatically optimize builds
+    // No additional configuration needed for most projects
   },
 
   async headers() {
-    return [
-      {
-        source: "/:path*",
-        headers: securityHeaders,
-      },
-    ];
+    return cacheHeaders;
+  },
+
+  // Experimental optimizations
+  experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "framer-motion",
+    ],
   },
 };
 

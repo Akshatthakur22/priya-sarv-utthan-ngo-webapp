@@ -4,7 +4,6 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-neutral-muted/20 bg-surface-offwhite">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 md:flex-row md:items-center md:justify-between md:px-6">
-        
         {/* Left section */}
         <div className="space-y-1">
           <p className="text-sm font-semibold text-neutral-ink">Priya Sarv Utthan Seva Sansthan</p>
@@ -25,7 +24,6 @@ export function SiteFooter() {
             </a>
           </p>
         </div>
-
         {/* Navigation links */}
         <div className="flex flex-wrap gap-4 text-sm text-neutral-muted">
           <Link href="/about" className="hover:text-primary">About</Link>
@@ -33,13 +31,11 @@ export function SiteFooter() {
           <Link href="/careers" className="hover:text-primary">Careers</Link>
           <Link href="/contact" className="hover:text-primary">Contact</Link>
           <Link href="/donate" className="hover:text-primary">Donate</Link>
-
           <span className="mx-2 hidden md:inline">|</span>
-
+          <Link href="/developer" className="hover:text-primary">Developer</Link>
           <Link href="/privacy-policy" className="hover:text-primary">Policy</Link>
           <Link href="/terms" className="hover:text-primary">Terms</Link>
         </div>
-
       </div>
     </footer>
   );

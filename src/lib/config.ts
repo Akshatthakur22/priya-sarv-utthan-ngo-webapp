@@ -12,5 +12,5 @@ export const siteConfig = {
   donationReferencePrefix: "PSUF",
 
   // Transparency (future use)
-  registrationNumber: "XXXXXXX", // NGO reg no (optional)
+  registrationNumber: "IND 4124/99", // NGO reg no (optional)
 };
