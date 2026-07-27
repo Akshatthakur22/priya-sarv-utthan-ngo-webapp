@@ -43,8 +43,13 @@ This is a production web application built for **Priya Sarv Utthan Seva Sansthan
 - Webhook handler as a redundant recording path (`payment.captured`, `payment.failed`)
 - Client-side verification retry logic (up to 3 attempts)
 - Donation persistence in PostgreSQL with idempotent `payment_id` constraints
-- HTML donation receipt emails via Gmail SMTP (Section 80G messaging)
+- **Professional HTML donation receipt emails** with sequential receipt numbers (PSUS-DR-YYYY-XXXXXX)
+- Receipt archival in database with receipt ID for verification
+- Receipt viewer endpoint at `/api/donation/receipt/[id]` with HTML rendering
+- Download receipts as printable HTML (browsers can save as PDF via print-to-PDF)
 - Rate limiting on donation endpoints (3 requests / 15 minutes per IP)
+- Audit-friendly receipt design with donor details, donation metadata, and NGO information
+- Tax information section (Section 80G ready for future registration)
 
 ### Admin Dashboard
 

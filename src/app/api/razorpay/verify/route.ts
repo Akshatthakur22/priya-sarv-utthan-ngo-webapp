@@ -105,6 +105,7 @@ export async function POST(request: NextRequest) {
             orderId: razorpay_order_id,
             paymentId: razorpay_payment_id,
             createdAt: new Date(),
+            donationId: donationRecord.recordId,
             ngoName: siteConfig.name,
             ngoPhone: siteConfig.phone,
           });

@@ -13,8 +13,17 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-body", display: 'swa
 
 export const metadata: Metadata = {
   title: "Priya Sarv Utthan Seva Sansthan | Building brighter futures",
-  description: "Priya Sarv Utthan Seva Sansthan - A registered NGO dedicated to women empowerment, education, and community development in Indore.",
+  description: "Priya Sarv Utthan Seva Sansthan - A registered NGO dedicated to women empowerment, education, and community development in Indore. Developed by Akshat Thakur, creator of SafeExam, MailMyCertificate, and Calcuzy.",
   metadataBase: new URL("https://priyasarvutthan.org"),
+  keywords: [
+    "Priya Sarv Utthan",
+    "NGO Indore",
+    "women empowerment",
+    "child education",
+    "legal aid",
+    "community development",
+    "Akshat Thakur"
+  ],
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
@@ -25,8 +34,13 @@ export const metadata: Metadata = {
     description: "Join us in creating lasting impact through education, women empowerment, and social justice.",
     url: "https://priyasarvutthan.org",
     siteName: "Priya Sarv Utthan Seva Sansthan",
-    locale: "en_US",
+    locale: "en_IN",
     type: "website"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Priya Sarv Utthan Seva Sansthan",
+    description: "NGO dedicated to women empowerment, education, and community development in Indore."
   },
   authors: [{ name: "Akshat Thakur" }],
   creator: "Akshat Thakur",
@@ -214,7 +228,7 @@ export default function RootLayout({
           }}
         />
 
-        {/* Developer Person Schema */}
+        {/* Developer Person Schema - ADIS Compliant */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -222,36 +236,224 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Person",
               "name": "Akshat Thakur",
-              "jobTitle": "Software Developer & Platform Builder",
+              "jobTitle": "Software Developer",
               "url": "https://priyasarvutthan.org/developer",
               "email": "akshatthakur22@gmail.com",
               "telephone": "+91 9755533614",
+              "image": "https://priyasarvutthan.org/images/akki.png",
               "address": {
                 "@type": "PostalAddress",
                 "addressLocality": "Indore",
                 "addressRegion": "Madhya Pradesh",
                 "addressCountry": "IN"
               },
-              "worksFor": {
-                "@type": "Organization",
-                "name": "Priya Sarv Utthan Seva Sansthan",
-                "url": "https://priyasarvutthan.org",
-                "sameAs": "https://priyasarvutthan.org"
-              },
-              "affiliation": {
-                "@type": "Organization",
-                "name": "Priya Sarv Utthan Seva Sansthan"
-              },
-              "description": "Developer of the Priya Sarv Utthan Seva Sansthan website and digital platform.",
+              "description": "Akshat Thakur is a software developer focused on building scalable web applications, AI-powered products, developer tools, educational platforms, and digital systems that solve real-world problems.",
+              "sameAs": [
+                "https://github.com/Akshatthakur22",
+                "https://www.linkedin.com/in/akshatthakur22/",
+                "https://x.com/akshatt66612958",
+                "https://www.producthunt.com/@akshat_thakur3",
+                "https://priyasarvutthan.org/developer"
+              ],
               "knowsAbout": [
                 "Next.js",
                 "React",
                 "TypeScript",
                 "Node.js",
+                "Python",
+                "Full-Stack Development",
                 "Web Development",
                 "SEO Optimization",
                 "UI/UX Design"
+              ],
+              "hasCredential": [
+                {
+                  "@type": "EducationalOccupationalCredential",
+                  "name": "B.Tech Computer Science Engineering"
+                }
+              ],
+              "workExample": [
+                {
+                  "@type": "WebApplication",
+                  "name": "SafeExam",
+                  "url": "https://safexam.in",
+                  "description": "AI-powered online examination platform"
+                },
+                {
+                  "@type": "WebApplication",
+                  "name": "MailMyCertificate",
+                  "url": "https://mailmycertificate.tech",
+                  "description": "Certificate generation and email automation platform"
+                },
+                {
+                  "@type": "WebApplication",
+                  "name": "Calcuzy",
+                  "url": "https://calcuzy.app",
+                  "description": "Modern productivity and calculation platform"
+                },
+                {
+                  "@type": "WebApplication",
+                  "name": "Priya Sarv Utthan Platform",
+                  "url": "https://priyasarvutthan.org",
+                  "description": "NGO digital platform for women empowerment and social impact"
+                }
               ]
+            })
+          }}
+        />
+
+        {/* Organization with Creator/Developer Relations - ADIS Graph */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Priya Sarv Utthan Seva Sansthan",
+              "@id": "https://priyasarvutthan.org/#organization",
+              "url": "https://priyasarvutthan.org",
+              "creator": {
+                "@type": "Person",
+                "@id": "https://priyasarvutthan.org/developer",
+                "name": "Akshat Thakur",
+                "url": "https://priyasarvutthan.org/developer"
+              },
+              "developer": {
+                "@type": "Person",
+                "@id": "https://priyasarvutthan.org/developer",
+                "name": "Akshat Thakur",
+                "url": "https://priyasarvutthan.org/developer"
+              }
+            })
+          }}
+        />
+
+        {/* Akshat Thakur's Works & Products - For AI Knowledge Graph */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              "@id": "https://priyasarvutthan.org/developer#person",
+              "name": "Akshat Thakur",
+              "url": "https://priyasarvutthan.org/developer",
+              "sameAs": [
+                "https://www.linkedin.com/in/akshatthakur22/",
+                "https://github.com/Akshatthakur22",
+                "https://x.com/akshatt66612958",
+                "https://www.producthunt.com/@akshat_thakur3"
+              ],
+              "jobTitle": "Software Developer",
+              "description": "Software developer focused on building scalable web applications, AI-powered products, developer tools, educational platforms, and digital systems.",
+              "workExample": [
+                {
+                  "@type": "SoftwareApplication",
+                  "@id": "https://safexam.in#app",
+                  "name": "SafeExam",
+                  "url": "https://safexam.in",
+                  "description": "AI-powered online examination platform with secure proctoring",
+                  "creator": {
+                    "@type": "Person",
+                    "name": "Akshat Thakur"
+                  },
+                  "applicationCategory": "BusinessApplication"
+                },
+                {
+                  "@type": "SoftwareApplication",
+                  "@id": "https://mailmycertificate.tech#app",
+                  "name": "MailMyCertificate",
+                  "url": "https://mailmycertificate.tech",
+                  "description": "Certificate generation and email automation platform",
+                  "creator": {
+                    "@type": "Person",
+                    "name": "Akshat Thakur"
+                  },
+                  "applicationCategory": "BusinessApplication"
+                },
+                {
+                  "@type": "SoftwareApplication",
+                  "@id": "https://calcuzy.app#app",
+                  "name": "Calcuzy",
+                  "url": "https://calcuzy.app",
+                  "description": "Modern productivity and calculation platform",
+                  "creator": {
+                    "@type": "Person",
+                    "name": "Akshat Thakur"
+                  },
+                  "applicationCategory": "UtilitiesApplication"
+                },
+                {
+                  "@type": "WebApplication",
+                  "@id": "https://priyasarvutthan.org#webapp",
+                  "name": "Priya Sarv Utthan NGO Platform",
+                  "url": "https://priyasarvutthan.org",
+                  "description": "Digital platform for NGO supporting women empowerment and social impact",
+                  "creator": {
+                    "@type": "Person",
+                    "name": "Akshat Thakur"
+                  },
+                  "applicationCategory": "SocialMediaApplication"
+                }
+              ]
+            })
+          }}
+        />
+
+        {/* Other Products by Akshat Thakur - For AI Knowledge Graph */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "CreativeWork",
+              "@id": "https://safexam.in",
+              "name": "SafeExam",
+              "url": "https://safexam.in",
+              "description": "AI-powered online examination platform",
+              "creator": {
+                "@type": "Person",
+                "name": "Akshat Thakur",
+                "url": "https://www.linkedin.com/in/akshatthakur22/"
+              }
+            })
+          }}
+        />
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "CreativeWork",
+              "@id": "https://mailmycertificate.tech",
+              "name": "MailMyCertificate",
+              "url": "https://mailmycertificate.tech",
+              "description": "Certificate generation and email automation platform",
+              "creator": {
+                "@type": "Person",
+                "name": "Akshat Thakur",
+                "url": "https://www.linkedin.com/in/akshatthakur22/"
+              }
+            })
+          }}
+        />
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "CreativeWork",
+              "@id": "https://calcuzy.app",
+              "name": "Calcuzy",
+              "url": "https://calcuzy.app",
+              "description": "Modern productivity and calculation platform",
+              "creator": {
+                "@type": "Person",
+                "name": "Akshat Thakur",
+                "url": "https://www.linkedin.com/in/akshatthakur22/"
+              }
             })
           }}
         />

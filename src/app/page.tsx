@@ -8,12 +8,12 @@ import { organizationSchema, localBusinessSchema } from "@/lib/schema-templates"
 
 export const metadata: Metadata = {
   title: "Priya Sarv Utthan Seva Sansthan | NGO in Indore | Building Brighter Futures",
-  description: "Official website of Priya Sarv Utthan Seva Sansthan - a registered NGO in Indore since 1999. Women empowerment, education, health, legal aid, and community development in Gandhi Nagar, Indore, MP.",
+  description: "Official website of Priya Sarv Utthan Seva Sansthan - a registered NGO in Indore since 1999. Women empowerment, education, health, legal aid, and community development. Website developed by Akshat Thakur.",
   keywords: [
     "NGO Indore", "NGO in Indore", "women empowerment Indore", "education NGO", "legal aid Indore", 
     "community development", "volunteer Indore", "charity Indore", "social work", "child development", 
     "skill training", "self-employment", "social justice", "Gandhi Nagar Indore", "nonprofit India",
-    "Priya Sarv Utthan Seva Sansthan"
+    "Priya Sarv Utthan Seva Sansthan", "Akshat Thakur"
   ],
   openGraph: {
     title: "Priya Sarv Utthan Seva Sansthan | NGO in Indore",
