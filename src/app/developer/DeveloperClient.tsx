@@ -263,6 +263,23 @@ export default function DeveloperClient() {
 <br />
         {/* ======================= 5. SOCIAL LINKS ======================= */}
         <section className="mb-20 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Portfolio */}
+          <a
+            href="https://akshatt.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-4 p-6 rounded-2xl border border-neutral-200 hover:border-indigo-600 transition-all bg-white shadow-sm hover:shadow-lg"
+          >
+            <div className="w-14 h-14 rounded-xl bg-indigo-600 flex items-center justify-center">
+              <Code className="w-7 h-7 text-white" />
+            </div>
+            <div className="flex-1">
+              <p className="font-bold text-neutral-900 text-lg">Portfolio</p>
+              <p className="text-sm text-neutral-600">akshatt.in</p>
+            </div>
+            <ArrowRight className="w-5 h-5 text-neutral-400" />
+          </a>
+
           {/* GitHub */}
           <a
             href="https://github.com/Akshatthakur22"

@@ -74,6 +74,7 @@ export default function DeveloperPage() {
       "https://www.linkedin.com/in/akshatthakur22/",
       "https://x.com/akshatt66612958",
       "https://www.producthunt.com/@akshat_thakur3",
+      "https://akshatt.in",
       "https://priyasarvutthan.org/developer"
     ],
     "knowsAbout": [
